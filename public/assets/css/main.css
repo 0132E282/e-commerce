@@ -1,0 +1,14 @@
+*::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar {
+    overflow-y: scroll;
+    ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+.ellipsis {
+    max-width:100%; 
+    overflow: hidden;  
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+}
