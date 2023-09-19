@@ -25,7 +25,7 @@ class FormCategory extends Component
      */
     public function render(): View|Closure|string
     {
-        $dataCategory =  $this->recusive->filterCategory(optional($this->detailCategory)->parent_id);
+        $dataCategory = $this->recusive->filterCategory($this->detailCategory->parent_id ?? null);
         return view('components/form/form-category', ['dataCategory' => $dataCategory]);
     }
 }

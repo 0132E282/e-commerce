@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -47,6 +48,16 @@ class AuthController extends Controller
                 'name' => 'admin',
             ]);
             return response()->json($user);
+        } catch (Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+    function logout(Request $req)
+    {
+
+        try {
+            Auth::logout();
+            return redirect(route('admin-home'));
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }

@@ -1,11 +1,5 @@
 @extends('/include/layouts/admin-layout')
 @section('content')
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <x-BreadcrumbAdmin />
-</div>
-<!-- /.content-header -->
-
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">

@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class SidebarAdmin extends Component
@@ -109,8 +110,76 @@ class SidebarAdmin extends Component
                         'title' => 'create',
                         'icon' => 'far fa-circle ',
                         'path' => route('create-slider'),
+                    ],
+                    [
+                        'title' => 'trash',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('trash-slider'),
                     ]
                 ]
+            ],
+            [
+                'title' => 'user',
+                'icon' => 'far bi bi-person-fill',
+                'path' => route('slider'),
+                'children' => [
+                    [
+                        'title' => 'user',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('user'),
+                    ],
+                    [
+                        'title' => 'create',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('create-user'),
+                    ], [
+                        'title' => 'profile',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('update-user', ['id' => Auth::id()]),
+                    ],
+                    [
+                        'title' => 'trash',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('trash-user'),
+                    ]
+
+                ]
+            ],
+            [
+                'title' => 'roles',
+                'icon' => ' far bi bi-gear-fill',
+                'path' => route('roles'),
+                'children' => [
+                    [
+                        'title' => 'roles',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('roles'),
+                    ],
+                    [
+                        'title' => 'create',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('create-role'),
+                    ],
+
+                ]
+            ],
+            [
+                'title' => 'settings',
+                'icon' => ' far bi bi-gear-fill',
+                'path' => route('slider'),
+                'children' => [
+                    [
+                        'title' => 'settings',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('setting'),
+                    ],
+                ]
+            ],
+            [
+                'title' => 'logout',
+                'icon' => 'bi bi-box-arrow-left',
+                'method' => 'post',
+                'path' => route('logout')
             ]
         ];
     }

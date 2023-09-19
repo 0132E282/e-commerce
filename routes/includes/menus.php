@@ -8,7 +8,6 @@ use App\Http\Controllers\MenusController;
 
 Route::prefix('menus')->group(function () {
     Route::get('/', [MenusController::class, 'index'])->name('table-menus');
-
     Route::get('/create', [MenusController::class, 'showForm'])->name('create-menus');
     Route::post('/create', [MenusController::class, 'store'])->name('create-menus');
     Route::get('/trash', [MenusController::class, 'showTrash'])->name('trash-menus');

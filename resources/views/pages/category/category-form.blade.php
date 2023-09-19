@@ -1,10 +1,5 @@
 @extends('/include/layouts/admin-layout')
 @section('content')
-<!-- Content Header (Page header) -->
-<div class="content-header">
-    <x-BreadcrumbAdmin :value="$detailCategory" />
-</div>
-<!-- /.content-header -->
 
 <!-- Main content -->
 <section class="content">
@@ -13,7 +8,7 @@
     <x-alert message="{{$message['content'] }}" type="{{$message['type']}}" />
     @endif
     <div class="container-fluid">
-        <x-FormCategory :detailCategory="$detailCategory" />
+        <x-FormCategory action="{{$detailCategory ? route('update-category' ,$detailCategory->id_category ) : route('create-category')}}" method="{{ $detailCategory ? 'put' : 'post'}}" :detailCategory="$detailCategory" />
     </div>
 </section>
 <!-- /.content -->

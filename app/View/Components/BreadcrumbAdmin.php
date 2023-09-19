@@ -16,13 +16,8 @@ class BreadcrumbAdmin extends Component
     public $value = [];
     public function __construct($value = null)
     {
-
         $this->value = $value;
     }
-
-    /**
-     * Get the view / contents that represent the component.
-     */
     public function render(): View|Closure|string
     {
         return view('components/breadcrumb-admin');

@@ -1,7 +1,5 @@
 @props(['route' , 'method' => 'POST'])
-<form action="{{$route}}" method="post" enctype="multipart/form-data">
-    @csrf
-    @method($method)
+<x-Form action="{{$route}}" method="post">
     <div class="mb-3">
         <x-inputForm name="name_product" value="{{$dataForm->name_product ?? ''}}" title="nhập tên sản phẩm" />
     </div>
@@ -33,5 +31,4 @@
     <div class="mb-3 ">
         <x-TagsSelect name="tags_products[]" :dataTagsSelect="$dataForm->tags ??[]" title="chọn tags" />
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</x-Form>

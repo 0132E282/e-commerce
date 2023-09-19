@@ -28,7 +28,7 @@ class Recusive
         }
         return $this->category;
     }
-    public function filterMenus($parent_id = null, $id = 0, $text = '')
+    public function filterMenus($parent_id = '', $id = 0, $text = '')
     {
         foreach ($this->data as $item) {
             if ($item->parent_id == $id) {
@@ -38,8 +38,9 @@ class Recusive
                     'value' => $item->id_menus,
                     'title' => $text . $item->name_menus
                 ]);
-                $this->filterCategory($parent_id, $item->id_menus, $text . '--');
+                $this->filterMenus($parent_id, $item->id_menus, $text . '--');
             }
         }
+        return $this->dataMenus;
     }
 }

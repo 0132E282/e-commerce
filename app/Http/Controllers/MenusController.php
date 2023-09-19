@@ -29,11 +29,12 @@ class MenusController extends Controller
     function showForm($id = '')
     {
         try {
+            $detailMenus = [];
             if ($id) {
                 $detailMenus = $this->modelMenus->find($id);
             }
             $menusList = $this->modelMenus->all();
-            return View('pages/menus/menus-forms', ['detailMenus' => $detailMenus, 'menusList' => $menusList]);
+            return View('pages/menus/menus-forms', ['detailsMenus' => $detailMenus, 'menusList' => $menusList, 'valueBread' => $detailMenus]);
         } catch (Exception $e) {
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         }

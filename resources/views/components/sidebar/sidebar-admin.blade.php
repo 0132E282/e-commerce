@@ -35,6 +35,15 @@
             @foreach($menuList as $key => $value)
             @if(!isset($value['children']))
             <li class="nav-item">
+                @if(isset($value['method']))
+                <x-Button action="{{$value['path']}}" method="{{$value['method']}}" class="nav-link bg-transparent">
+                    <i class="nav-icon {{$value['icon']}}"></i>
+                    <p>
+                        {{$value['title']}}
+                        <!-- <span class="badge badge-info right">2</span> -->
+                    </p>
+                </x-Button>
+                @else
                 <a href="{{$value['path']}}" class="nav-link">
                     <i class="nav-icon {{$value['icon']}}"></i>
                     <p>
@@ -42,6 +51,7 @@
                         <!-- <span class="badge badge-info right">2</span> -->
                     </p>
                 </a>
+                @endif
             </li>
             @else
             <li class="nav-item">

@@ -6,9 +6,6 @@
 @endsection
 @section('content')
 <!-- Content Header (Page header) -->
-<div class="content-header">
-    <x-BreadcrumbAdmin :value="$detailProduct" />
-</div>
 <section class="content">
     @if(session()->has('message'))
     @php $message = session()->get('message'); @endphp

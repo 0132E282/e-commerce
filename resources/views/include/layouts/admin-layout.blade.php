@@ -37,6 +37,10 @@
         </aside>
 
         <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <x-BreadcrumbAdmin :value="$valueBread ?? null " />
+            </div>
             @yield('content')
         </div>
         <footer class="main-footer">

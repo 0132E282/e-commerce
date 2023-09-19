@@ -165,7 +165,7 @@ class ProductsController extends Controller
                 $detailProduct['images'] = $detailProduct->productImages()->get();
                 $detailProduct['tags'] = $detailProduct->tags()->get();
             }
-            return view('pages/products/form', ['detailProduct' => $detailProduct]);
+            return view('pages/products/form', ['detailProduct' => $detailProduct,  'valueBread' => $detailProduct]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }

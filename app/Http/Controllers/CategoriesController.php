@@ -19,7 +19,7 @@ class CategoriesController extends Controller
     }
     function index()
     {
-        $categoryList = $this->modelCategory->latest()->paginate(25);
+        $categoryList = $this->modelCategory->latest()->paginate(25, ['id_category', 'name_category', 'slug_category', 'created_at']);
         return View('pages/category/index', ['categoryList' => $categoryList]);
     }
     function showTrash()
@@ -35,9 +35,7 @@ class CategoriesController extends Controller
                 $detailCategory = $this->modelCategory->find($id);
             }
             $categoryList = $this->modelCategory->all();
-            $recusive = new Recusive($categoryList);
-            $htmlSelect = $recusive->filterCategory($detailCategory->parent_id ?? 0);
-            return View('pages/category/category-form', ['viewOptionCategory' => $htmlSelect, 'detailCategory' => $detailCategory]);
+            return View('pages/category/category-form', ['detailCategory' => $detailCategory, 'detailProduct' => $detailCategory]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
