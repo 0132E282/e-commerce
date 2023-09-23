@@ -13,12 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::prefix('/')->group(function () {
+    include_once('includes/shop.php');
+    include_once('includes/site.php');
+});
 Route::prefix('/admin')->group(function () {
     include_once('includes/auth.php');
     Route::post('editor/image_upload', [EditorController::class, 'upload'])->name('upload');
     Route::middleware(['auth'])->group(function () {
         include_once('includes/user.php');
+        include_once('includes/order.php');
+        include_once('includes/permission.php');
         include_once('includes/product.php');
         include_once('includes/menus.php');
         include_once('includes/admin.php');

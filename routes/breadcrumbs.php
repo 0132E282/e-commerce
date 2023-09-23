@@ -59,6 +59,10 @@ Breadcrumbs::for('create-product', function (BreadcrumbTrail $trail) {
     $trail->parent('product-page');
     $trail->push('create', route('create-product'));
 });
+Breadcrumbs::for('orders', function (BreadcrumbTrail $trail) {
+    $trail->parent('product-page');
+    $trail->push('tất cả đơn hàng ', route('orders'));
+});
 Breadcrumbs::for('trash-product', function (BreadcrumbTrail $trail) {
     $trail->parent('product-page');
     $trail->push('trash', route('trash-product'));
@@ -119,4 +123,17 @@ Breadcrumbs::for('create-role', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('update-role', function (BreadcrumbTrail $trail, $role) {
     $trail->parent('roles');
     $trail->push('update role', route('update-role', ['id' => $role]));
+});
+Breadcrumbs::for('trash-role', function (BreadcrumbTrail $trail) {
+    $trail->parent('roles');
+    $trail->push('trash role', route('trash-role'));
+});
+// permission
+Breadcrumbs::for('create-permissions', function (BreadcrumbTrail $trail) {
+    $trail->parent('roles');
+    $trail->push('create permission', route('create-permissions'));
+});
+Breadcrumbs::for('update-permissions', function (BreadcrumbTrail $trail, $permissions) {
+    $trail->parent('roles');
+    $trail->push('update permissions', route('update-permissions', ['id' => $permissions]));
 });

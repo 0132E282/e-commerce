@@ -1,29 +1,23 @@
-@props(['title' , 'text'])
-
-<div class="modal fade" id="modalMassage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <x-Button type="submit" name="form-delete" method="delete" class="btn btn-primary">oke delete</x-Button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    const myModal = document.getElementById('modalMassage')
-    const btnModalMassage = document.getElementById('btnModalMassage')
-
-    myModal.addEventListener('shown.bs.modal', () => {
-        const value = btnModalMassage.dataset.value;
-        const btnDelete = document.querySelector('form[name="form-delete"]');
-        btnDelete.action = value;
+@props(['title', 'content', 'btnTitle', 'id'])
+<x-modal.index id="{{ $id ?? 'modal_message' }}">
+    <x-slot:header>
+        <h5>{{ $title }}</h5>
+    </x-slot:header>
+    <x-slot:body>
+        <p>{{ $content }}</p>
+    </x-slot:body>
+    <x-slot:action>
+        <x-Button action="''" class="btn-secondary" method="post">{{ $btnTitle }}</x-Button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">thoát</button>
+    </x-slot:action>
+</x-modal.index>
+<script type="module">
+    $(document).ready(function() {
+        $('#modal_message').on('shown.bs.modal', function(e) {
+            const route = $(e.relatedTarget).data('route');
+            const method = $(e.relatedTarget).data('method');
+            $('form').attr('action', route);
+            $('form').find('input[name="_method"]').val(method);
+        })
     })
 </script>

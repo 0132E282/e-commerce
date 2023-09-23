@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
@@ -36,7 +35,7 @@ class ProductsController extends Controller
         try {
             $idUserAuth = Auth::user();
             if ($req->hasFile('feature_image')) {
-                $imagePath =   StorageImage::uploadImage($req->feature_image, 'products');
+                $imagePath =   StorageImage::uploadImage($req->feature_image, 'products', 556, 600);
             }
             $product = $this->modelProducts->create([
                 'name_product' => $req->name_product,
@@ -49,7 +48,7 @@ class ProductsController extends Controller
             ]);
             if ($req->has('product_images')) {
                 foreach ($req->product_images as $image) {
-                    $imagePath =   StorageImage::uploadImage($image, 'products');
+                    $imagePath =   StorageImage::uploadImage($image, 'products', 556, 600);
                     $product->productImages()->create([
                         'path' => $imagePath,
                     ]);
@@ -76,7 +75,7 @@ class ProductsController extends Controller
                 if ($product->feature_image) {
                     $pathDelete = StorageImage::deleteImagePath($product, 'feature_image');
                 }
-                $imagePath = StorageImage::uploadImage($req->feature_image, 'products');
+                $imagePath = StorageImage::uploadImage($req->feature_image, 'products', 556, 600);
             }
             $product->update([
                 'name_product' => $req->name_product ?? $product->name_product,
@@ -95,7 +94,7 @@ class ProductsController extends Controller
                     $productImage->delete();
                 }
                 foreach ($req->product_images as $image) {
-                    $imagePath = StorageImage::uploadImage($image, 'products');
+                    $imagePath = StorageImage::uploadImage($image, 'products', 556, 600);
                     $product->productImages()->create([
                         'path' => $imagePath,
                     ]);
@@ -141,14 +140,15 @@ class ProductsController extends Controller
     {
         try {
             $product = $this->modelProducts->onlyTrashed()->find($id);
-            if ($product->first()->feature_image) {
+            if (empty($product->first()->feature_image)) {
                 StorageImage::deleteImagePath($product, 'feature_image');
             }
-            $productImage = $product->productImages()->get();
+            $productImage = $product->productImages;
             if (count($productImage) > 0) {
                 StorageImage::deleteImagePath($productImage, 'path');
                 $product->productImages()->forceDelete();
             }
+            $product->update(['id_category' => null]);
             $product->tags()->sync([]);
             $product->forceDelete();
             return back()->with('message', ['content' => 'delete product success', 'type' => 'success']);
@@ -156,16 +156,25 @@ class ProductsController extends Controller
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         }
     }
-    function showForm($id = 0)
+    function showForm($id = null)
     {
         try {
-            $detailProduct = [];
+            $form = [
+                'route' => route('create-product'),
+                'method' => 'post',
+                'data' => []
+            ];
             if ($id != 0) {
                 $detailProduct = $this->modelProducts->find($id);
                 $detailProduct['images'] = $detailProduct->productImages()->get();
                 $detailProduct['tags'] = $detailProduct->tags()->get();
+                $form = [
+                    'route' => route('update-product', $id),
+                    'method' => 'put',
+                    'data' =>  $detailProduct
+                ];
             }
-            return view('pages/products/form', ['detailProduct' => $detailProduct,  'valueBread' => $detailProduct]);
+            return view('pages/products/form', ['form' => $form,  'valueBread' => $form['data'] ?? '']);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }

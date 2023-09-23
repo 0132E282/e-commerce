@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Components\StorageImage;
+use App\Http\Requests\ValidateSlider;
 use App\Models\Sliders;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -33,29 +34,30 @@ class SliderController extends Controller
         }
         return view('pages/slider/form', ['sliderDetails' => $sliderDetails]);
     }
-    function create(Request $req)
+    function create(ValidateSlider $req)
     {
         try {
             if ($req->hasFile('image_url')) {
-                $imageUrl = StorageImage::uploadImage($req->image_url, 'slider', 800, 300);
+                $imageUrl = StorageImage::uploadImage($req->image_url, 'slider', 390, 356);
             }
             $slider = $this->modelSlider->create([
                 'image_url' => $imageUrl,
                 'name_slider' => $req->name_slider,
                 'description_slider' => $req->description_slider
             ]);
-            return back()->with('message', ['content' => 'create slider success id :' .  $slider->id_slider, 'type' => 'success']);
+            return back()->with('message', ['content' => 'create slider success id:' . $slider->id_slider, 'type' => 'success']);
         } catch (\Exception $e) {
-            return back()->with('message', ['content' => 'create slider fail id :' .  $slider->id_slider, 'type' => 'success']);
+            return $e->getMessage();
+            return back()->with('message', ['content' => 'create slider fail', 'type' => 'error']);
         }
     }
-    function update(Request $req, $id)
+    function update(ValidateSlider $req, $id)
     {
         try {
             $sliderDetails = $this->modelSlider->find($id);
             if ($req->hasFile('image_url')) {
                 StorageImage::deleteImagePath($sliderDetails, 'image_url');
-                $imageUrl = StorageImage::uploadImage($req->image_url, 'slider', 800, 300);
+                $imageUrl = StorageImage::uploadImage($req->image_url, 'slider', 390, 356);
             }
             $sliderDetails->update([
                 'image_url' => $imageUrl ?? $sliderDetails->image_url,
@@ -81,8 +83,8 @@ class SliderController extends Controller
     {
         try {
             $sliderDetails = $this->modelSlider->onlyTrashed()->find($id);
-            $sliderDetails->withTrashed()->restore();
-            return back()->with('message', ['content' => 'delete slider success id :' . $sliderDetails->id_slider, 'type' => 'success']);
+            $sliderDetails->restore();
+            return back()->with('message', ['content' => 'restore slider success id :' . $sliderDetails->id_slider, 'type' => 'success']);
         } catch (\Exception $e) {
             return back()->with('message', ['update slider fail', 'type' => 'error']);
         }
@@ -94,10 +96,10 @@ class SliderController extends Controller
             if ($sliderDetails->image_url) {
                 StorageImage::deleteImagePath($sliderDetails, 'image_url');
             }
-            $sliderDetails->withTrashed()->forceDelete();
-            return back()->with('message', ['content' => 'delete slider success id :' . $sliderDetails->id_slider, 'type' => 'success']);
+            $sliderDetails->forceDelete();
+            return back()->with('message', ['content' => 'destroy slider success id :' . $sliderDetails->id_slider, 'type' => 'success']);
         } catch (\Exception $e) {
-            return back()->with('message', ['update slider fail', 'type' => 'error']);
+            return back()->with('message', ['content' => 'destroy slider fail', 'type' => 'error']);
         }
     }
 }

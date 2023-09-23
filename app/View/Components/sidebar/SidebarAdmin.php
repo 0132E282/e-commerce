@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\sidebar;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -10,18 +10,22 @@ use Illuminate\View\Component;
 class SidebarAdmin extends Component
 {
     public $menuList = [];
+    protected $access;
     public function __construct()
     {
+        $this->access = config('permissions.access');
         $this->menuList = [
             [
                 'title' => 'home',
                 'icon' => ' far bi bi-house',
                 'path' => route('admin-home'),
+                'key_code' => 'MANAGER_ADMIN',
             ],
             [
                 'title' => 'Category',
                 'icon' => ' far bi bi-bookmark',
                 'path' => route('table-category'),
+                'key_code' => 'VIEW_CATEGORY',
                 'children' => [
                     [
                         'title' => 'Category',
@@ -44,21 +48,25 @@ class SidebarAdmin extends Component
                 'title' => 'menus',
                 'icon' => ' bi bi-list',
                 'path' => route('table-menus'),
+                'key_code' => 'VIEW_MENUS',
                 'children' => [
                     [
                         'title' => 'menus',
                         'icon' => 'far fa-circle ',
+                        'key_code' => 'VIEW_MENUS',
                         'path' => route('table-menus'),
                     ],
                     [
                         'title' => 'create',
                         'icon' => 'far fa-circle ',
                         'path' => route('create-menus'),
+                        'key_code' => 'CREATE_MENUS',
                     ],
                     [
                         'title' => 'trash',
                         'icon' => 'far fa-circle ',
                         'path' => route('trash-menus'),
+                        'key_code' => 'VIEW_TRASH_MENUS',
                     ]
                 ]
             ],
@@ -66,6 +74,7 @@ class SidebarAdmin extends Component
                 'title' => 'e-commerce',
                 'icon' => ' far bi bi-box2',
                 'path' => '',
+                'key_code' => 'VIEW_PRODUCT',
                 'children' => [
                     [
                         'title' => 'products',
@@ -78,16 +87,23 @@ class SidebarAdmin extends Component
                         'path' => route('create-product'),
                     ],
                     [
+                        'title' => 'order',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('orders'),
+                    ],
+                    [
                         'title' => 'trash',
                         'icon' => 'far fa-circle ',
                         'path' => route('trash-product'),
-                    ]
+                    ],
+
                 ]
             ],
             [
                 'title' => 'Mail',
                 'icon' => ' far bi bi-envelope',
                 'path' => route('mail'),
+                'key_code' => 'VIEW_MAIL',
                 'children' => [
                     [
                         'title' => 'inbox',
@@ -100,6 +116,7 @@ class SidebarAdmin extends Component
                 'title' => 'slider',
                 'icon' => ' far bi bi-sliders',
                 'path' => route('slider'),
+                'key_code' => 'VIEW_SLIDER',
                 'children' => [
                     [
                         'title' => 'slider',
@@ -122,6 +139,7 @@ class SidebarAdmin extends Component
                 'title' => 'user',
                 'icon' => 'far bi bi-person-fill',
                 'path' => route('slider'),
+                'key_code' => 'VIEW_USER',
                 'children' => [
                     [
                         'title' => 'user',
@@ -147,8 +165,9 @@ class SidebarAdmin extends Component
             ],
             [
                 'title' => 'roles',
-                'icon' => ' far bi bi-gear-fill',
+                'icon' => ' far bi bi-person-lines-fill',
                 'path' => route('roles'),
+                'key_code' => 'VIEW_ROLES',
                 'children' => [
                     [
                         'title' => 'roles',
@@ -159,14 +178,23 @@ class SidebarAdmin extends Component
                         'title' => 'create',
                         'icon' => 'far fa-circle ',
                         'path' => route('create-role'),
+                    ], [
+                        'title' => 'permissions',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('create-permissions'),
                     ],
-
+                    [
+                        'title' => 'trash',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('trash-role'),
+                    ],
                 ]
             ],
             [
                 'title' => 'settings',
                 'icon' => ' far bi bi-gear-fill',
                 'path' => route('slider'),
+                'key_code' => 'MANAGER_ADMIN',
                 'children' => [
                     [
                         'title' => 'settings',
@@ -179,6 +207,7 @@ class SidebarAdmin extends Component
                 'title' => 'logout',
                 'icon' => 'bi bi-box-arrow-left',
                 'method' => 'post',
+                'key_code' => 'MANAGER_ADMIN',
                 'path' => route('logout')
             ]
         ];

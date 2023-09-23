@@ -1,8 +1,10 @@
-@props(['action' , 'method'=> 'post'])
+@props(['action', 'method' => 'post', 'name' => '', 'custom' => false])
 
-<form action="{{$action}}" method="POST" enctype="multipart/form-data">
+<form action="{{ $action }}" name="name" method="POST" enctype="multipart/form-data">
     @csrf
     @method($method)
-    {{$slot}}
-    <x-Button type="submit">Submit</x-Button>
+    {{ $slot }}
+    @if ($custom == false)
+        <x-Button type="submit">Submit</x-Button>
+    @endif
 </form>

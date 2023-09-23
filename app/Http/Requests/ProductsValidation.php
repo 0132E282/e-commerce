@@ -25,10 +25,10 @@ class ProductsValidation extends FormRequest
         $rules =  [
             'name_product' => ['required'],
             'price_product' => ['required', 'numeric'],
-            'feature_image' => ['image', 'mimes:web,jpg,png'],
+            'feature_image' => ['image'],
         ];
         if ($this->method() === 'POST') {
-            $rules['feature_image'] = ['required', 'image', 'mimes:web,jpg,png'];
+            $rules['feature_image'] = ['required', 'image'];
         }
 
         return $rules;

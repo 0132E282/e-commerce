@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Components\StorageImage;
+use App\Http\Requests\ValidateUser;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -26,19 +27,25 @@ class AdminUserController extends Controller
     }
     function form($id = null)
     {
-        $user = [];
+        $form = [
+            'route' => route('create-user'),
+            'method' => 'POST',
+            'data' => [],
+        ];
         if ($id) {
             $user = $this->modelUser->find($id);
             $user->roles = $user->roles()->get();
+            $form = [
+                'route' => route('update-user', $id),
+                'method' => 'put',
+                'data' => $user,
+            ];
         }
-        return view('pages/user/form', ['user' => $user]);
+        return view('pages/user/form', ['form' => $form]);
     }
-    function store(Request $req)
+    function store(ValidateUser $req)
     {
         try {
-            // if ($req->hasFile('avatar')) {
-            //     $pathImage =  StorageImage::uploadImage($req->avatar, 'avatar');
-            // }
             $user =  $this->modelUser->create([
 
                 'name' => $req->name,
@@ -51,15 +58,15 @@ class AdminUserController extends Controller
             return back()->with('message', ['content' => 'user created fail', 'type' => 'error']);
         }
     }
-    function edit(Request $req, $id)
+    function edit(ValidateUser $req, $id)
     {
         try {
             $user = $this->modelUser->find($id);
-
+            $password = bcrypt($user->password);
             $user->update([
-                'name' => $req->name ?? $req->name,
-                'email' => $req->email ?? $req->email,
-                'password' => Hash::make($req->password) ??  Hash::make($req->password)
+                'name' => $req->name ?? $user->name,
+                'email' => $user->email,
+                'password' => $req->password ?? $user->password
             ]);
             $user->roles()->sync($req->roles);
             return back()->with('message', ['content' => ' update user success with id :' .  $user->id, 'type' => 'success']);

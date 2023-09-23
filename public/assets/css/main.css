@@ -12,3 +12,10 @@
     text-overflow: ellipsis; 
     white-space: nowrap;
 }
+.children_menu {
+    left: 100% !important;
+    top: 0 !important;
+}
+li:hover > .children_menu {
+    display: block;
+}

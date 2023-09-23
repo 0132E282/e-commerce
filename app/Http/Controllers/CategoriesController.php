@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Components\Recusive;
 use App\Http\Requests\CategoryValidation;
 use App\Models\Category;
+use App\Models\Products;
 use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
@@ -12,10 +13,12 @@ use Illuminate\Support\Str;
 class CategoriesController extends Controller
 {
     protected $modelCategory;
+    protected $modelProduct;
     function __construct()
     {
         Paginator::useBootstrapFive();
         $this->modelCategory = new Category();
+        $this->modelProduct = new Products();
     }
     function index()
     {
@@ -34,7 +37,6 @@ class CategoriesController extends Controller
             if ($id > 0) {
                 $detailCategory = $this->modelCategory->find($id);
             }
-            $categoryList = $this->modelCategory->all();
             return View('pages/category/category-form', ['detailCategory' => $detailCategory, 'detailProduct' => $detailCategory]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
@@ -71,7 +73,9 @@ class CategoriesController extends Controller
     {
         try {
             $category =  $this->modelCategory->find($id);
+
             $category->delete();
+
             $this->modelCategory->where('parent_id', $id)->delete();
             return back()->with('message', ['content' => 'delete category success id :' .  $category->id_category, 'type' => 'success']);
         } catch (Exception $e) {
@@ -82,12 +86,16 @@ class CategoriesController extends Controller
     function destroy($id)
     {
         try {
+
             $category =  $this->modelCategory->onlyTrashed()->find($id);
+            if (empty($category->product)) {
+                $category->product->update(['parent_id' => null]);
+            }
             $category->forceDelete();
-            $this->modelCategory->where('parent_id', $id)->update(['parent_id' => 0]);
             return back()->with('message', ['content' => 'delete category success id :' .  $category->id_category, 'type' => 'success']);
         } catch (Exception $e) {
-            return back()->with('error', 'delete category failed');
+            return $e->getMessage();
+            return back()->with('message', ['content' => 'delete category fail ', 'type' => 'error']);
         }
     }
     function restore($id)

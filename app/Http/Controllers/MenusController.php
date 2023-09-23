@@ -6,6 +6,7 @@ use App\Models\Menus;
 use Exception;
 use App\Http\Requests\MenusValidation;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Str;
 
 class MenusController extends Controller
 {
@@ -29,12 +30,20 @@ class MenusController extends Controller
     function showForm($id = '')
     {
         try {
-            $detailMenus = [];
+            $form = [
+                'route' => route('create-menus'),
+                'method' => 'post',
+                'data' => [],
+            ];
             if ($id) {
                 $detailMenus = $this->modelMenus->find($id);
+                $form = [
+                    'route' => route('update-menus', $id),
+                    'method' => 'put',
+                    'data' => $detailMenus,
+                ];
             }
-            $menusList = $this->modelMenus->all();
-            return View('pages/menus/menus-forms', ['detailsMenus' => $detailMenus, 'menusList' => $menusList, 'valueBread' => $detailMenus]);
+            return View('pages/menus/menus-forms', ['form' => $form, 'valueBread' => $form['data']]);
         } catch (Exception $e) {
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         }
@@ -58,7 +67,8 @@ class MenusController extends Controller
                 [
                     'name_menus' => $req->name_menus,
                     'route' => $req->route_menus,
-                    'parent_id' => $req->parent_id
+                    'parent_id' => $req->parent_id ?? 0,
+                    'slug' => Str::slug($req->name_menus)
                 ]
             );
             return back()->with('message', ['content' => 'create menus success :' .  $menus->id_menus, 'type' => 'success']);
@@ -74,7 +84,8 @@ class MenusController extends Controller
                 [
                     'name_menus' => $req->name_menus,
                     'route' => $req->route_menus,
-                    'parent_id' => $req->parent_id
+                    'parent_id' => $req->parent_id ?? 0,
+                    'slug' => Str::slug($req->name_menus)
                 ]
             );
             return back()->with('message', ['content' => 'update menus success :' .  $menus->id_menus, 'type' => 'success']);

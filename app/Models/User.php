@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -48,5 +49,16 @@ class User extends Authenticatable
     function roles(): BelongsToMany
     {
         return $this->belongsToMany(Roles::class, 'user_role', 'id_user', 'id_role');
+    }
+    function checkPermission($keyCode)
+    {
+        $roles = Auth::user()->roles;
+        foreach ($roles as $role) {
+            $permissions = $role->permissions;
+            if ($permissions->contains('key_code', $keyCode)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

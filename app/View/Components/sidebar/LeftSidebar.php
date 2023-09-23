@@ -1,17 +1,19 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\sidebar;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class ModalMessage extends Component
+class LeftSidebar extends Component
 {
-    public $action;
-    public function __construct($action = [])
+    /**
+     * Create a new component instance.
+     */
+    public function __construct()
     {
-        $this->action = $action;
+        //
     }
 
     /**
@@ -19,6 +21,6 @@ class ModalMessage extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components/modal/modal-message');
+        return view('components/sidebar/left-sidebar');
     }
 }

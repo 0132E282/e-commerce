@@ -3,7 +3,12 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Models\Permissions;
+use App\Models\User;
+use App\Policies\ProductPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +26,11 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $configAccess = config('permissions.access');
+        foreach ($configAccess as $key => $value) {
+            foreach ($value['config'] as $permission) {
+                Gate::define($permission['name'], [$value['policy'], $permission['action']]);
+            }
+        }
     }
 }

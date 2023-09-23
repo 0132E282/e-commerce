@@ -17,6 +17,12 @@ return new class extends Migration
             $table->bigInteger('price_product')->notNull();
             $table->string('slug_product')->default(null);
             $table->text('content')->default(null);
+            $table->text('content')->default(null);
+            $table->bigInteger('views_count')->default(0);
+            $table->bigInteger('views_count')->default(0);
+            $table->bigInteger('count_warehouse')->default(0);
+            $table->bigInteger('like_count')->default(0);
+            $table->bigInteger('comment_count')->default(0);
             $table->string('feature_image')->default('/storage/uploads/images/products/QsEd3sG9UNk2597dJ17Os5gRXrpXcTtswiuhm7eZ.jpg');
             $table->unsignedBigInteger('id_category')->default(null);
             $table->softDeletes();

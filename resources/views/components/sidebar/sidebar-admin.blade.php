@@ -31,50 +31,50 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
-            @foreach($menuList as $key => $value)
-            @if(!isset($value['children']))
-            <li class="nav-item">
-                @if(isset($value['method']))
-                <x-Button action="{{$value['path']}}" method="{{$value['method']}}" class="nav-link bg-transparent">
-                    <i class="nav-icon {{$value['icon']}}"></i>
-                    <p>
-                        {{$value['title']}}
-                        <!-- <span class="badge badge-info right">2</span> -->
-                    </p>
-                </x-Button>
-                @else
-                <a href="{{$value['path']}}" class="nav-link">
-                    <i class="nav-icon {{$value['icon']}}"></i>
-                    <p>
-                        {{$value['title']}}
-                        <!-- <span class="badge badge-info right">2</span> -->
-                    </p>
-                </a>
-                @endif
-            </li>
-            @else
-            <li class="nav-item">
-                <a href="{{$value['path']}}" class="nav-link">
-                    <i class="{{$value['icon']}}"></i>
-                    <p>
-                        {{$value['title']}}
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    @foreach($value['children'] as $key => $childrenValue)
-                    <li class="nav-item">
-                        <a href="{{$childrenValue['path']}}" class="nav-link">
-                            <i class="{{$childrenValue['icon']}}"></i>
-                            <p>{{$childrenValue['title']}}</p>
-                        </a>
-                    </li>
-                    @endforeach
-                </ul>
-            </li>
-            @endif
-
+            @foreach ($menuList as $key => $value)
+                @can($value['key_code'])
+                    @if (!isset($value['children']))
+                        <li class="nav-item">
+                            @if (isset($value['method']))
+                                <x-Button action="{{ $value['path'] }}" method="{{ $value['method'] }}" class="nav-link bg-transparent">
+                                    <i class="nav-icon {{ $value['icon'] }}"></i>
+                                    <p>
+                                        {{ $value['title'] }}
+                                        <!-- <span class="badge badge-info right">2</span> -->
+                                    </p>
+                                </x-Button>
+                            @else
+                                <a href="{{ $value['path'] }}" class="nav-link">
+                                    <i class="nav-icon {{ $value['icon'] }}"></i>
+                                    <p>
+                                        {{ $value['title'] }}
+                                        <!-- <span class="badge badge-info right">2</span> -->
+                                    </p>
+                                </a>
+                            @endif
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a href="{{ $value['path'] }}" class="nav-link">
+                                <i class="{{ $value['icon'] }}"></i>
+                                <p>
+                                    {{ $value['title'] }}
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @foreach ($value['children'] as $key => $childrenValue)
+                                    <li class="nav-item">
+                                        <a href="{{ $childrenValue['path'] }}" class="nav-link">
+                                            <i class="{{ $childrenValue['icon'] }}"></i>
+                                            <p>{{ $childrenValue['title'] }}</p>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endif
+                @endcan
             @endforeach
         </ul>
     </nav>
