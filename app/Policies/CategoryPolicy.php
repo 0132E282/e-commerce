@@ -73,4 +73,9 @@ class CategoryPolicy
         $keyCode = $this->configCategory['DESTROY_CATEGORY']['key_code'];
         return $user->checkPermission($keyCode);
     }
+    public function viewTrash(User $user): bool
+    {
+        $keyCode = $this->configCategory['VIEW_TRASH_CATEGORY']['key_code'];
+        return $user->checkPermission($keyCode);
+    }
 }

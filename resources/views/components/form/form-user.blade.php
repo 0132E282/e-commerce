@@ -7,7 +7,7 @@
         <x-InputForm name="name" value="{{ $dataUser->name ?? old('name') }}" title="ten nguoi dung" />
     </div>
     <div class="mb-3">
-        <x-InputForm name="email" disabled="{{ $method === 'put' ?? false }}" title="email" value="{{ $dataUser->email ?? old('email') }}" type="email" />
+        <x-InputForm name="email"{{ $dataUser ? 'disabled' : '' }} title="email" value="{{ $dataUser->email ?? old('email') }}" type="email" />
     </div>
     <div class="mb-3">
         <x-InputForm name="password" type="password" value="{{ old('password') }}" title="password" />

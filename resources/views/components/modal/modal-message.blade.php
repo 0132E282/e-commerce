@@ -13,7 +13,7 @@
 </x-modal.index>
 <script type="module">
     $(document).ready(function() {
-        $('#modal_message').on('shown.bs.modal', function(e) {
+        $('#{{ $id }}').on('shown.bs.modal', function(e) {
             const route = $(e.relatedTarget).data('route');
             const method = $(e.relatedTarget).data('method');
             $('form').attr('action', route);

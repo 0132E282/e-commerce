@@ -17,7 +17,7 @@ class SidebarAdmin extends Component
         $this->menuList = [
             [
                 'title' => 'home',
-                'icon' => ' far bi bi-house',
+                'icon' => 'far bi bi-house',
                 'path' => route('admin-home'),
                 'key_code' => 'MANAGER_ADMIN',
             ],
@@ -218,6 +218,7 @@ class SidebarAdmin extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components/sidebar/sidebar-admin');
+        $user = Auth::user();
+        return view('components/sidebar/sidebar-admin', ['user' => $user]);
     }
 }

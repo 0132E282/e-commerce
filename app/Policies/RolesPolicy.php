@@ -72,4 +72,9 @@ class RolesPolicy
         $keyCode = $this->configRole['DESTROY_ROLES']['key_code'];
         return $user->checkPermission($keyCode);
     }
+    public function viewTrash(User $user): bool
+    {
+        $keyCode = $this->configRole['VIEW_TRASH_ROLES']['key_code'];
+        return $user->checkPermission($keyCode);
+    }
 }

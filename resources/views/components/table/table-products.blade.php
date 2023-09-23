@@ -19,14 +19,14 @@
                     <x-Button method="POST" action="{{ route('restore-product', $value->id_product) }}" class="btn btn-warning">
                         <i class="bi bi-arrow-counterclockwise"></i>
                     </x-Button>
-                    <x-Button method="delete" action="{{ route('destroy-product', $value->id_product) }}" class="btn-danger">
+                    <x-Button data-method="delete" data-route="{{ route('destroy-product', $value->id_product) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
                         <i class="bi bi-trash-fill"></i>
                     </x-Button>
                 @else
                     <x-Button link="{{ route('update-product', $value->id_product) }}" class="btn btn-warning">
                         <i class="bi bi-pencil-square"></i>
                     </x-Button>
-                    <x-Button data-method="delete" data-route="{{ route('delete-product', $value->id_product) }}" data-bs-toggle="modal" data-bs-target="#modal_message" class="btn-danger">
+                    <x-Button data-method="delete" data-route="{{ route('delete-product', $value->id_product) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
                         <i class="bi bi-trash-fill"></i>
                     </x-Button>
                 @endif
@@ -34,5 +34,3 @@
         </tr>
     @endforeach
 </x-Table>
-<x-modal.modal-message title="xóa sản phẩm" content="bạn có muốn xóa không" btnTitle="đồng ý xóa" />
-<x-modal.modal-message title="xóa sản phẩm" content="bạn có muốn xóa không" btnTitle="đồng ý xóa" />

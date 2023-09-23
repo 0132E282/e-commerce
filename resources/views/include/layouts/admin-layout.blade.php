@@ -46,7 +46,7 @@
             <footer class="main-footer">
                 @include('include/components/footer/footer-admin')
             </footer>
-
+            <x-modal.modal-message id="delete_message" title="xóa bản nghi" content="bạn có muốn xóa không" btnTitle="đồng ý xóa" />
             <aside class="control-sidebar control-sidebar-dark">
             </aside>
         </div>

@@ -9,10 +9,10 @@
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-            <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            <img src="{{ $user->avatar }}" onerror="this.src='https://tse3.mm.bing.net/th?id=OIP.R97hFhAyScVK0EsD5seM6wHaHa&pid=Api&P=0&h=180';" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
+            <a href="{{ route('update-user', ['id' => $user->id]) }}" class="d-block">{{ $user->name }}</a>
         </div>
     </div>
 

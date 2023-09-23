@@ -14,6 +14,5 @@
                 </div>
             </div>
         </div>
-        <x-ModalMessage />
     </section>
 @endsection
