@@ -52,6 +52,7 @@
         <script src="/web/assets/js/price-range.js"></script>
         <script src="/web/assets/js/jquery.prettyPhoto.js"></script>
         <script src="/web/assets/js/main.js"></script>
+
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
         @yield('script')
     </body>

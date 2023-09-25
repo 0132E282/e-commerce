@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\validateOrder;
+use App\Models\Category;
 use App\Models\Customers;
 use App\Models\Orders;
 use App\Models\Products;
@@ -15,19 +16,21 @@ class ShopController extends Controller
     protected $modelProduct;
     protected $modelOrders;
     protected $modelCustomers;
-
+    protected $modelCategory;
     function __construct()
     {
         $this->modelProduct = new Products();
         $this->modelOrders = new Orders();
+        $this->modelCategory = new Category();
         $this->modelCustomers = new Customers();
         Paginator::useBootstrapFive();
     }
-    function index($slug = null, $id = null)
+    function index($slug = null)
     {
         $productList = $this->modelProduct;
-        if ($id) {
-            $productList = $productList->where('id_category', '=', $id);
+        $category = $this->modelCategory->where('slug_category', $slug)->first();
+        if ($category) {
+            $productList = $productList->where('id_category', '=',  $category->id_category);
         }
         $productList =  $productList->latest()->paginate(12);
         return view('pages/shop/index', ['productList' => $productList]);
@@ -57,9 +60,17 @@ class ShopController extends Controller
                 'quantity' => $request->quantity
             ];
             session()->put('cart_product', $cart);
-            return  back()->with('message', ['content' => 'product added to cart successfully', 'type' => 'success']);
+            return  response()->json([
+                'message' => ' success',
+                'type' => 'success',
+                'data' => $cart
+            ], 200);
         } catch (\Exception $e) {
-            abort(500);
+            return  response()->json([
+                'message' => 'fail',
+                'type' => 'error',
+                'data' => $cart
+            ], 200);
         }
     }
     function cart()
@@ -100,6 +111,10 @@ class ShopController extends Controller
         try {
             $userId = Auth::id();
             $products = session()->get('cart_product');
+            $tola = array_reduce($products, function ($tola, $product) {
+                return $tola + ($product['price_product'] * $product['quantity']);
+            });
+
             $customers = $this->modelCustomers->create(
                 [
                     'name' => $req->name,
@@ -110,8 +125,9 @@ class ShopController extends Controller
             );
             $order = $customers->orders()->create([
                 'user_id' => $userId,
-                'status' => 'order',
+                'status' => 'Processing',
                 'note' => $req->message,
+                'tola' => $tola
             ]);
             foreach ($products as $product) {
                 $order->orderItems()->create([

@@ -5,7 +5,7 @@
         @foreach ($dataCategory as $value)
             @php
                 $checkChildrenCount = !empty($value['children']) && count($value['children']) > 0;
-                $router = route('category-shop', ['slug' => $value->slug_category, 'id' => $value->id_category]);
+                $router = route('category-shop', ['slug' => $value->slug_category]);
             @endphp
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -26,7 +26,7 @@
                             @if ($checkChildrenCount)
                                 @foreach ($value['children'] as $value)
                                     @php
-                                        $router = route('category-shop', ['slug' => $value->slug_category, 'id' => $value->id_category]);
+                                        $router = route('category-shop', ['slug' => $value->slug_category]);
                                     @endphp
                                     <li><a href=" {{ $router }}"> {{ $value->name_category }} </a></li>
                                 @endforeach

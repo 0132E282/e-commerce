@@ -26,25 +26,13 @@
     </head><!--/head-->
 
     <body>
-        <header id="header"><!--header-->
-            <x-header.header-web />
-        </header><!--/header-->
-        <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        @yield('content')
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    @yield('content')
                 </div>
             </div>
-        </section>
-
-        <footer id="footer"><!--Footer-->
-            <x-footer.footer-web />
-
-        </footer><!--/Footer-->
-
-
+        </div>
         <script src="/web/assets/js/jquery.js"></script>
         <script src="/web/assets/js/bootstrap.min.js"></script>
         <script src="/web/assets/js/jquery.scrollUp.min.js"></script>

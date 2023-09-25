@@ -12,7 +12,7 @@ class Orders extends Model
 {
     protected $table = 'orders';
     protected $primaryKey = 'id';
-    protected $fillable = ['customers_id', 'status', 'user_id'];
+    protected $fillable = ['customers_id', 'status', 'user_id', 'tola'];
     function orderItems(): HasMany
     {
         return $this->hasMany(OrderItems::class, 'order_id');

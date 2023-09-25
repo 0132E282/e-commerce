@@ -21,6 +21,10 @@ class SliderController extends Controller
         $slider = $this->modelSlider->paginate(25);
         return view('/pages/slider/index', ['slider' => $slider]);
     }
+    function demo()
+    {
+        return view('pages.slider.demo');
+    }
     function trash()
     {
         $slider = $this->modelSlider->onlyTrashed()->paginate(25);

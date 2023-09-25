@@ -7,8 +7,8 @@
     <title>{{ $detailProduct->name_product }} | E-Shopper</title>
 @endsection
 @section('link')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-    <link rel="stylesheet" href="/vendor/modal/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 @endsection
 
 @section('content')
@@ -69,6 +69,27 @@
     @endif
 @endsection
 @section('script')
-    <script src='http://dynamicsjs.com/lib/dynamics.js'></script>
-    <script src="{{ asset('vendor/modal/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
+<script type="module">
+    $(document).ready(function() {
+        $('form').on('submit', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const action = form.attr('action');
+            const quantity = form.find("input[name='quantity']").val();
+            const token = form.find("input[name='_token']").val();
+            $.post(action, {
+                quantity: quantity,
+                '_token': token
+            }, function(data) {
+                Swal.fire({
+                    icon: data.type,
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            })
+        })
+    });
+</script>

@@ -119,7 +119,6 @@ class ProductsController extends Controller
     {
         try {
             $product = $this->modelProducts->find($id);
-
             $product->delete();
             return back()->with('message', ['content' => 'delete product tag success :' .   $product->id_product, 'type' => 'success']);
         } catch (Exception $e) {

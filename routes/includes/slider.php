@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/slider')->group(function () {
     // view 
     Route::get('/', [SliderController::class, 'index'])->middleware('can:VIEW_SLIDER')->name('slider');
+    Route::get('/demo', [SliderController::class, 'demo'])->middleware('can:VIEW_SLIDER')->name('demo-slider');
     Route::get('/trash', [SliderController::class, 'trash'])->middleware('can:VIEW_TRASH_SLIDER')->name('trash-slider');
     // create a new slider
     Route::get('/create', [SliderController::class, 'showForm'])->middleware('can:CREATE_SLIDER')->name('create-slider');

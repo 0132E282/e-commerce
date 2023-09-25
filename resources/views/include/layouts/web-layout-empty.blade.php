@@ -36,7 +36,6 @@
         </div>
         <footer id="footer"><!--Footer-->
             <x-footer.footer-web />
-
         </footer><!--/Footer-->
 
         <script src="/web/assets/js/jquery.js"></script>
