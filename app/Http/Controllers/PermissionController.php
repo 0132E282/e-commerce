@@ -52,6 +52,7 @@ class PermissionController extends Controller
             }
             return back()->with('message', ['content' => 'create permission success', 'type' => 'success']);
         } catch (Exception $e) {
+            return response()->json($e->getMessage());
             return back()->with('message', ['content' => 'create permission fail', 'type' => 'error']);
         }
     }

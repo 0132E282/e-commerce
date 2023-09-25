@@ -15,16 +15,14 @@ return new class extends Migration
             $table->id('id_product');
             $table->string('name_product')->notNull();
             $table->bigInteger('price_product')->notNull();
-            $table->string('slug_product')->default(null);
-            $table->text('content')->default(null);
-            $table->text('content')->default(null);
-            $table->bigInteger('views_count')->default(0);
-            $table->bigInteger('views_count')->default(0);
-            $table->bigInteger('count_warehouse')->default(0);
-            $table->bigInteger('like_count')->default(0);
-            $table->bigInteger('comment_count')->default(0);
+            $table->string('slug_product')->default(null)->nullable();
+            $table->text('content')->default(null)->nullable()->nullable();
+            $table->bigInteger('views_count')->default(0)->nullable();
+            $table->bigInteger('count_warehouse')->default(0)->nullable();
+            $table->bigInteger('like_count')->default(0)->nullable();
+            $table->bigInteger('comment_count')->default(0)->nullable();
             $table->string('feature_image')->default('/storage/uploads/images/products/QsEd3sG9UNk2597dJ17Os5gRXrpXcTtswiuhm7eZ.jpg');
-            $table->unsignedBigInteger('id_category')->default(null);
+            $table->unsignedBigInteger('id_category')->default(null)->nullable();
             $table->softDeletes();
             $table->foreignId('id_user')->constrained(
                 table: 'users',

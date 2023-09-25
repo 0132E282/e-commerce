@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('category', function (Blueprint $table) {
             $table->id('id_category');
-            $table->bigInteger('views_count');
+            $table->bigInteger('views_count')->default(0)->nullable();
             $table->string('name_category');
             $table->string('slug_category');
             $table->softDeletes();

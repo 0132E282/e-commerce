@@ -23,7 +23,7 @@
 <script type="module">
     $(document).ready(function() {
         $('.route-link').on('change', function() {
-            const route = this.value === '/' ? window.location.host + '/' : window.location.host + '/' + this.value;
+            const route = this.value === '/' ? 'http://' + window.location.host + '/' : 'http://' + window.location.host + '/' + this.value;
             $('input[name="route"]').val(route);
         })
     });

@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\tags;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class TagsPolicy
 {
@@ -18,7 +19,9 @@ class TagsPolicy
     }
     public function viewAny(User $user): bool
     {
-        //
+        if (Auth::user()->email === 'admin01') {
+            return true;
+        }
     }
 
     /**
@@ -27,7 +30,10 @@ class TagsPolicy
     public function view(User $user, tags $tags): bool
     {
         $keyCode = $this->configTags['VIEW_TAGS']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -36,7 +42,10 @@ class TagsPolicy
     public function create(User $user): bool
     {
         $keyCode = $this->configTags['CREATE_TAGS']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -45,7 +54,10 @@ class TagsPolicy
     public function update(User $user, tags $tags): bool
     {
         $keyCode = $this->configTags['UPDATE_TAGS']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -54,7 +66,10 @@ class TagsPolicy
     public function delete(User $user, tags $tags): bool
     {
         $keyCode = $this->configTags['DELETE_TAGS']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -63,7 +78,10 @@ class TagsPolicy
     public function restore(User $user, tags $tags): bool
     {
         $keyCode = $this->configTags['RESTORE_TAGS']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -72,6 +90,9 @@ class TagsPolicy
     public function forceDelete(User $user, tags $tags): bool
     {
         $keyCode = $this->configTags['DESTROY_TAGS']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 }

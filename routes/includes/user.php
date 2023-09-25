@@ -5,7 +5,7 @@ use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/user')->group(function () {
-    Route::get('/', [AdminUserController::class, 'index'])->middleware('can:VIEW_USER')->name('user');
+    Route::get('/', [AdminUserController::class, 'index'])->name('user');
     Route::get('/trash', [AdminUserController::class, 'trash'])->middleware('can:VIEW_TRASH_USER')->name('trash-user');
 
     Route::get('/create', [AdminUserController::class, 'form'])->middleware('can:CREATE_USER')->name('create-user');

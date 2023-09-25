@@ -43,9 +43,9 @@ class AuthController extends Controller
 
         try {
             $user =  $this->modelUser->create([
-                'email' => 'admin@example.com',
-                'password' => '123',
-                'name' => 'admin',
+                'email' => $req->email,
+                'password' => $req->password,
+                'name' => $req->name,
             ]);
             return response()->json($user);
         } catch (Exception $e) {

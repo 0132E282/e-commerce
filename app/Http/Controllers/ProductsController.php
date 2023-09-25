@@ -66,7 +66,8 @@ class ProductsController extends Controller
             }
             return back()->with('message', ['content' => 'crete product success id :' .  $product->id_product, 'type' => 'success']);
         } catch (Exception $e) {
-            return back()->with('error', 'crete product  failed :' . $e->getMessage());
+            return response()->json($e->getMessage());
+            return back()->with('message', ['content' => 'crete product fail ', 'type' => 'error']);
         }
     }
 

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('display_name');
-            $table->string('key_code')->default(null);
+            $table->string('key_code')->nullable();
             $table->bigInteger('parent_id')->default(0);
             $table->timestamps();
         });

@@ -66,7 +66,7 @@ class MenusController extends Controller
             $menus = $this->modelMenus->create(
                 [
                     'name_menus' => $req->name_menus,
-                    'route' => $req->route_menus,
+                    'route' => $req->route,
                     'parent_id' => $req->parent_id ?? 0,
                     'slug' => Str::slug($req->name_menus)
                 ]
@@ -83,7 +83,7 @@ class MenusController extends Controller
             $menus->update(
                 [
                     'name_menus' => $req->name_menus,
-                    'route' => $req->route_menus,
+                    'route' => $req->route,
                     'parent_id' => $req->parent_id ?? 0,
                     'slug' => Str::slug($req->name_menus)
                 ]

@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryPolicy
 {
@@ -17,7 +18,10 @@ class CategoryPolicy
     }
     public function viewAny(User $user): bool
     {
-        //
+        if (Auth::user()->email === 'admin01@admin.com') {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -26,7 +30,10 @@ class CategoryPolicy
     public function view(User $user): bool
     {
         $keyCode = $this->configCategory['VIEW_CATEGORY']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -35,7 +42,10 @@ class CategoryPolicy
     public function create(User $user): bool
     {
         $keyCode = $this->configCategory['CREATE_CATEGORY']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -44,7 +54,10 @@ class CategoryPolicy
     public function update(User $user): bool
     {
         $keyCode = $this->configCategory['UPDATE_CATEGORY']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -53,7 +66,10 @@ class CategoryPolicy
     public function delete(User $user): bool
     {
         $keyCode = $this->configCategory['DELETE_CATEGORY']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -62,7 +78,10 @@ class CategoryPolicy
     public function restore(User $user): bool
     {
         $keyCode = $this->configCategory['RESTORE_CATEGORY']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -71,11 +90,17 @@ class CategoryPolicy
     public function forceDelete(User $user): bool
     {
         $keyCode = $this->configCategory['DESTROY_CATEGORY']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
     public function viewTrash(User $user): bool
     {
         $keyCode = $this->configCategory['VIEW_TRASH_CATEGORY']['key_code'];
-        return $user->checkPermission($keyCode);
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
     }
 }

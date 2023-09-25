@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
             $table->bigInteger('quantity')->default(0);
+            $table->bigInteger('tola')->default(0);
             $table->string('note')->default(null);
             $table->timestamps();
         });

@@ -17,6 +17,7 @@ class ShopController extends Controller
     protected $modelOrders;
     protected $modelCustomers;
     protected $modelCategory;
+    protected $idCategory = [];
     function __construct()
     {
         $this->modelProduct = new Products();
@@ -25,12 +26,25 @@ class ShopController extends Controller
         $this->modelCustomers = new Customers();
         Paginator::useBootstrapFive();
     }
+    function getChildrenIdCategory($data)
+    {
+        foreach ($data as $value) {
+            $this->idCategory[] = $value->id_category;
+            if (count($value->categoryParent()->get()) > 0) {
+                $this->getChildrenIdCategory($value->categoryParent()->get);
+            }
+        }
+        return $this->idCategory;
+    }
     function index($slug = null)
     {
         $productList = $this->modelProduct;
         $category = $this->modelCategory->where('slug_category', $slug)->first();
+
         if ($category) {
-            $productList = $productList->where('id_category', '=',  $category->id_category);
+            $idCategory = $this->getChildrenIdCategory($category->categoryParent()->get());
+            $idCategory[] = $category->id_category;
+            $productList = $productList->whereIn('id_category',  $idCategory);
         }
         $productList =  $productList->latest()->paginate(12);
         return view('pages/shop/index', ['productList' => $productList]);
