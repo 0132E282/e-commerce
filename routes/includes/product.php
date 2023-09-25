@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/products')->group(function () {
     Route::get('/', [ProductsController::class, 'index'])->middleware('can:VIEW_PRODUCT')->name('product-page');
+    Route::get('/demo', [ProductsController::class, 'demo'])->middleware('can:VIEW_PRODUCT')->name('demo-product');
     // show a trash product
     Route::get('/trash', [ProductsController::class, 'trash'])->middleware('can:VIEW_TRASH_PRODUCT')->name('trash-product');
     // create a new product 

@@ -25,6 +25,11 @@ class ProductsController extends Controller
         $productList  = $this->modelProducts->leftJoin('category', 'products.id_category', 'category.id_category')->orderBy('products.created_at', 'DESC')->paginate(25);
         return view('pages/products/index', ['productList' => $productList]);
     }
+    function demo()
+    {
+        $productList  = $this->modelProducts->leftJoin('category', 'products.id_category', 'category.id_category')->orderBy('products.created_at', 'DESC')->paginate(25);
+        return view('pages/shop/demo', ['productList' => $productList]);
+    }
     function trash()
     {
         $productList =  $this->modelProducts->leftJoin('category', 'products.id_category', 'category.id_category')->orderBy('products.deleted_at', 'DESC')->onlyTrashed()->paginate(25);
