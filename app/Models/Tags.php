@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tags extends Model
 {
-    use SoftDeletes;
-    protected $table = 'tags';
-    protected $primaryKey = 'id_tag';
-    protected $fillable = ['name_tag'];
     use HasFactory;
+    protected $table = 'tags';
+    protected $primaryKey = 'id';
+    protected $fillable = ['name', 'id_product'];
 }

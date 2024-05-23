@@ -6,13 +6,11 @@
             <div class="row">
                 @if (session()->has('message'))
                     @php $message = session()->get('message'); @endphp
-                    <x-Alert message="{{ $message['content'] }}" type="{{ $message['type'] }}" />
+                    <x-alert message="{{ $message['content'] }}" type="{{ $message['type'] }}" />
                 @endif
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <x-FormRoles :data="$form['data']" action="{{ $form['action'] }}" method="{{ $form['method'] }}" />
-                </div>
+            <div class="card p-4 ">
+                <x-form.form-roles :action="route('admin.roles.create')" method="POST" />
             </div>
         </div>
     </section>

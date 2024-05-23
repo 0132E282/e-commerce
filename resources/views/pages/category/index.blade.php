@@ -1,21 +1,107 @@
 @extends('/include/layouts/admin-layout')
-@section('content')
-<!-- Main content -->
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
+@php
+    $curentUrl = Request::url();
+    $navCategory = [
+        [
+            'title' => 'tất cả',
+            'url' => route('admin.category.table'),
+        ],
+        [
+            'title' => 'hoạt động',
+            'url' => route('admin.category.status', ['status' => 'is-active']),
+        ],
+        [
+            'title' => 'ngừng bán',
+            'url' => route('admin.category.status', ['status' => 'stop-working']),
+        ],
+        [
+            'title' => 'thùng rác',
+            'url' => route('admin.category.trash.show'),
+        ],
+    ];
 
-            @if(session()->has('message'))
-            @php $message = session()->get('message'); @endphp
-            <x-Alert message="{{$message['content']}}" type="{{$message['type']}}" />
+@endphp
+@section('content')
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            @if (session()->has('message'))
+                @php $message = session()->get('message'); @endphp
+                <x-alert message="{{ $message['content'] }}" type="{{ $message['type'] }}" />
             @endif
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <x-TableCategory :data="$categoryList" />
+            <div class="row">
+                <div class="col-12">
+                    <div class=" card px-3 py-4 ">
+                        <form action="{{ $curentUrl }}">
+                            <div class="row gap-4 ">
+                                <div class="row col-6">
+                                    <x-input.input-between type="number" :placeholder="['start' => 'lượt truy cập tối thiểu', 'end' => 'lượt truy vập tối đa']" labde="Lượt try cập" name="views" :value="request()->views" />
+                                </div>
+                                <div class="row col-6">
+                                    <div class="col-2">
+                                        <label for="">Tên sản phẩm</label>
+                                    </div>
+                                    <div class="input-group col">
+                                        <input type="text" class="form-control" name="search" placeholder="Nhập tên danh mục ">
+                                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                                    </div>
+                                </div>
+                                <div class="row col-6">
+                                    <x-input.input-between type="number" labde="Sản phẩm" name="products" :placeholder="['start' => 'số lượng sản phẩm tối thiểu', 'end' => 'số lượng sản phẩm tối đa']" :value="request()->products" />
+                                </div>
+                                <div class="row col-6">
+                                    <x-input.input-between type="date" labde="ngày tạo" name="created" :value="request()->created" />
+                                </div>
+                            </div>
+                            <div class="mt-3 ">
+                                <button class="btn-primary btn">Tìm kiếm</button>
+                                <a href="{{ $curentUrl }}" class="btn-danger  btn">Xóa bỏ</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card px-2" style="min-height: 65vh;">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center ">
+                                <ul class="nav nav-underline">
+                                    @foreach ($navCategory as $nav)
+                                        <li class="nav-item">
+                                            <a class="nav-link text-black {{ $curentUrl == $nav['url'] ? 'active border-0  ' : '' }}" aria-current="page" href="{{ $nav['url'] }}">{{ $nav['title'] }}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <div class="fl">
+                                    <x-button :link="Route('admin.category.create')">
+                                        <i class="bi bi-plus-lg me-1"></i>
+                                        Tạo mới
+                                    </x-button>
+
+                                    <x-button data-target="#import-file" data-toggle="modal" data-route="{{ Route('admin.category.import') }}">
+                                        <i class="bi bi-plus-lg me-1"></i>
+                                        Thêm nhiều
+                                    </x-button>
+                                    <x-button data-target="#modal-export-category" data-toggle="modal" class="btn-success">
+                                        <i class="bi bi-file-earmark me-1"></i>
+                                        Xuất File
+                                    </x-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body ">
+                            @yield('cateogry-content')
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- /.content -->
+    </section>
+    <!-- /.content -->
+@endsection
+@section('modal')
+    <x-modal.import-file id="import-file" />
+    <x-modal.modal-ex-file id="modal-export-category" valueDefault="danh muc sản phẩm" />
+    <x-category.modal-details id="modal-catgory" />
+    <x-category.modal-coppy />
+    <x-modal.modal-message id="delete_message" btnTitle="xóa" title="Xóa sản danh mục sản phẩm" content="nếu bạn xóa danh mục nầy đồng nghĩ những sản phẩm thuộc danh mục sẽ không được hoạt động" />
 @endsection

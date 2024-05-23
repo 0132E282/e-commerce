@@ -1,16 +1,16 @@
-<h2 class="title text-center">recommended items</h2>
+@props(['title' => ''])
 
+<h2 class="title text-start">{{ $title }}</h2>
 <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
         @foreach ($recommendedProduct as $key => $product)
-            @if ($key % 3 == 0)
+            @if ($key % 4 == 0)
                 <div class="item {{ $key == 0 ? 'active' : '' }}">
             @endif
-
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <x-product.card control="{{ false }}" :data="$product" />
             </div>
-            @if ($key % 3 == 2)
+            @if ($key % 4 == 3)
     </div>
     @endif
     @endforeach

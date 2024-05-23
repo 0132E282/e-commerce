@@ -22,7 +22,7 @@ class CategoryValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'name_category' => ['required' ]
+            'name_category' => ['required']
         ];
     }
     public function  messages(): array

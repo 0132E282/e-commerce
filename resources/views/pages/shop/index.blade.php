@@ -14,15 +14,15 @@
     </section>
 @endsection
 @section('content')
-    <div class="features_items"><!--features_items-->
-        <h2 class="title text-center">Features Items</h2>
-        @if (count($productList) > 0)
-            <x-product.group :data="$productList" colmun="4" />
-        @else
-            <div>
-                <img src="/web/assets//images/404/404.png" alt="">
+    <div class="row">
+        <div class="col-sm-3">
+            <x-sidebar.left-sidebar />
+        </div>
+        <div class="col-sm-9 padding-right">
+            <div class="features_items">
+                <x-home.features-item :data="$productList" column="3" />
             </div>
-        @endif
+        </div>
     </div>
     <div>
         {{ $productList->links() }}

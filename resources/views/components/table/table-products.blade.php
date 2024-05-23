@@ -1,36 +1,85 @@
-@props(['columnNames' => ['#', 'hình ảnh', 'tên sản phẩm', 'giá sản phẩm', 'loại sản phẩm', 'ngày tạo', 'action']])
-<x-Table :columnNames="$columnNames" :dataTable="$dataTable">
-    @foreach ($dataTable as $key => $value)
+@props([
+    'columnNames' => [
+        '#',
+        'tên',
+        [
+            'col_name' => 'danh mục',
+            'order' => 'category',
+        ],
+        [
+            'col_name' => 'Thương hiệu',
+            'order' => 'brand',
+        ],
+        [
+            'col_name' => 'giá',
+            'order' => 'price',
+        ],
+        [
+            'col_name' => 'lượt truy cập',
+            'order' => 'view',
+        ],
+
+        [
+            'col_name' => 'like',
+            'order' => 'like',
+        ],
+        [
+            'col_name' => 'kho',
+            'order' => 'quantity',
+        ],
+        [
+            'col_name' => 'ngày tạo',
+            'order' => 'created',
+        ],
+        '',
+    ],
+])
+<x-table :tableHead="$columnNames">
+    @foreach ($products as $key => $value)
         <tr>
-            <th scope="row">{{ $loop->iteration }}</th>
-            <th style="width: 80px; height: auto;">
-                <img src="{{ $value->feature_image }}" onerror="this.src='/assets/default-images/empty_product.jpg';" class="img-thumbnail" alt="{{ $value->name_product }}">
-            </th>
-            <td style="max-width: 200px;">
-                <p class="ellipsis" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="This top tooltip is themed via CSS variables.">
-                    {{ $value->name_product }}
-                </p>
-            </td>
-            <td>{{ number_format($value->price_product) }}</td>
-            <td>{{ $value->name_category }}</td>
-            <td>{{ date('Y/m/d', strtotime($value->created_at)) }} </td>
+            <td>{{ ++$key }}</td>
             <td>
-                @if (Route::currentRouteName() == 'trash-product')
-                    <x-Button method="POST" action="{{ route('restore-product', $value->id_product) }}" class="btn btn-warning">
+                <div class="d-flex" style="max-width: 400px;">
+                    <img class="img-thumbnail" src="{{ $value->feature_image }}" alt="{{ $value->slug }}" style="max-width: 60px; height: 80px;">
+                    <p class="ellipsis ms-2 " data-toggle="tooltip" data-placement="top" data-custom-class="custom-tooltip" data-title="This top tooltip is themed via CSS variables.">
+                        {{ $value->name }}
+                    </p>
+                </div>
+            </td>
+            <td> {{ optional($value->category)->name }}</td>
+            <td> {{ optional($value->brand)->name }}</td>
+            <td> {{ number_format($value->min_price) ?? 0 }} {{ !empty($value->max_price) && $value->max_price > $value->min_price ? ' -  ' . number_format($value->max_price) : '' }} đ</td>
+            <td> {{ number_format($value->views_count) }}</td>
+            <td>{{ 0 }}</td>
+            <td>{{ number_format($value->quantity) }}</td>
+
+            <td>{{ date('Y/m/d', strtotime($value->created_at)) }} </td>
+            <td class="text-end ">
+                @if (Route::currentRouteName() == 'admin.products.trash')
+                    <x-button method="POST" action="{{ route('admin.products.restore', $value->id) }}" class="btn btn-warning">
                         <i class="bi bi-arrow-counterclockwise"></i>
-                    </x-Button>
-                    <x-Button data-method="delete" data-route="{{ route('destroy-product', $value->id_product) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
+                    </x-button>
+                    <x-button data-method="delete" data-route="{{ route('admin.products.destroy', $value->id) }}" data-toggle="modal" data-target="#delete_message" class="btn-danger">
                         <i class="bi bi-trash-fill"></i>
-                    </x-Button>
+                    </x-button>
                 @else
-                    <x-Button link="{{ route('update-product', $value->id_product) }}" class="btn btn-warning">
+                    <x-button class="btn btn-secondary" data-router="{{ route('admin.products.details', ['id' => $value->id]) }}" data-target="#modal-details" data-toggle="modal">
+                        <i class="bi bi-eye-fill"></i>
+                    </x-button>
+                    <x-button action="{{ route('admin.products.update-status', ['id' => $value->id, 'status' => $value->status == 1 ? 0 : 1]) }}" class="btn btn-secondary">
+                        @php
+                            $icon = $value->status == 1 ? 'bi bi-lock-fill' : 'bi bi-unlock-fill';
+                        @endphp
+                        <i class="{{ $icon }}"></i>
+                    </x-button>
+                    <x-button link="{{ route('admin.products.update', $value->id) }}" class="btn btn-warning">
                         <i class="bi bi-pencil-square"></i>
-                    </x-Button>
-                    <x-Button data-method="delete" data-route="{{ route('delete-product', $value->id_product) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
+                    </x-button>
+                    <x-button data-target="#delete_message" data-toggle="modal" data-method="delete" data-route="{{ route('admin.products.delete', $value->id) }}" class="btn-danger">
                         <i class="bi bi-trash-fill"></i>
-                    </x-Button>
+                    </x-button>
                 @endif
             </td>
         </tr>
     @endforeach
-</x-Table>
+</x-table>

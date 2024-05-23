@@ -3,20 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
-use Illuminate\Http\Request;
+use App\Repository\RepositoryMain\CategoryRepository;
+use App\Repository\RepositoryMain\ProductsRepository;
 
 class SiteController extends Controller
 {
     protected $modelProduct;
+    protected $categoryRepository;
+    protected $productsRepository;
     function __construct()
     {
         $this->modelProduct = new Products();
+        $this->categoryRepository = new CategoryRepository();
+        $this->productsRepository = new ProductsRepository();
     }
     function index()
     {
-        $newProduct = $this->modelProduct->latest()->paginate(6);
-        $recommendedProduct = $this->modelProduct->latest('views_count', 'desc')->take(12)->get();
-        return view('pages.site.home', ['newProduct' => $newProduct, 'recommendedProduct' => $recommendedProduct]);
+        $recommendedProduct = $this->productsRepository->shopSlider('views');
+        $TopProductByOrder = $this->productsRepository->shopSlider('order');
+        $category = $this->categoryRepository->all();
+        $products = $this->productsRepository->shop(25, ['order' => 'view', 'by' => 'DESC']);
+        return view('pages.site.home', ['products' => $products, 'recommendedProduct' => $recommendedProduct, 'category' => $category]);
     }
     function page404()
     {

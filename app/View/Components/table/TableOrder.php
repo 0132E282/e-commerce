@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\table;
+namespace App\View\Components\Table;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -11,10 +11,10 @@ class TableOrder extends Component
     /**
      * Create a new component instance.
      */
-    protected $dataBillList;
-    public function __construct($data)
+    protected $orders;
+    public function __construct($orders)
     {
-        $this->dataBillList = $data;
+        $this->orders = $orders;
     }
 
     /**
@@ -22,6 +22,6 @@ class TableOrder extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.table.table-order', ['billList' => $this->dataBillList]);
+        return view('components.table.table-order', ['orders' => $this->orders]);
     }
 }

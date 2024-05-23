@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\menus;
+namespace App\View\Components\Menus;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -8,10 +8,13 @@ use Illuminate\View\Component;
 
 class MenusChildren extends Component
 {
-    protected $dataMenus;
-    public function __construct($data)
+    /**
+     * Create a new component instance.
+     */
+    protected $menuChildren;
+    public function __construct($menuChildren)
     {
-        $this->dataMenus = $data;
+        $this->menuChildren = $menuChildren;
     }
 
     /**
@@ -19,6 +22,6 @@ class MenusChildren extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.menus.menus-children', ['dataMenus' => $this->dataMenus]);
+        return view('components.menus.menus-children', ['menuChildren' => $this->menuChildren]);
     }
 }

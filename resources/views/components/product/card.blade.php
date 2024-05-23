@@ -1,18 +1,13 @@
 @props(['control' => true])
 <div class="product-image-wrapper" style="min-height: 440px;">
     <div class="single-products">
-        <div class="productinfo text-center">
-            <img src="{{ $productItem->feature_image }}" alt="{{ $productItem->name_product }}" />
-            <h2>{{ number_format($productItem->price_product) . ' đ' }}</h2>
-            <p style="min-height: 40px;">{{ $productItem->name_product }}</p>
-            <a href="{{ route('single-shop', ['slug' => $productItem->slug_product, 'id' => $productItem->id_product]) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+        <div class="single-products-header">
+            <img src="{{ $productItem->feature_image }}" alt="{{ $productItem->name }}" />
         </div>
-        <div class="product-overlay">
-            <div class="overlay-content">
-                <h2>{{ number_format($productItem->price_product) . ' đ' }}</h2>
-                <p style="min-height: 40px;">{{ $productItem->name_product }}</p>
-                <a href="{{ route('single-shop', ['slug' => $productItem->slug_product, 'id' => $productItem->id_product]) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-            </div>
+        <div class="productinfo text-center ">
+            <h2>{{ number_format($productItem->variations->min('price')) }} {{ $productItem->variations->min('price') <= $productItem->variations->max('price') ? '' : '-' . $productItem->variations->max('price') }} đ </h2>
+            <p class="line-clamp-2" style="min-height: 40px; ">{{ Str::limit($productItem->name, 63, '...') }}</p>
+            <a href="{{ route('client.shop.single', ['slug' => $productItem->slug, 'id' => $productItem->id]) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
         </div>
     </div>
     @if ($control == true)

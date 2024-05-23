@@ -1,3 +1,5 @@
+@props(['title' => ''])
+
 <div class="card">
     <div class="card-header border-0">
         <h3 class="card-title">Products</h3>
@@ -12,7 +14,7 @@
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <x-table :columnNames="['Mã ĐH', 'sản phẩm', 'trạng thái', 'ngày tạo']" :dataTable="$dataOrders">
+            <x-table.index :columnNames="['Mã ĐH', 'sản phẩm', 'trạng thái', 'ngày tạo']" :dataTable="$dataOrders">
                 @foreach ($dataOrders as $order)
                     @php
                         $key = array_search($order->status, array_column($statusList, 'title'), true);
@@ -28,13 +30,13 @@
                         </tr>
                     @endforeach
                 @endforeach
-            </x-table>
+            </x-table.index>
         </div>
         <!-- /.table-responsive -->
     </div>
     <!-- /.card-body -->
     <div class="card-footer clearfix">
         <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
-        <a href="{{ route('orders') }}" class="btn btn-sm btn-secondary float-right">xem tất cả</a>
+        <a href="{{ route('order.index') }}" class="btn btn-sm btn-secondary float-right">xem tất cả</a>
     </div>
 </div>

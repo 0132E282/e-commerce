@@ -12,12 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sliders', function (Blueprint $table) {
-            $table->id('id_slider');
-            $table->softDeletes();
+            $table->id();
             $table->string('image_url');
-            $table->string('name_slider');
-            $table->string('description_slider');
+            $table->string('title');
+            $table->string('content')->nullable();
+            $table->integer('location')->nullable();
+            $table->bigInteger('views_count')->nullable()->default(0);
+            $table->integer('links')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('sliders');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

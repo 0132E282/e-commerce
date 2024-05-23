@@ -2,9 +2,9 @@
 @section('seo')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
+    <meta name="description" content="{{ $detailProduct->content }}">
     <meta name="author" content="">
-    <title>{{ $detailProduct->name_product }} | E-Shopper</title>
+    <title>{{ $detailProduct->name }} | E-Shopper</title>
 @endsection
 @section('link')
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
@@ -16,7 +16,7 @@
         <div class="col-sm-5">
             <x-product.view-product :data="$detailProduct" />
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-6">
             <x-product.product-information :data="$detailProduct" />
         </div>
     </div><!--/product-details-->
@@ -24,7 +24,7 @@
     <div class="category-tab shop-details-tab"><!--category-tab-->
         <div class="col-sm-12">
             <ul class="nav nav-tabs">
-                <li><a href="#description" data-toggle="tab">description</a></li>
+                <li><a href="#description" data-toggle="tab">Mô tả sản phẩm</a></li>
                 <li class="active"><a href="#reviews" data-toggle="tab">Reviews (5)</a></li>
             </ul>
         </div>
@@ -64,32 +64,4 @@
             </div>
         </div>
     </div><!--/category-tab-->
-    @if (count($recommendedProduct) > 0)
-        <x-product.recommended-item :data="$recommendedProduct" />
-    @endif
 @endsection
-@section('script')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endsection
-<script type="module">
-    $(document).ready(function() {
-        $('form').on('submit', function(e) {
-            e.preventDefault();
-            const form = $(this);
-            const action = form.attr('action');
-            const quantity = form.find("input[name='quantity']").val();
-            const token = form.find("input[name='_token']").val();
-            $.post(action, {
-                quantity: quantity,
-                '_token': token
-            }, function(data) {
-                Swal.fire({
-                    icon: data.type,
-                    title: data.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                })
-            })
-        })
-    });
-</script>

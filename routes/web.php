@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\EditorController;
+use App\Routes\RouteGroup;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,25 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('/')->group(function () {
-    include_once('includes/shop.php');
-    include_once('includes/site.php');
+$route = new RouteGroup();
+
+Route::prefix('/')->group(function () use ($route) {
+    $route->client();
 });
-Route::prefix('/admin')->group(function () {
-    include_once('includes/auth.php');
-    Route::post('editor/image_upload', [EditorController::class, 'upload'])->name('upload');
-    Route::middleware(['auth'])->group(function () {
-        include_once('includes/user.php');
-        include_once('includes/order.php');
-        include_once('includes/permission.php');
-        include_once('includes/product.php');
-        include_once('includes/menus.php');
-        include_once('includes/admin.php');
-        include_once('includes/category.php');
-        include_once('includes/roles.php');
-        include_once('includes/mail.php');
-        include_once('includes/widgets.php');
-        include_once('includes/slider.php');
-        include_once('includes/setting.php');
-    });
+
+Route::prefix('/admin')->group(function () use ($route) {
+    $route->admin();
 });

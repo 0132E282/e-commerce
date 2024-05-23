@@ -2,130 +2,137 @@
 
 namespace App\Http\Controllers;
 
-use App\Components\StorageImage;
-use App\Components\UploadFiles;
-use App\Http\Requests\ProductsValidation;
+use App\Exports\ProductsExport;
+use App\Http\Requests\ProductsRequest;
+use App\Models\Category;
 use App\Models\Products;
-use Exception;
+use App\Repository\RepositoryMain\CategoryRepository;
+use App\Repository\RepositoryMain\ProductsRepository;
+use App\Repository\RepositoryMain\ProductsValidationRepository;
+use App\Repository\RepositoryMain\TagsRepository;
+use App\View\Components\Product\Details;
+use App\View\Components\product\VariationsAdmin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Pagination\Paginator;
+use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 class ProductsController extends Controller
 {
     protected $modelProducts;
+    protected $modelCategory;
+    protected $productRepository;
+    protected $productsValidationRepository;
+    protected $tagsRepository;
+    protected $categoryRepository;
     function __construct()
     {
+        $this->productRepository = new ProductsRepository();
+        $this->productsValidationRepository = new ProductsValidationRepository();
+        $this->categoryRepository = new CategoryRepository();
+
+        $this->tagsRepository = new TagsRepository();
         $this->modelProducts = new Products();
+        $this->modelCategory = new Category();
         Paginator::useBootstrapFive();
     }
 
-    function index()
+    function index(ProductsRequest $req, $status = null)
     {
-        $productList  = $this->modelProducts->leftJoin('category', 'products.id_category', 'category.id_category')->orderBy('products.created_at', 'DESC')->paginate(25);
-        return view('pages/products/index', ['productList' => $productList]);
+        $status =  $status === 'stop-working' ? 0 : ($status === 'work' ? 1 : null);
+        $option = ['filter' => $req->filter, 'status' => $status, 'search' => $req->search, ...$req->input()];
+        $products = $this->productRepository->all($option);
+        $categoryList =  $this->categoryRepository->has_products();
+        return view('pages.products.manager-all', ['products' => $products, 'categoryList' => $categoryList]);
     }
-    function demo()
+    function details($id)
     {
-        $productList  = $this->modelProducts->leftJoin('category', 'products.id_category', 'category.id_category')->orderBy('products.created_at', 'DESC')->paginate(25);
-        return view('pages/shop/demo', ['productList' => $productList]);
+        $product = $this->productRepository->details($id);
+        return (new Details($product))->render();
     }
-    function trash()
+    function status($status)
     {
-        $productList =  $this->modelProducts->leftJoin('category', 'products.id_category', 'category.id_category')->orderBy('products.deleted_at', 'DESC')->onlyTrashed()->paginate(25);
-        return view('pages/products/index', ['productList' => $productList]);
+        $products = $this->productRepository->all(['status' => $status]);
+        $categoryList =  $this->categoryRepository->has_products();
+        return view('pages.products.manager-all', ['products' => $products, 'categoryList' => $categoryList]);
     }
-    function store(ProductsValidation $req)
+    function trash(Request $req)
+    {
+        $option = [
+            'order' => $req->order,
+            'by' => $req->by,
+            'quantity' => $req->quantity,
+            'price' => $req->price,
+            'search' => $req->search,
+            'category' => $req->category,
+            'created' => $req->created,
+            'brand' => $req->brand
+        ];
+        $products =  $this->productRepository->trash($option);
+        $categoryList =  $this->categoryRepository->has_products();
+        return view('pages.products.trash', ['products' => $products, 'categoryList' => $categoryList]);
+    }
+    function store(ProductsRequest $req)
     {
         try {
-            $idUserAuth = Auth::user();
-            if ($req->hasFile('feature_image')) {
-                $imagePath =   StorageImage::uploadImage($req->feature_image, 'products', 556, 600);
-            }
-            $product = $this->modelProducts->create([
-                'name_product' => $req->name_product,
-                'price_product' => $req->price_product,
-                'slug_product' => Str::slug($req->name_product),
-                'feature_image' => $imagePath,
-                'content' => $req->content_product ?? null,
-                'id_category' => $req->id_category > 0 ? $req->id_category : null,
-                'id_user' => $idUserAuth->id
-            ]);
-            if ($req->has('product_images')) {
-                foreach ($req->product_images as $image) {
-                    $imagePath =   StorageImage::uploadImage($image, 'products', 556, 600);
-                    $product->productImages()->create([
-                        'path' => $imagePath,
-                    ]);
-                }
-            }
-            if ($req->tags_products) {
-                foreach ($req->tags_products as $value) {
-                    $product->tags()->firstOrCreate(['name_tag' => $value]);
-                }
-            }
-            return back()->with('message', ['content' => 'crete product success id :' .  $product->id_product, 'type' => 'success']);
+            $dataProduct = [
+                'name' => $req->name_product,
+                'price' => $req->price_product,
+                'description_image' => $req->file('description_image'),
+                'slug' => Str::slug($req->name_product),
+                'feature_image' => $req->file('feature_image'),
+                'content' => $req->description ?? null,
+                'id_category' => $req->category > 0 ? $req->category : null,
+                'user_id' => Auth::id(),
+                'brand_id' => $req->brand
+            ];
+            $product = $this->productRepository->create($dataProduct);
+
+            $this->productsValidationRepository->create_by_products($product, $req->attr);
+
+            $this->tagsRepository->create_by_products($product, $req->tags);
+            return back()->with('message', ['content' => 'tạo sản phẩm thành công:' .  $product->id, 'type' => 'success']);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
-            return back()->with('message', ['content' => 'crete product fail ', 'type' => 'error']);
+            return back()->with('message', ['content' => 'Tạo sản phẩm thất bại', 'type' => 'error']);
         }
     }
-
-    function edit(ProductsValidation $req, $id)
+    function updateStatus($id, $status)
     {
-
         try {
-            $idUserAuth = Auth::user();
-            $product = $this->modelProducts->find($id);
-            if ($req->hasFile('feature_image')) {
-                if ($product->feature_image) {
-                    $pathDelete = StorageImage::deleteImagePath($product, 'feature_image');
-                }
-                $imagePath = StorageImage::uploadImage($req->feature_image, 'products', 556, 600);
-            }
-            $product->update([
-                'name_product' => $req->name_product ?? $product->name_product,
-                'price_product' => $req->price_product ?? $product->price_product,
-                'slug_product' => Str::slug($req->name_product),
-                'feature_image' => $imagePath ?? $product->feature_image,
-                'content' => $req->content_product ?? $req->content,
-                'id_category' => $req->id_category > 0 ? $req->id_category : null ?? $product->id_category,
-                'id_user' => $idUserAuth->id
-            ]);
-
-            if ($req->hasFile('product_images')) {
-                $productImage =  $product->productImages();
-                $pathDelete = StorageImage::deleteImagePath($productImage->get(), 'path');
-                if ($pathDelete) {
-                    $productImage->delete();
-                }
-                foreach ($req->product_images as $image) {
-                    $imagePath = StorageImage::uploadImage($image, 'products', 556, 600);
-                    $product->productImages()->create([
-                        'path' => $imagePath,
-                    ]);
-                }
-            }
-            if ($req->tags_products) {
-                $tags = [];
-                foreach ($req->tags_products as $value) {
-                    $productsTags  =  $product->tags()->firstOrCreate(['name_tag' => $value]);
-                    $tags[] = $productsTags->id_tag;
-                }
-                $product->tags()->sync($tags);
-            }
-
-            return back()->with('message', ['content' => 'update product success id :' .  $product->id_product, 'type' => 'success']);
+            $this->productRepository->updateStatus($id, $status);
+            return back()->with('message', ['content' => 'Cập nhập sản phẩm thành công', 'type' => 'success']);
         } catch (Exception $e) {
-            return response()->json($e->getMessage());
-            return back()->with('error', 'crete product  failed :' . $e->getMessage());
+            return back()->with('message', ['content' => 'Cập nhập sản phẩm thất bại', 'type' => 'error']);
+        }
+    }
+    function edit(Request $req, $id)
+    {
+        try {
+            $dataProduct = [
+                'name' => $req->name_product,
+                'price' => $req->price_product,
+                'description_image' => $req->description_image,
+                'slug' => Str::slug($req->name_product),
+                'feature_image' => $req->feature_image,
+                'content' => $req->description ?? null,
+                'id_category' => $req->category,
+                'user_id' => Auth::id()
+            ];
+            $product = $this->productRepository->update($id, $dataProduct);
+            $this->tagsRepository->update_by_products($product, $req->tags);
+            $this->productsValidationRepository->update_by_products($product, $req->attr);
+            return back()->with('message', ['content' => 'Cập nhập sản phẩm thành công', 'type' => 'success']);
+        } catch (Exception $e) {
+            return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         }
     }
     function delete($id)
     {
         try {
-            $product = $this->modelProducts->find($id);
-            $product->delete();
+            $product =   $this->productRepository->delete($id);
             return back()->with('message', ['content' => 'delete product tag success :' .   $product->id_product, 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' => 'delete product tag success :' . $e->getMessage(), 'type' => 'error']);
@@ -134,8 +141,7 @@ class ProductsController extends Controller
     function restore($id)
     {
         try {
-            $product = $this->modelProducts->where('id_product', $id);
-            $product->withTrashed()->restore();
+            $this->productRepository->restore($id);
             return back()->with('message', ['content' => 'restore product success', 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' =>    $e->getMessage(), 'type' => 'error']);
@@ -144,18 +150,7 @@ class ProductsController extends Controller
     function destroy($id)
     {
         try {
-            $product = $this->modelProducts->onlyTrashed()->find($id);
-            if (empty($product->first()->feature_image)) {
-                StorageImage::deleteImagePath($product, 'feature_image');
-            }
-            $productImage = $product->productImages;
-            if (count($productImage) > 0) {
-                StorageImage::deleteImagePath($productImage, 'path');
-                $product->productImages()->forceDelete();
-            }
-            $product->update(['id_category' => null]);
-            $product->tags()->sync([]);
-            $product->forceDelete();
+            $this->productRepository->destroy($id);
             return back()->with('message', ['content' => 'delete product success', 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
@@ -164,24 +159,23 @@ class ProductsController extends Controller
     function showForm($id = null)
     {
         try {
-            $form = [
-                'route' => route('create-product'),
-                'method' => 'post',
-                'data' => []
-            ];
             if ($id != 0) {
                 $detailProduct = $this->modelProducts->find($id);
-                $detailProduct['images'] = $detailProduct->productImages()->get();
-                $detailProduct['tags'] = $detailProduct->tags()->get();
-                $form = [
-                    'route' => route('update-product', $id),
-                    'method' => 'put',
-                    'data' =>  $detailProduct
-                ];
             }
-            return view('pages/products/form', ['form' => $form,  'valueBread' => $form['data'] ?? '']);
+            return view('pages/products/form', ['detailProduct' => $detailProduct ?? []]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
+    }
+    function variationsAdmin($id)
+    {
+        $product = $this->productsValidationRepository->allByProduct($id);
+        return (new VariationsAdmin($product))->render();
+    }
+    function export(Request $req)
+    {
+        $typeFile = explode('-', $req->type_file);
+        $nameFile = $req->name_file . '.' . $typeFile[0];
+        return Excel::download(new ProductsExport, $nameFile, constant('Maatwebsite\Excel\Excel::' . $typeFile[1]));
     }
 }

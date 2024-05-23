@@ -22,13 +22,13 @@ class MenusValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'name_menus' => ['required'],
+            'name' => ['required'],
         ];
     }
     public function  messages(): array
     {
         return [
-            'name_menus.required' => 'name menus không được để trống',
+            'name.required' => 'tên menu không được để trống',
         ];
     }
 }

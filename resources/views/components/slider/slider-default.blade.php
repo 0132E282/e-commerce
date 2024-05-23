@@ -12,15 +12,14 @@
             <div class="carousel-inner">
                 @foreach ($slider as $key => $item)
                     <div class="item {{ $key == 0 ? 'active' : '' }}">
-                        <div class="col-sm-6">
-                            <h1><span>E</span>-SHOPPER</h1>
-                            <h2>{{ $item->name_slider }}</h2>
-                            <p>{{ $item->description_slider }} </p>
-                            <x-Button link="{{ $item->path_src ?? '' }}" class="btn btn-default get">Get it now</x-Button>
-                        </div>
-                        <div class="col-sm-6">
-                            <img src="{{ $item->image_url }} " class="girl img-responsive" alt="{{ $item->name_slider }}" />
-                            {{-- <img src="web/assets/images/home/pricing.png" class="pricing" alt="" /> --}}
+                        <img src="{{ $item->image_url }} " class="girl img-responsive" alt="{{ $item->name_slider }}" />
+                        <div class="carousel-content">
+                            <h1>{{ $item->title }}</h1>
+                            {{-- <h2>{{ $item->title }}</h2> --}}
+                            <p>{{ $item->content }} </p>
+                            @if (!empty($item->links))
+                                <x-button link="{{ $item->links ?? '' }}" class="btn btn-default get">Xem thêm </x-button>
+                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -34,3 +33,6 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+@endpush

@@ -12,10 +12,10 @@ class CategoryProducts extends Component
     /**
      * Create a new component instance.
      */
-    protected $modelCategory;
-    public function __construct()
+    protected $categoryList;
+    public function __construct($categoryList)
     {
-        $this->modelCategory = new Category();
+        $this->categoryList = $categoryList;
     }
 
     /**
@@ -23,10 +23,6 @@ class CategoryProducts extends Component
      */
     public function render(): View|Closure|string
     {
-        $categoryList =  $this->modelCategory->where('parent_id', 0)->get();
-        foreach ($categoryList as $key => $category) {
-            $categoryList[$key]['children'] = $category->categoryParent()->get();
-        }
-        return view('components.category-products', ['dataCategory' => $categoryList]);
+        return view('components.category-products', ['categoryList' => $this->categoryList]);
     }
 }

@@ -4,19 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Menus extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
     protected $table = 'menus';
-    protected $primaryKey = 'id_menus';
-    protected $fillable = ['name_menus', 'route', 'parent_id', 'slug'];
-    function menusChildren(): HasMany
+    protected $primaryKey = 'id';
+    protected $fillable = ['name', 'location', 'description', 'user_id', 'hidden'];
+    function user(): BelongsTo
     {
-        return $this->hasMany(Menus::class, 'parent_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-    use HasFactory;
+    function menu_items(): HasMany
+    {
+        return $this->hasMany(MenuItems::class, 'menu_id');
+    }
 }

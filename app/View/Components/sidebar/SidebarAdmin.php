@@ -16,190 +16,128 @@ class SidebarAdmin extends Component
         $this->access = config('permissions.access');
         $this->menuList = [
             [
-                'title' => 'home',
+                'title' => 'Thống kê',
                 'icon' => 'far bi bi-house',
                 'path' => route('admin-home'),
                 'key_code' => 'MANAGER_ADMIN',
             ],
             [
-                'title' => 'Category',
-                'icon' => ' far bi bi-bookmark',
-                'path' => route('table-category'),
-                'key_code' => 'VIEW_CATEGORY',
+                'title' => 'Bán hàng',
+                'icon' => 'bi bi-bag-plus',
+                'path' => route('admin.order.index'),
+                'key_code' => 'VIEW_ORDERS',
                 'children' => [
                     [
-                        'title' => 'Category',
+                        'title' => 'Đơn hàng',
                         'icon' => 'far fa-circle ',
-                        'path' => route('table-category'),
+                        'key_code' => 'VIEW_ORDERS',
+                        'path' => route('admin.order.index'),
                     ],
                     [
-                        'title' => 'create',
-                        'icon' => 'far fa-circle nav-icon',
-                        'path' => route('create-category'),
+                        'title' => 'Thanh toán',
+                        'icon' => 'far fa-circle ',
+                        'key_code' => 'VIEW_ORDERS',
+                        'path' => route('admin.order.index'),
                     ],
-                    [
-                        'title' => 'trash',
-                        'icon' => 'far fa-circle nav-icon',
-                        'path' => route('trash-category'),
-                    ]
+
                 ]
             ],
             [
-                'title' => 'menus',
-                'icon' => ' bi bi-list',
-                'path' => route('table-menus'),
+                'title' => 'Giao diện',
+                'icon' => 'bi bi-brush',
+                'path' => route('admin.menus.index'),
                 'key_code' => 'VIEW_MENUS',
                 'children' => [
                     [
                         'title' => 'menus',
                         'icon' => 'far fa-circle ',
                         'key_code' => 'VIEW_MENUS',
-                        'path' => route('table-menus'),
+                        'path' => route('admin.menus.index'),
                     ],
-                    [
-                        'title' => 'create',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('create-menus'),
-                        'key_code' => 'CREATE_MENUS',
-                    ],
-                    [
-                        'title' => 'trash',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('trash-menus'),
-                        'key_code' => 'VIEW_TRASH_MENUS',
-                    ]
+
                 ]
             ],
             [
-                'title' => 'e-commerce',
+                'title' => 'Sản phẩm',
                 'icon' => ' far bi bi-box2',
                 'path' => '',
                 'key_code' => 'VIEW_PRODUCT',
                 'children' => [
                     [
-                        'title' => 'products',
+                        'title' => 'Tất cả',
                         'icon' => 'far fa-circle ',
-                        'path' => route('product-page'),
+                        'path' => route('admin.products.index'),
                     ],
                     [
-                        'title' => 'create',
+                        'title' => 'Tảo sản phẩm mới',
                         'icon' => 'far fa-circle ',
-                        'path' => route('create-product'),
+                        'path' => route('admin.products.create'),
                     ],
                     [
-                        'title' => 'order',
+                        'title' => 'Danh mục sản phẩm',
                         'icon' => 'far fa-circle ',
-                        'path' => route('orders'),
+                        'path' => route('admin.category.table'),
+                        'key_code' => 'VIEW_CATEGORY',
                     ],
                     [
-                        'title' => 'trash',
+                        'title' => 'Nhản hiệu',
                         'icon' => 'far fa-circle ',
-                        'path' => route('trash-product'),
+                        'path' => route('admin.brands.index'),
+                        'key_code' => 'VIEW_CATEGORY',
                     ],
-
                 ]
             ],
             [
-                'title' => 'Mail',
-                'icon' => ' far bi bi-envelope',
-                'path' => route('mail'),
-                'key_code' => 'VIEW_MAIL',
-                'children' => [
-                    [
-                        'title' => 'inbox',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('mail'),
-                    ]
-                ]
-            ],
-            [
-                'title' => 'slider',
+                'title' => 'Quản cáo',
                 'icon' => ' far bi bi-sliders',
-                'path' => route('slider'),
+                'path' => '',
                 'key_code' => 'VIEW_SLIDER',
                 'children' => [
                     [
                         'title' => 'slider',
                         'icon' => 'far fa-circle ',
-                        'path' => route('slider'),
+                        'path' => route('admin.slider.index'),
                     ],
-                    [
-                        'title' => 'create',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('create-slider'),
-                    ],
-                    [
-                        'title' => 'trash',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('trash-slider'),
-                    ]
                 ]
             ],
             [
-                'title' => 'user',
+                'title' => 'Người dùng',
                 'icon' => 'far bi bi-person-fill',
-                'path' => route('slider'),
+                'path' => '',
                 'key_code' => 'VIEW_USER',
                 'children' => [
                     [
-                        'title' => 'user',
+                        'title' => 'Tài khoản',
                         'icon' => 'far fa-circle ',
-                        'path' => route('user'),
+                        'path' => route('admin.users.index'),
                     ],
                     [
-                        'title' => 'create',
+                        'title' => 'Quyền người dùng',
                         'icon' => 'far fa-circle ',
-                        'path' => route('create-user'),
-                    ], [
-                        'title' => 'profile',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('update-user', ['id' => Auth::id()]),
-                    ],
-                    [
-                        'title' => 'trash',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('trash-user'),
-                    ]
-
-                ]
-            ],
-            [
-                'title' => 'roles',
-                'icon' => ' far bi bi-person-lines-fill',
-                'path' => route('roles'),
-                'key_code' => 'VIEW_ROLES',
-                'children' => [
-                    [
-                        'title' => 'roles',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('roles'),
-                    ],
-                    [
-                        'title' => 'create',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('create-role'),
-                    ], [
-                        'title' => 'permissions',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('create-permissions'),
-                    ],
-                    [
-                        'title' => 'trash',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('trash-role'),
+                        'path' => route('admin.roles.index'),
                     ],
                 ]
             ],
             [
-                'title' => 'settings',
+                'title' => 'Thiết lập',
                 'icon' => ' far bi bi-gear-fill',
-                'path' => route('slider'),
-                'key_code' => 'MANAGER_ADMIN',
+                'path' => '',
+                'key_code' => 'CREATE_SETTING',
                 'children' => [
                     [
-                        'title' => 'settings',
+                        'title' => 'Hệ thống',
                         'icon' => 'far fa-circle ',
-                        'path' => route('setting'),
+                        'path' => route('admin.settings.system'),
+                    ],
+                    [
+                        'title' => 'Thông tin liên hệ',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('admin.settings.info'),
+                    ],
+                    [
+                        'title' => 'Vai trò',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('admin.permissions.create'),
                     ],
                 ]
             ],

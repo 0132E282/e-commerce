@@ -5,17 +5,25 @@
     overflow-y: scroll;
     ms-overflow-style: none;
     scrollbar-width: none;
-  }
+}
 .ellipsis {
-    max-width:100%; 
-    overflow: hidden;  
-    text-overflow: ellipsis; 
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .children_menu {
     left: 100% !important;
     top: 0 !important;
 }
 li:hover > .children_menu {
     display: block;
+}
+.dropdown-toggle::before {
+    display: none !important;
+}
+.list-group-item {
+    padding: var(--bs-list-group-item-padding-y)
+        var(--bs-list-group-item-padding-x);
 }

@@ -14,9 +14,20 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('customers_id');
-            $table->string('status');
+            $table->boolean('status')->nullable();
+            $table->string('note')->nullable();
+            $table->string('fullname', 50);
+            $table->json('address');
+            $table->string('email', 100)->nullable();
+            $table->string('phone', 11)->nullable();
+
+            $table->string('payment', 100)->nullable();
+            $table->timestamp('paid_at')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
+            $table->bigInteger('trading_code');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

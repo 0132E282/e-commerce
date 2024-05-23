@@ -10,24 +10,24 @@ Breadcrumbs::for('admin-home', function (BreadcrumbTrail $trail) {
     $trail->push('Admin', route('admin-home'));
 });
 // category
-Breadcrumbs::for('table-category', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('admin.category.table', function (BreadcrumbTrail $trail) {
     $trail->parent('admin-home');
-    $trail->push('category', route('table-category'));
+    $trail->push('category', route('admin.category.table'));
 });
 
-Breadcrumbs::for('create-category', function (BreadcrumbTrail $trail) {
-    $trail->parent('table-category');
-    $trail->push('create', route('create-category'));
+Breadcrumbs::for('admin.category.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.category.table');
+    $trail->push('create', route('admin.category.create'));
 });
 
-Breadcrumbs::for('trash-category', function (BreadcrumbTrail $trail) {
-    $trail->parent('table-category');
-    $trail->push('trash', route('trash-category'));
+Breadcrumbs::for('admin.category.trash', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.category.table');
+    $trail->push('trash', route('admin.category.trash'));
 });
 
-Breadcrumbs::for('update-category', function (BreadcrumbTrail $trail, $category) {
-    $trail->parent('table-category');
-    $trail->push($category->slug_category ?? "Update", route('update-category', ['id' => $category->id_category ?? 0]));
+Breadcrumbs::for('admin.category.update', function (BreadcrumbTrail $trail, $category) {
+    $trail->parent('admin.category.table');
+    $trail->push($category->slug_category ?? "Update", route('admin.category.update', ['id' => $category->id_category ?? 0]));
 });
 // end category
 
@@ -50,26 +50,26 @@ Breadcrumbs::for('update-menus', function (BreadcrumbTrail $trail, $menus) {
 // end menu
 
 // product
-Breadcrumbs::for('product-page', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('admin.products.index', function (BreadcrumbTrail $trail) {
     $trail->parent('admin-home');
-    $trail->push('product', route('product-page'));
+    $trail->push('product', route('admin.products.index'));
 });
 
-Breadcrumbs::for('create-product', function (BreadcrumbTrail $trail) {
-    $trail->parent('product-page');
-    $trail->push('create', route('create-product'));
+Breadcrumbs::for('admin.products.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.products.index');
+    $trail->push('create', route('admin.products.create'));
 });
-Breadcrumbs::for('orders', function (BreadcrumbTrail $trail) {
-    $trail->parent('product-page');
-    $trail->push('tất cả đơn hàng ', route('orders'));
+Breadcrumbs::for('order.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.products.index');
+    $trail->push('tất cả đơn hàng ', route('order.index'));
 });
-Breadcrumbs::for('trash-product', function (BreadcrumbTrail $trail) {
-    $trail->parent('product-page');
-    $trail->push('trash', route('trash-product'));
+Breadcrumbs::for('product.trash', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.products.index');
+    $trail->push('trash', route('product.trash'));
 });
-Breadcrumbs::for('update-product', function (BreadcrumbTrail $trail, $product) {
+Breadcrumbs::for('product.update', function (BreadcrumbTrail $trail, $product) {
     $trail->parent('table-menus');
-    $trail->push($product->slug_product ?? "Update", route('update-product', ['id' => $product->id_product ?? 0]));
+    $trail->push("cập nhập :", route('product.update', ['id' => $product->id_product ?? 0]));
 });
 // slider
 Breadcrumbs::for('slider', function (BreadcrumbTrail $trail) {

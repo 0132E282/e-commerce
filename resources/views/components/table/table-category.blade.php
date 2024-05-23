@@ -1,28 +1,44 @@
-@props(['columnNames' => ['#', 'tên category', 'slug', 'ngày tạo', 'action']])
-<x-Table :columnNames="$columnNames" :dataTable="$dataCategoryList">
-    @foreach ($dataCategoryList as $value)
-        <tr>
-            <th scope="row">{{ $loop->iteration }}</th>
-            <td>{{ $value->name_category }}</td>
-            <td>{{ $value->slug_category }}</td>
-            <td>{{ date('Y/m/d', strtotime($value->created_at)) }}</td>
-            <td>
-                @if (Route::currentRouteName() == 'trash-category')
-                    <x-Button method="POST" action="{{ route('restore-category', $value->id_category) }}" class="btn btn-warning">
-                        <i class="bi bi-arrow-counterclockwise"></i>
-                    </x-Button>
-                    <x-Button data-method="delete" data-route="{{ route('destroy-category', $value->id_category) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
-                        <i class="bi bi-trash-fill"></i>
-                    </x-Button>
-                @else
-                    <x-Button link="{{ route('update-category', $value->id_category) }}" class="btn btn-warning">
-                        <i class="bi bi-pencil-square"></i>
-                    </x-Button>
-                    <x-Button data-method="delete" data-route="{{ route('delete-category', $value->id_category) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
-                        <i class="bi bi-trash-fill"></i>
-                    </x-Button>
-                @endif
-            </td>
+@php
+    $tableHead = [
+        '#',
+        'tên danh mục',
+        'mô tả',
+        [
+            'col_name' => 'truy Cập',
+            'order' => 'views_count',
+        ],
+        [
+            'col_name' => 'sản phẩm',
+            'order' => 'quantity_products',
+        ],
+        [
+            'col_name' => 'trạng thái',
+            'order' => 'status',
+        ],
+        [
+            'col_name' => 'ngày tạo',
+            'order' => 'created_at',
+        ],
+        '',
+    ];
+
+@endphp
+<x-Table.index :tableHead="$tableHead">
+    @if ($categoryList->count() > 0)
+        @foreach ($categoryList as $category)
+            <x-category.row-table :category="$category" :row="$loop->iteration" />
+            @if ($category->children->count() > 0)
+                <x-category.row-table-chill :categoryChill="$category->children" />
+            @endif
+        @endforeach
+    @else
+        <tr style="border-color: transparent">
+            <th scope="row" colspan="{{ count($tableHead) }}">
+                <div class="text-center " style="margin-top: 100px">
+                    <img class="w-100 me-2 " style="max-width: 150px;" loading="lazy" src="{{ asset('assets/default-images/empty_category.png') }}" alt="">
+                    <p> Không có dữ liệu</p>
+                </div>
+            </th>
         </tr>
-    @endforeach
-</x-Table>
+    @endif
+</x-Table.index>

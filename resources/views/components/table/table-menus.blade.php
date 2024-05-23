@@ -1,29 +1,33 @@
-@props(['columnNames' => ['#', 'tên menus', 'đường dẫn', 'ngày tạo', 'action']])
-<x-Table :columnNames="$columnNames" :dataTable="$dataTable">
-    @foreach ($dataTable as $item)
+@props(['tableHead' => ['#', 'tên menu', 'vị trí', 'mô tả', 'người tạo', 'ngày tạo', '']])
+<x-table :tableHead="$tableHead">
+    @foreach ($menus as $menu)
         <tr>
             <th scope="row">{{ $loop->iteration }}</th>
-            <td>{{ $item->name_menus }}</td>
-            <td>{{ $item->route }}</td>
-
-            <td>{{ date('Y/m/d', strtotime($item->created_at)) }}</td>
-            <td>
-                @if (Route::currentRouteName() == 'trash-menus')
-                    <x-Button method="POST" action="{{ route('restore-menus', $item->id_menus) }}" class="btn btn-warning">
+            <td>{{ $menu->name }}</td>
+            <td>{{ $menu->location }}</td>
+            <td>{{ $menu->description }}</td>
+            <td>{{ $menu->user->name }}</td>
+            <td>{{ date('Y/m/d', strtotime($menu->created_at)) }}</td>
+            <td class="text-end">
+                @if (Route::currentRouteName() == 'admin.menus.trash.index')
+                    <x-button method="POST" action="{{ route('admin.menus.trash.restore', $menu->id) }}" class="btn btn-warning">
                         <i class="bi bi-arrow-counterclockwise"></i>
-                    </x-Button>
-                    <x-Button data-method="delete" data-route="{{ route('destroy-menus', $item->id_menus) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger" class="btn-danger">
+                    </x-button>
+                    <x-button data-method="delete" data-route="{{ route('admin.menus.trash.destroy', $menu->id) }}" data-toggle="modal" data-target="#delete_message" class="btn-danger" class="btn-danger">
                         <i class="bi bi-trash-fill"></i>
-                    </x-Button>
+                    </x-button>
                 @else
-                    <x-Button link="{{ route('update-menus', $item->id_menus) }}" class="btn btn-warning">
+                    <x-button link="{{ route('admin.menus.item.index', $menu->id) }}" class="btn btn-secondary ">
+                        <i class="bi bi-diagram-3"></i>
+                    </x-button>
+                    <x-button link="{{ route('admin.menus.update', $menu->id) }}" class="btn btn-warning">
                         <i class="bi bi-pencil-square"></i>
-                    </x-Button>
-                    <x-Button data-method="delete" data-route="{{ route('delete-menus', $item->id_menus) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
+                    </x-button>
+                    <x-button data-method="delete" data-route="{{ route('admin.menus.delete', $menu->id) }}" data-toggle="modal" data-target="#delete_message" class="btn-danger">
                         <i class="bi bi-trash-fill"></i>
-                    </x-Button>
+                    </x-button>
                 @endif
             </td>
         </tr>
     @endforeach
-</x-Table>
+</x-table>

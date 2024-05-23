@@ -14,12 +14,15 @@ class Roles extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
-        'display_name',
         'description'
     ];
+    function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_role', 'id_role', 'id_user');
+    }
     function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permissions::class, 'permissions_role', 'id_role', 'id_permissions');
+        return $this->belongsToMany(Permissions::class, 'permissions_role', 'role_id', 'permission_id');
     }
     use HasFactory;
 }

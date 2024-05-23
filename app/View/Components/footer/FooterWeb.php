@@ -2,6 +2,7 @@
 
 namespace App\View\Components\footer;
 
+use App\Models\Menus;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -11,9 +12,10 @@ class FooterWeb extends Component
     /**
      * Create a new component instance.
      */
+    protected $modelMenus;
     public function __construct()
     {
-        //
+        $this->modelMenus = new Menus();
     }
 
     /**
@@ -21,6 +23,10 @@ class FooterWeb extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.footer.footer-web');
+        $menus =  $this->modelMenus->where('location', '=', 'bottom')->first();
+        if (!empty($menus)) {
+            $menusList = $menus->menu_items()->orderBy('location', "ASC")->whereNull('parent_id')->get();
+        }
+        return view('components.footer.footer-web', ['menusList' => $menusList ?? []]);
     }
 }

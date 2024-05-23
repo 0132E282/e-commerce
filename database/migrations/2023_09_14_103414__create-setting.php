@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('setting', function (Blueprint $table) {
-            $table->id('id_setting');
-            $table->string('name_setting');
-            $table->string('value_setting');
+            $table->id();
+            $table->string('key');
+            $table->json('value');
             $table->softDeletes();
             $table->timestamps();
         });

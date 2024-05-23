@@ -1,21 +1,20 @@
 <?php
 
-namespace App\View\Components\home;
+namespace App\View\Components\Home;
 
-use App\Models\Category;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class categoryTab extends Component
+class CategoryTab extends Component
 {
     /**
      * Create a new component instance.
      */
-    protected $modelCategory;
-    public function __construct()
+    protected $categoryList = [];
+    public function __construct($categoryList = [])
     {
-        $this->modelCategory =  new Category();
+        $this->categoryList = $categoryList;
     }
 
     /**
@@ -23,8 +22,6 @@ class categoryTab extends Component
      */
     public function render(): View|Closure|string
     {
-        $categoryList = $this->modelCategory->latest('views_count', 'desc')->take(8)->get();
-
-        return view('components.home.category-tab', ['categoryList' => $categoryList]);
+        return view('components.home.category-tab', ['categoryList' => $this->categoryList]);
     }
 }

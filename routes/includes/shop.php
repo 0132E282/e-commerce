@@ -1,18 +1,24 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShopController;
-use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
+Route::controller(ShopController::class)->name('shop.')->group(function () {
+    Route::get('/', 'index')->name('view');
+    Route::get('cart', 'cart')->name('cart');
+    Route::get('category/{slug}', 'index')->name('category');
+    Route::get('{slug}_{id}', 'detail')->name('single');
 
-Route::prefix('shop')->group(function () {
-    Route::get('/', [ShopController::class, 'index'])->name('shop');
-    Route::get('/cart', [ShopController::class, 'cart'])->name('cart-shop');
-    Route::get('/category', [ShopController::class, 'index'])->name('category-shop');
-    Route::get('/category/{slug}', [ShopController::class, 'index'])->name('category-shop');
-    Route::get('/{slug}_{id}', [ShopController::class, 'detail'])->name('single-shop');
-    Route::post('/{slug}_{id}', [ShopController::class, 'addToCart'])->name('add-cart-shop');
-    Route::delete('/{slug}_{id}', [ShopController::class, 'deleteProductCart'])->name('delete-product-cart');
-    Route::get('check-out', [ShopController::class, 'checkout'])->name('check-out');
-    Route::post('/create-order', [ShopController::class, 'createOrder'])->name('create-order');
+    Route::get('find-variants/{id}', 'findVariants')->name('find-variant');
+
+    Route::post('add-cart/{slug}_{id}', 'addToCart')->name('add-cart');
+    Route::delete('delete/{slug}_{id}', 'deleteProductCart')->name('delete-cart');
+    Route::get('check-out', 'checkout')->name('checkout');
+});
+
+
+Route::controller(OrderController::class)->name('order.')->group(function () {
+    Route::post('create', 'createOrderClient')->name('create');
+    Route::get('rel-checkout/{id}', 'relCheckout')->name('rel-checkout');
 });

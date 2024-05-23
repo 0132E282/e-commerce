@@ -2,42 +2,91 @@
 
 namespace App\Http\Controllers;
 
-use App\Components\Recusive;
+use App\Exports\CategoryExport;
+use App\View\Components\Category\Details;
+
 use App\Http\Requests\CategoryValidation;
+use App\Imports\CategoryImport;
 use App\Models\Category;
 use App\Models\Products;
+use App\Repository\RepositoryMain\CategoryRepository;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoriesController extends Controller
 {
     protected $modelCategory;
     protected $modelProduct;
+    protected $CategoryRepository;
     function __construct()
     {
         Paginator::useBootstrapFive();
         $this->modelCategory = new Category();
         $this->modelProduct = new Products();
+        $this->CategoryRepository = new CategoryRepository();
     }
-    function index()
+    function all_api()
     {
-        $categoryList = $this->modelCategory->latest()->paginate(25, ['id_category', 'name_category', 'slug_category', 'created_at']);
-        return View('pages/category/index', ['categoryList' => $categoryList]);
+        $categoryList = $this->modelCategory->get();
+        $categoryList->transform(function ($category) {
+            return [
+                'id' =>  $category->id,
+                'name' => $category->name . '-' .  $category->id,
+                'created_at' => $category->created_at,
+                'updated_at' => $category->updated_at,
+                'parent_id' =>  $category->parent_id,
+                'description' =>  $category->description,
+                'status' =>  $category->status,
+            ];
+        });
+        return response()->json($categoryList);
     }
-    function showTrash()
+    function index(Request $request, $status = null)
     {
-        $categoryList = $this->modelCategory->onlyTrashed()->paginate(25);
-        return View('pages/category/index', ['categoryList' => $categoryList]);
+        $option = [
+            'order' => $request->order,
+            'by' => $request->by,
+            'views' => $request->views,
+            'search' => $request->search,
+            'created' => $request->created,
+            'products' => $request->products
+        ];
+        switch ($status) {
+            case "stop-working":
+                $option['status'] = 0;
+                $categoryList =  $this->CategoryRepository->all($option);
+                return view('pages.category.category-all', ['categoryList' => $categoryList]);
+            case "is-active":
+                $option['status'] = 1;
+                $categoryList =  $this->CategoryRepository->all($option);
+                return view('pages.category.category-all', ['categoryList' => $categoryList]);
+            default:
+                $categoryList = $this->CategoryRepository->all($option);
+                return view('pages.category.category-all', ['categoryList' => $categoryList]);
+        }
     }
-    function showForm($id = 0)
+
+    function showTrash(Request $request)
+    {
+        $option = [
+            'order' => $request->order,
+            'by' => $request->by,
+            'views' => $request->views,
+            'search' => $request->search,
+            'created' => $request->created,
+            'products' => $request->products
+        ];
+        $categoryList =  $this->CategoryRepository->trash($option);
+        return view('pages.category.category-all', ['categoryList' => $categoryList]);
+    }
+    function showForm($id = null)
     {
         try {
-            $detailCategory = [];
-            if ($id > 0) {
-                $detailCategory = $this->modelCategory->find($id);
-            }
-            return View('pages/category/category-form', ['detailCategory' => $detailCategory, 'detailProduct' => $detailCategory]);
+            $detailCategory = $this->CategoryRepository->details($id);
+            return view('pages.category.category-form', ['detailCategory' => $detailCategory, 'detailProduct' => $detailCategory]);
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
@@ -45,11 +94,13 @@ class CategoriesController extends Controller
     function store(CategoryValidation $req)
     {
         try {
-            Category::create([
-                'name_category' => $req->name_category,
-                'parent_id' => $req->parent_id ?? 0,
-                'slug_category' => Str::slug($req->name_category),
-            ]);
+            $valueCategory = [
+                'name' => $req->name_category,
+                'parent_id' => $req->parent,
+                'slug' => Str::slug($req->name_category),
+                'description' => $req->description
+            ];
+            $this->CategoryRepository->create($valueCategory);
             return back()->with('message', ['content' => 'create category successfully', 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
@@ -57,14 +108,15 @@ class CategoriesController extends Controller
     }
     function edit(CategoryValidation $req, $id)
     {
-        $detailCategory = $this->modelCategory->find($id);
         try {
-            $detailCategory->update([
-                'name_category' => $req->name_category ??   $detailCategory->name_category,
-                'parent_id' => $req->parent_id ?? 0,
-                'slug_category' => Str::slug($req->name_category),
-            ]);
-            return back()->with('message', ['content' => 'update category success id :' . $detailCategory->id_category, 'type' => 'success']);
+            $ValueCategoryUpdate = [
+                'name' => $req->name_category,
+                'parent_id' => $req->parent ?? NULL,
+                'slug' => Str::slug($req->name_category),
+                'description' => $req->description
+            ];
+            $this->CategoryRepository->update($id, $ValueCategoryUpdate);
+            return back()->with('message', ['content' => 'update danh mục thành công', 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         }
@@ -72,12 +124,8 @@ class CategoriesController extends Controller
     function delete($id)
     {
         try {
-            $category =  $this->modelCategory->find($id);
-
-            $category->delete();
-
-            $this->modelCategory->where('parent_id', $id)->delete();
-            return back()->with('message', ['content' => 'delete category success id :' .  $category->id_category, 'type' => 'success']);
+            $this->CategoryRepository->delete($id);
+            return back()->with('message', ['content' => 'delete category success id :' .  $id, 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('error', 'delete category failed');
         }
@@ -86,13 +134,8 @@ class CategoriesController extends Controller
     function destroy($id)
     {
         try {
-
-            $category =  $this->modelCategory->onlyTrashed()->find($id);
-            if (empty($category->product)) {
-                $category->product->update(['parent_id' => null]);
-            }
-            $category->forceDelete();
-            return back()->with('message', ['content' => 'delete category success id :' .  $category->id_category, 'type' => 'success']);
+            $this->CategoryRepository->destroy($id);
+            return back()->with('message', ['content' => 'delete category success id :' . $id, 'type' => 'success']);
         } catch (Exception $e) {
             return $e->getMessage();
             return back()->with('message', ['content' => 'delete category fail ', 'type' => 'error']);
@@ -101,16 +144,41 @@ class CategoriesController extends Controller
     function restore($id)
     {
         try {
-            $category = $this->modelCategory->onlyTrashed()->find($id);
-            $parentCategory = $this->modelCategory->where('parent_id', $id);
-            if ($category->parent_id > 0) {
-                $category->update(['parent_id' => 0]);
-            }
-            $category->restore();
-            $parentCategory->restore();
-            return back()->with('message', ['content' => 'restore category success :' .  $category->id_category, 'type' => 'success']);
+            $this->CategoryRepository->restore($id);
+            return back()->with('message', ['content' => 'restore category success :' . $id, 'type' => 'success']);
         } catch (Exception $e) {
-            return back()->with('message', ['content' => $e->getMessage() . ' ' .  $category->id_category, 'type' => 'success']);
+            return back()->with('message', ['content' => $e->getMessage() . ' ' . $id, 'type' => 'success']);
+        }
+    }
+    function details($id = null)
+    {
+        $category = $this->CategoryRepository->details($id);
+        $htmlDetail = (new Details($category))->render();
+        return $htmlDetail;
+    }
+    function export(Request $request)
+    {
+        $typeFile = explode('-', $request->type_file);
+        $nameFile = $request->name_file . '.' . $typeFile[0];
+        return Excel::download(new CategoryExport, $nameFile, constant('Maatwebsite\Excel\Excel::' . $typeFile[1]));
+    }
+    function updateStatus(Request $req, $id)
+    {
+        try {
+            $this->CategoryRepository->updateStatus($id);
+            return back()->with('message', ['content' => 'Cập nhập trang thái thành công ', 'type' => 'success']);
+        } catch (Exception $e) {
+            return back()->with('message', ['content' => 'Cập nhập trang thái thất bại ', 'type' => 'error']);
+        }
+    }
+    function import_file(Request $req)
+    {
+        try {
+            $path = $req->file('file_import');
+            Excel::import(new CategoryImport, $path);
+            return back()->with('message', ['content' => 'Tải dữ liệu thành công', 'type' => 'success']);
+        } catch (Exception $e) {
+            return back()->with('message', ['content' => 'Tải dữ liệu  thái thất bại ', 'type' => 'error']);
         }
     }
 }

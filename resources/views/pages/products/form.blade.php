@@ -1,28 +1,34 @@
-@extends('/include/layouts/admin-layout')
-
-@section('css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="/vendor/ckeditor5/ckeditor.js"></script>
-@endsection
+@extends('include/layouts/admin-layout')
+@php
+    $route = [
+        'route' => route('admin.products.create'),
+        'method' => 'post',
+    ];
+    if (!empty($detailProduct)) {
+        $route = [
+            'route' => route('admin.products.update', $detailProduct->id),
+            'method' => 'put',
+        ];
+    }
+@endphp
 @section('content')
-    <!-- Content Header (Page header) -->
     <section class="content">
-        @if (session()->has('message'))
-            @php $message = session()->get('message'); @endphp
-            <x-alert message="{{ $message['content'] }}" type="{{ $message['type'] }}" />
-        @endif
-        <div class="form">
-            <x-FormProducts route="{{ $form['route'] }}" method="{{ $form['method'] }}" :dataForm="$form['data']" />
+        <div class="container-fluid">
+            <div class="card">
+                <div class="py-3 px-4">
+                    <x-button link="{{ route('admin.products.index') }}">Quay lai</x-button>
+                    @if (!empty($detailProduct))
+                        <x-button link="{{ route('admin.products.create') }}">Tạo mới</x-button>
+                    @endif
+                </div>
+            </div>
+            @if (session()->has('message'))
+                @php $message = session()->get('message'); @endphp
+                <x-alert message="{{ $message['content'] }}" type="{{ $message['type'] }}" />
+            @endif
+            <div class="card pt-3 px-4 pb-5 ">
+                <x-form.form-products :route="$route['route']" :method="$route['method']" :detailProduct="$detailProduct" />
+            </div>
         </div>
     </section>
-@endsection
-
-@section('js')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(".tagSl-2").select2({
-            tags: true,
-            tokenSeparators: [',', ' ']
-        })
-    </script>
 @endsection

@@ -3,19 +3,22 @@
         <div class="col-sm-6">
             <div class="contactinfo">
                 <ul class="nav nav-pills">
-                    <li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-                    <li><a href="#"><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                    @foreach ($infoContactLeft as $info)
+                        @if (!empty($info['display']))
+                            <li><a href="{{ $info['links'] }}"><i class="{{ $info['icon'] }}"></i> {{ $info['value'] }}</a></li>
+                        @endif
+                    @endforeach
                 </ul>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="social-icons pull-right">
                 <ul class="nav navbar-nav">
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                    @foreach ($infoContactRight as $info)
+                        @if (!empty($info['display']))
+                            <li><a href="{{ $info['links'] }}"><i class="{{ $info['icon'] }}"></i></a></li>
+                        @endif
+                    @endforeach
                 </ul>
             </div>
         </div>

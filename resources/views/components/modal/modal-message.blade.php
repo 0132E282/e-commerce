@@ -7,17 +7,18 @@
         <p>{{ $content }}</p>
     </x-slot:body>
     <x-slot:action>
-        <x-Button action="''" class="btn-secondary" method="post">{{ $btnTitle }}</x-Button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">thoát</button>
+        <x-button action="" class="btn-secondary" method="post">{{ $btnTitle }} </x-button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">thoát</button>
     </x-slot:action>
 </x-modal.index>
 <script type="module">
     $(document).ready(function() {
-        $('#{{ $id }}').on('shown.bs.modal', function(e) {
+        const modal = $('#{{ $id }}');
+        modal.on('shown.bs.modal', function(e) {
             const route = $(e.relatedTarget).data('route');
             const method = $(e.relatedTarget).data('method');
-            $('form').attr('action', route);
-            $('form').find('input[name="_method"]').val(method);
+            modal.find('form').attr('action', route);
+            modal.find('input[name="_method"]').attr('value', method);
         })
     })
 </script>

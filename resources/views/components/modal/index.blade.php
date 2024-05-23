@@ -1,5 +1,4 @@
-@props(['id', 'size' => '', 'ariaHidden' => true, 'ariaLabelledby' => 'exampleModalLabel'])
-
+@props(['id', 'size' => '', 'ariaHidden' => true, 'ariaLabelledby' => ''])
 <div class="modal fade" id="{{ $id }}" tabindex="-1" aria-labelledby="{{ $ariaLabelledby }}" aria-hidden="{{ $ariaHidden }}">
     <div class="modal-dialog {{ $size ? 'modal-' . $size : '' }}">
         <div class="modal-content">
@@ -9,9 +8,11 @@
             <div class="modal-body">
                 {{ $body }}
             </div>
-            <div class="modal-footer">
-                {{ $action }}
-            </div>
+            @if (!empty($action))
+                <div class="modal-footer">
+                    {{ $action }}
+                </div>
+            @endif
         </div>
     </div>
 </div>

@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('menus', function (Blueprint $table) {
-            $table->id('id_menus');
-            $table->string('name_menus')->nullable();
-            $table->integer('parent_id')->default(0);
-            $table->string('route');
-            $table->string('slug');
+            $table->id();
+            $table->string('name')->nullable();
+            $table->string('location')->nullable();
+            $table->boolean('hidden')->default(0);
+            $table->string('description')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });

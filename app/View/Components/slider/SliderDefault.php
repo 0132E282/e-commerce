@@ -23,7 +23,7 @@ class SliderDefault extends Component
      */
     public function render(): View|Closure|string
     {
-        $slider = $this->modelSlider->latest()->get();
+        $slider = $this->modelSlider->whereNotNull('location')->orderBy('location')->get();
         return view('components.slider.slider-default', ['slider' => $slider]);
     }
 }

@@ -1,35 +1,33 @@
-@props(['columnNames' => ['#', 'avatar', 'tên người dùng', 'email', 'ngày tạo', 'action']])
-<x-Table :columnNames="$columnNames" :dataTable="$dataTable">
-    @foreach ($dataTable as $key => $value)
+@props(['tableHead' => ['#', 'tên người dùng', 'email', 'quyền', 'xát thực', 'ngày tạo', '']])
+<x-table :tableHead="$tableHead">
+    @foreach ($users as $key => $user)
         <tr>
             <th scope="row">{{ $loop->iteration }}</th>
-            <th style="width: 80px; height: auto;">
-                <img src="{{ $value->feature_image }}" onerror="this.src='/assets/default-images/empty_product.jpg';" class="img-thumbnail" alt="{{ $value->name_product }}">
-            </th>
-            <td style="max-width: 200px;">
-                <p class="ellipsis" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="This top tooltip is themed via CSS variables.">
-                    {{ $value->name }}
-                </p>
-            </td>
-            <td>{{ $value->email }}</td>
-            <td>{{ date('Y/m/d', strtotime($value->created_at)) }} </td>
             <td>
-                @if (Route::currentRouteName() == 'trash-user')
-                    <x-Button method="post" action="{{ route('restore-user', $value->id) }}" class="btn btn-warning">
-                        <i class="bi bi-arrow-counterclockwise"></i>
-                    </x-Button>
-                    <x-Button data-value="{{ route('destroy-user', $value->id) }}" id="btnModalMassage" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
-                        <i class="bi bi-trash-fill"></i>
-                    </x-Button>
-                @else
-                    <x-Button link="{{ route('update-user', $value->id) }}" class="btn btn-warning">
-                        <i class="bi bi-pencil-square"></i>
-                    </x-Button>
-                    <x-Button data-method="delete" data-route="{{ route('delete-user', $value->id) }}" data-bs-toggle="modal" data-bs-target="#delete_message" class="btn-danger">
-                        <i class="bi bi-trash-fill"></i>
-                    </x-Button>
-                @endif
+                <div class="d-flex">
+                    <img class="img-thumbnail me-2 " src="{{ $user->feature_image }}" onerror="this.src='/assets/default-images/empty_product.jpg';" alt="{{ $user->name_product }}" style="width: 50px;">
+                    <p>
+                        {{ $user->name }}
+                    </p>
+                </div>
+            </td>
+            <td>{{ $user->email }}</td>
+            <td>{{ $user->roles->first()->name }} {{ $user->roles->count() > 1 ? '(' . $user->roles->count() - 1 . ')' : '' }} </td>
+            <td>{{ !empty($user->email_verified_at) ? 'đã xát thực' : 'chưa xát thực' }}</td>
+            <td>{{ date('Y/m/d', strtotime($user->created_at)) }} </td>
+            <td class="text-end">
+                <x-button class="btn-info " :link="route('admin.users.profile', ['id' => $user->id])">
+                    <span data-toggle="tooltip" data-placement="top" title="xem chi tiết">
+                        <i class="bi bi-eye"></i>
+                    </span>
+                </x-button>
+                <x-button method="patch" :action="Route('admin.users.update-status', ['id' => $user->id, 'status' => $user->status == 0 ? 1 : 0])" class="btn btn-secondary " title="{{ $user->status == 0 ? 'khóa tài khoản' : 'mỡ khóa tài khoản' }}" data-toggle="tooltip" data-placement="top">
+                    <i class="{{ $user->status == 1 ? 'bi bi-lock' : 'bi bi-unlock ' }}"></i>
+                </x-button>
+                <x-button link="{{ route('admin.users.update', $user->id) }}" class="btn btn-warning">
+                    <i class="bi bi-pencil-square"></i>
+                </x-button>
             </td>
         </tr>
     @endforeach
-</x-Table>
+</x-table>

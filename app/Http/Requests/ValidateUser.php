@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 
 class ValidateUser extends FormRequest
 {
@@ -22,15 +23,28 @@ class ValidateUser extends FormRequest
     public function rules(): array
     {
         $validate = [
-            'name' => 'required|string|min:5|max:50',
-            'email' => 'required|email|unique:users|min:5|max:40',
-            'password' => 'required|min:5|max:20',
-            'roles' => 'required'
+            'name' =>  ['required', 'string', 'min:5', 'max:50'],
+            'email' => ['required', 'email', 'min:5', 'max:40'],
         ];
-        if ($this->method() === 'PUT') {
-            unset($validate['email']);
-            
+        if (Route::currentRouteName() == 'admin.users.create') {
+            $validate['email'] = [...$validate['email'], 'unique:users'];
+            $validate['password'] = ['min:5', 'max:50', 'required'];
         }
         return $validate;
+    }
+    public function messages(): array
+    {
+
+        return [
+            'name.required' => 'Tên Người dùng không được để trống',
+            'name.string' => 'người dùng phải là chuổi',
+            'name.min' => 'tên người dùng phải có ích nhất 5 ký tự và tối đa 50 ky tư',
+            'name.max' => 'tên người dùng phải có ích nhất 5 ký tự và tối đa 50 ky tư',
+            'email.required' => 'Email không được để trống',
+            'email.email' => 'phải là email',
+            'email.unique' => 'email đã được đăng ký',
+            'email.min' => 'email phải có trên 5 ký tự và tối đã 40 ký tự',
+            'email.max' => 'email phải có trên 5 ký tự và tối đã 40 ký tự',
+        ];
     }
 }

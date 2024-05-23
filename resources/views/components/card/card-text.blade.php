@@ -1,8 +1,15 @@
 <div class="card text-bg-light" style="max-width: 100%;">
-    <div class="card-header">
-        {{ $header }}
-    </div>
+    @if (!empty($header))
+        <div class="card-header">
+            {{ $header }}
+        </div>
+    @endif
     <div class="card-body">
-        {{ $slot }}
+        {{ $body }}
     </div>
+    @if (!empty($footer))
+        <div class="card-footer">
+            {{ $footer }}
+        </div>
+    @endif
 </div>

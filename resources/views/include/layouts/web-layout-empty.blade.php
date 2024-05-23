@@ -23,6 +23,7 @@
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/web/assets/images/ico/apple-touch-icon-114-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/web/assets/images/ico/apple-touch-icon-72-precomposed.png">
         <link rel="apple-touch-icon-precomposed" href="/web/assets/images/ico/apple-touch-icon-57-precomposed.png">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     </head>
     </head><!--/head-->
 
@@ -44,6 +45,8 @@
         <script src="/web/assets/js/price-range.js"></script>
         <script src="/web/assets/js/jquery.prettyPhoto.js"></script>
         <script src="/web/assets/js/main.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        @stack('scripts')
     </body>
 
 </html>

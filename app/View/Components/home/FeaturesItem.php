@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\home;
+namespace App\View\Components\Home;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -11,7 +11,7 @@ class FeaturesItem extends Component
     /**
      * Create a new component instance.
      */
-    protected $dataProductList;
+    protected $dataProductList = [];
     public function __construct($data)
     {
         $this->dataProductList = $data;

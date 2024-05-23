@@ -6,17 +6,15 @@
 
 <!-- Sidebar -->
 <div class="sidebar">
-    <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
             <img src="{{ $user->avatar }}" onerror="this.src='https://tse3.mm.bing.net/th?id=OIP.R97hFhAyScVK0EsD5seM6wHaHa&pid=Api&P=0&h=180';" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="{{ route('update-user', ['id' => $user->id]) }}" class="d-block">{{ $user->name }}</a>
+            <a href="{{ route('admin.users.update', ['id' => $user->id]) }}" class="d-block">{{ $user->name }}</a>
         </div>
     </div>
 
-    <!-- SidebarSearch Form -->
     <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
             <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
@@ -36,13 +34,13 @@
                     @if (!isset($value['children']))
                         <li class="nav-item">
                             @if (isset($value['method']))
-                                <x-Button action="{{ $value['path'] }}" method="{{ $value['method'] }}" class="nav-link bg-transparent">
+                                <x-button action="{{ $value['path'] }}" method="{{ $value['method'] }}" class="nav-link bg-transparent">
                                     <i class="nav-icon {{ $value['icon'] }}"></i>
                                     <p>
                                         {{ $value['title'] }}
                                         <!-- <span class="badge badge-info right">2</span> -->
                                     </p>
-                                </x-Button>
+                                </x-button>
                             @else
                                 <a href="{{ $value['path'] }}" class="nav-link">
                                     <i class="nav-icon {{ $value['icon'] }}"></i>

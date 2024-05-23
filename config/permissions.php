@@ -1,6 +1,4 @@
 <?php
-
-
 return [
     'access' => [
         'product' => [
@@ -80,11 +78,7 @@ return [
                     'name' =>  'VIEW_TRASH_USER',
                     'key_code' => 'view_trash_users',
                     'action' => 'viewTrash',
-                ],
-                'MANAGER_ADMIN' => [
-                    'name' =>  'MANAGER_ADMIN',
-                    'action' => 'admin',
-                ],
+                ]
             ]
         ],
         'tags' => [
@@ -287,82 +281,125 @@ return [
                 ],
             ]
         ],
-    ],
-    'modules' => [
-        'table' => [
-            [
-                'title' =>  'category',
-                'value' => 'category'
-            ],
-            [
-                'title' =>  'users',
-                'value' => 'users'
-            ],
-            [
-                'title' => 'product',
-                'value' => 'product'
-            ],
-            [
-                'title' => 'menu',
-                'value' => 'menu'
-            ],
-            [
-                'title' => 'role',
-                'value' => 'role'
-            ],
-            [
-                'title' => 'permissions',
-                'value' => 'permissions'
-            ],
-            [
-                'title' => 'setting',
-                'value' => 'setting'
-            ],
-            [
-                'title' => 'sliders',
-                'value' => 'sliders'
-            ],
-            [
-                'title' => 'tags',
-                'value' => 'tags'
-            ],
+        'orders' => [
+            'policy' => 'App\Policies\OrdersPolicy',
+            'config' => [
+                'CREATE_ORDERS' => [
+                    'name' => 'CREATE_ORDERS',
+                    'key_code' => 'create_orders',
+                    'action' => 'create',
+                ],
+                'UPDATE_ORDERS' => [
+                    'name' => 'UPDATE_ORDERS',
+                    'key_code' => 'update_orders',
+                    'action' => 'update',
+                ],
+                'DELETE_ORDERS' => [
+                    'name' => 'DELETE_ORDERS',
+                    'key_code' => 'delete_orders',
+                    'action' => 'delete',
+                ],
+                'VIEW_ORDERS' => [
+                    'name' => 'VIEW_ORDERS',
+                    'key_code' => 'show_orders',
+                    'action' => 'view',
+                ],
+                'RESTORE_ORDERS' => [
+                    'name' => 'RESTORE_ORDERS',
+                    'key_code' => 'restore_orders',
+                    'action' => 'restore',
+                ],
+                'DESTROY_ORDERS' => [
+                    'name' => 'DESTROY_ORDERS',
+                    'key_code' => 'destroy_orders',
+                    'action' => 'forceDelete',
+                ],
+                'VIEW_TRASH_ORDERS' => [
+                    'name' =>  'VIEW_TRASH_ORDERS',
+                    'key_code' => 'view_trash_orders',
+                    'action' => 'viewTrash',
+                ],
+            ]
         ],
-        'permissions' => [
-            [
-                'id' => 1,
-                'title' => 'thêm',
-                'value' => 'create',
-            ],
-            [
-                'id' => 2,
-                'title' => 'xóa',
-                'value' => 'delete',
-            ],
-            [
-                'id' => 3,
-                'title' => 'cập nhập',
-                'value' => 'update',
-            ],
-            [
-                'id' => 4,
-                'title' => 'hiển thị',
-                'value' => 'show'
-            ],
-            [
-                'id' => 5,
-                'title' => 'hiển thị đã xóa',
-                'value' => 'view_trash'
-            ],
-            [
-                'id' => 6,
-                'title' => 'khôi phục đã xóa',
-                'value' => 'restore'
-            ],
-            [
-                'id' => 7,
-                'title' => 'xóa dữ liệu đã xóa',
-                'value' => 'destroy'
-            ],
-        ]
-    ]
+        'setting' => [
+            'policy' => 'App\Policies\SettingPolicy',
+            'config' => [
+                'CREATE_SETTING' => [
+                    'name' => 'CREATE_SETTING',
+                    'key_code' => 'create_setting',
+                    'action' => 'create',
+                ],
+                'UPDATE_SETTING' => [
+                    'name' => 'UPDATE_SETTING',
+                    'key_code' => 'update_setting',
+                    'action' => 'update',
+                ],
+                'DELETE_SETTING' => [
+                    'name' => 'DELETE_SETTING',
+                    'key_code' => 'delete_setting',
+                    'action' => 'delete',
+                ],
+                'VIEW_SETTING' => [
+                    'name' => 'VIEW_SETTING',
+                    'key_code' => 'show_setting',
+                    'action' => 'view',
+                ],
+                'RESTORE_SETTING' => [
+                    'name' => 'RESTORE_SETTING',
+                    'key_code' => 'restore_setting',
+                    'action' => 'restore',
+                ],
+                'DESTROY_SETTING' => [
+                    'name' => 'DESTROY_SETTING',
+                    'key_code' => 'destroy_setting',
+                    'action' => 'forceDelete',
+                ],
+                'VIEW_TRASH_SETTING' => [
+                    'name' =>  'VIEW_TRASH_SETTING',
+                    'key_code' => 'view_trash_setting',
+                    'action' => 'viewTrash',
+                ],
+            ]
+        ],
+        'brands' => [
+            'policy' => 'App\Policies\SettingPolicy',
+            'config' => [
+                'CREATE_BANDS' => [
+                    'name' => 'CREATE_BANDS',
+                    'key_code' => 'create_setting',
+                    'action' => 'create',
+                ],
+                'UPDATE_BANDS' => [
+                    'name' => 'UPDATE_BANDS',
+                    'key_code' => 'update_setting',
+                    'action' => 'update',
+                ],
+                'DELETE_BANDS' => [
+                    'name' => 'DELETE_BANDS',
+                    'key_code' => 'delete_setting',
+                    'action' => 'delete',
+                ],
+                'VIEW_BANDS' => [
+                    'name' => 'VIEW_BANDS',
+                    'key_code' => 'show_setting',
+                    'action' => 'view',
+                ],
+                'RESTORE_BANDS' => [
+                    'name' => 'RESTORE_BANDS',
+                    'key_code' => 'restore_setting',
+                    'action' => 'restore',
+                ],
+                'DESTROY_BANDS' => [
+                    'name' => 'DESTROY_BANDS',
+                    'key_code' => 'destroy_setting',
+                    'action' => 'forceDelete',
+                ],
+                'VIEW_TRASH_BANDS' => [
+                    'name' =>  'VIEW_TRASH_BANDS',
+                    'key_code' => 'view_trash_setting',
+                    'action' => 'viewTrash',
+                ],
+            ]
+        ],
+    ],
 ];

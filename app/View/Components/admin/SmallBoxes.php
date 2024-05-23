@@ -33,14 +33,14 @@ class SmallBoxes extends Component
         $quantityList = [
             [
                 'title' => 'đơn hàng',
-                'route' => route('orders'),
+                'route' => route('order.index'),
                 'fill' => 'bg-info',
                 'quantity' => count($bill),
                 'icon' => 'ion ion-bag'
             ],
             [
                 'title' => 'sản phẩm còn có',
-                'route' => route('product-page'),
+                'route' => route('admin.products.index'),
                 'fill' => 'bg-success',
                 'quantity' => $product->sum('count_warehouse'),
                 'icon' => 'ion ion-stats-bars'
@@ -54,7 +54,7 @@ class SmallBoxes extends Component
             ],
             [
                 'title' => 'tài khoản người dùng',
-                'route' => route('user'),
+                'route' => route('admin.users.index'),
                 'fill' => 'bg-warning',
                 'quantity' => count($user),
                 'icon' => 'ion ion-person-add'

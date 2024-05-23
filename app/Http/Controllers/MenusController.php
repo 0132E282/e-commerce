@@ -2,76 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Menus;
 use Exception;
 use App\Http\Requests\MenusValidation;
+use App\Repository\RepositoryMain\MenusRepository;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class MenusController extends Controller
 {
-    private $modelMenus;
+    protected $menusRepository;
     function __construct()
     {
-        $this->modelMenus = new Menus();
+        $this->menusRepository = new MenusRepository();
         Paginator::useBootstrapFive();
     }
     function index()
     {
-        $menusList = $this->modelMenus->latest()->paginate(25);
-
-        return View('pages/menus/index', ['menusList' =>  $menusList, 'viewOptionMenus' => '']);
+        $menus =  $this->menusRepository->all();
+        return view('pages.menus.manager-all', ['menus' =>  $menus]);
     }
     function showTrash()
     {
-        $menusList = $this->modelMenus->onlyTrashed()->paginate(25);
-        return View('pages/menus/index', ['menusList' =>  $menusList, 'viewOptionMenus' => '']);
+        $menus = $this->menusRepository->trash();
+        return view('pages.menus.manager-trash', ['menus' =>  $menus, 'viewOptionMenus' => '']);
     }
-    function showForm($id = '')
+    function showForm($id = null)
     {
         try {
-            $form = [
-                'route' => route('create-menus'),
-                'method' => 'post',
-                'data' => [],
-            ];
-            if ($id) {
-                $detailMenus = $this->modelMenus->find($id);
-                $form = [
-                    'route' => route('update-menus', $id),
-                    'method' => 'put',
-                    'data' => $detailMenus,
-                ];
-            }
-            return View('pages/menus/menus-forms', ['form' => $form, 'valueBread' => $form['data']]);
+            $menu = $this->menusRepository->details($id);
+            return view('pages.menus.menus-forms', ['menu' => $menu]);
         } catch (Exception $e) {
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         }
     }
-    function delete($id)
-    {
-        try {
-            $menus =  $this->modelMenus->find($id);
-            $menus->delete();
-            $this->modelMenus->where('parent_id', $id)->delete();
 
-            return back()->with('message', ['content' => 'delete menus success :' .  $menus->id_menus, 'type' => 'success']);
-        } catch (Exception $e) {
-            return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
-        }
-    }
     function store(MenusValidation $req)
     {
         try {
-            $menus = $this->modelMenus->create(
-                [
-                    'name_menus' => $req->name_menus,
-                    'route' => $req->route,
-                    'parent_id' => $req->parent_id ?? 0,
-                    'slug' => Str::slug($req->name_menus)
-                ]
-            );
-            return back()->with('message', ['content' => 'create menus success :' .  $menus->id_menus, 'type' => 'success']);
+            $menu =  $this->menusRepository->create([
+                'name' => $req->name,
+                'description' => $req->description,
+                'location' => $req->location,
+                'user_id' => Auth::id(),
+            ]);
+            return back()->with('message', ['content' => 'Tạo menu thành công :' .  $menu->id, 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         };
@@ -79,27 +54,30 @@ class MenusController extends Controller
     function edit(MenusValidation $req, $id)
     {
         try {
-            $menus = $this->modelMenus->find($id);
-            $menus->update(
-                [
-                    'name_menus' => $req->name_menus,
-                    'route' => $req->route,
-                    'parent_id' => $req->parent_id ?? 0,
-                    'slug' => Str::slug($req->name_menus)
-                ]
-            );
-            return back()->with('message', ['content' => 'update menus success :' .  $menus->id_menus, 'type' => 'success']);
+            $menu = $this->menusRepository->update($id, [
+                'name' => $req->name,
+                'description' => $req->description,
+                'location' => $req->location,
+            ]);
+            return back()->with('message', ['content' => 'cập nhập menu thành công :' .    $menu->id, 'type' => 'success']);
+        } catch (Exception $e) {
+            return back()->with('message', ['content' => 'cập nhập menu thất bại', 'type' => 'error']);
+        };
+    }
+    function delete($id)
+    {
+        try {
+            $menu = $this->menusRepository->delete($id);
+            return back()->with('message', ['content' => 'xóa menu thanh công :' .  $menu->id, 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
-        };
+        }
     }
     function destroy($id)
     {
         try {
-            $menus =  $this->modelMenus->onlyTrashed()->find($id);
-            $menus->forceDelete();
-            $this->modelMenus->where('parent_id', $id)->update(['parent_id' => 0]);
-            return back()->with('message', ['content' => 'delete menus tag success id :' .   $menus->id_menus, 'type' => 'success']);
+            $menu = $this->menusRepository->destroy($id);
+            return back()->with('message', ['content' => 'delete menus tag success id :' .   $menu->id, 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('error', 'delete menus tag failed');
         }
@@ -107,16 +85,10 @@ class MenusController extends Controller
     function restore($id)
     {
         try {
-            $menus = $this->modelMenus->onlyTrashed()->find($id);
-            $parentCategory = $this->modelMenus->where('parent_id', $id);
-            if ($menus->parent_id > 0) {
-                $menus->update(['parent_id' => 0]);
-            }
-            $menus->restore();
-            $parentCategory->restore();
-            return back()->with('message', ['content' => 'restore menus tag success :' .   $menus->id_menus, 'type' => 'success']);
+            $menus = $this->menusRepository->restore($id);
+            return back()->with('message', ['content' => 'restore menus tag success :' .   $menus->id, 'type' => 'success']);
         } catch (Exception $e) {
-            return back()->with('message', ['content' => $e->getMessage() . ' ' .   $menus->id_menus, 'type' => 'success']);
+            return back()->with('message', ['content' => $e->getMessage() . ' ' .   $menus->id, 'type' => 'error']);
         }
     }
 }

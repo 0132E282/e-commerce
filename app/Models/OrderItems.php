@@ -11,10 +11,10 @@ class OrderItems extends Model
 {
     protected $table = 'order_items';
     protected $primaryKey = 'id';
-    protected $fillable = ['product_id', 'order_id', 'quantity'];
-    function products(): BelongsTo
+    protected $fillable = ['variation_id', 'order_id', 'quantity', 'price'];
+    function variation(): BelongsTo
     {
-        return $this->BelongsTo(Products::class, 'product_id');
+        return $this->BelongsTo(ProductVariants::class, 'variation_id');
     }
 
     use HasFactory;

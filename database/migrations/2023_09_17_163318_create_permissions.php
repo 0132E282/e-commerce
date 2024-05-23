@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('display_name');
             $table->string('key_code')->nullable();
-            $table->bigInteger('parent_id')->default(0);
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('permissions')->onDelete('cascade');
             $table->timestamps();
         });
     }

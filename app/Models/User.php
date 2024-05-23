@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -24,7 +25,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'avatar',
+        'avatar_url',
+        'status'
     ];
 
     /**
@@ -49,6 +51,18 @@ class User extends Authenticatable
     function roles(): BelongsToMany
     {
         return $this->belongsToMany(Roles::class, 'user_role', 'id_user', 'id_role');
+    }
+    function categories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'user_id');
+    }
+    function products(): HasMany
+    {
+        return $this->hasMany(Products::class, 'user_id');
+    }
+    function orders(): HasMany
+    {
+        return $this->hasMany(Orders::class, 'user_id');
     }
     function checkPermission($keyCode)
     {

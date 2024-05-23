@@ -12,23 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id('id_product');
-            $table->string('name_product')->notNull();
-            $table->bigInteger('price_product')->notNull();
-            $table->string('slug_product')->default(null)->nullable();
+            $table->id();
+            $table->string('name')->notNull();
+            $table->string('slug')->default(null)->nullable();
             $table->text('content')->default(null)->nullable()->nullable();
             $table->bigInteger('views_count')->default(0)->nullable();
-            $table->bigInteger('count_warehouse')->default(0)->nullable();
-            $table->bigInteger('like_count')->default(0)->nullable();
-            $table->bigInteger('comment_count')->default(0)->nullable();
-            $table->string('feature_image')->default('/storage/uploads/images/products/QsEd3sG9UNk2597dJ17Os5gRXrpXcTtswiuhm7eZ.jpg');
-            $table->unsignedBigInteger('id_category')->default(null)->nullable();
+            $table->string('feature_image');
+            $table->integer('status')->default(0)->nullable();
+            $table->json('description_image')->nullable(null);
+            $table->unsignedBigInteger('id_category')->nullable();
             $table->softDeletes();
-            $table->foreignId('id_user')->constrained(
-                table: 'users',
-                indexName: 'products_user_id'
-            )->default(null);
-            $table->foreign('id_category')->references('id_category')->on('category');
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('id_category')->references('id')->on('category')->onDelete('set null');
             $table->timestamps();
         });
     }

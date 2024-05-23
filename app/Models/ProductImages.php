@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductImages extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
     protected $table = 'product_images';
     protected $primaryKey = 'id_image';
     protected $fillable = ['path', 'id_product'];
-    use HasFactory;
 }

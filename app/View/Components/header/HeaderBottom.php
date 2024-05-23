@@ -23,7 +23,7 @@ class HeaderBottom extends Component
      */
     public function render(): View|Closure|string
     {
-        $menusList =  $this->modelMenus->where('parent_id', 0)->get();
+        $menusList =  $this->modelMenus->where('location', '=', 'top')->first()->menu_items()->orderBy('location', "ASC")->whereNull('parent_id')->get();
         return view('components.header.header-bottom', ['menusList' => $menusList]);
     }
 }

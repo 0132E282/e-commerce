@@ -12,13 +12,13 @@
             <div class="mainmenu pull-left">
                 <ul class="nav navbar-nav collapse navbar-collapse">
                     @foreach ($menusList as $item)
-                        @if (!$item->menusChildren->count() > 0)
-                            <li>
-                                <a href="{{ $item->route ?? '' }}" class="active">{{ $item->name_menus }}</a>
+                        @if ($item->children->count() > 0)
+                            <li class="dropdown"><a href="{{ $item->link }}">{{ $item->title }}<i class="fa fa-angle-down"></i></a>
+                                <x-menus.menus-children :menuChildren="$item->children" />
                             </li>
                         @else
-                            <li class="dropdown"><a href="{{ $item->route }}">{{ $item->name_menus }}<i class="fa fa-angle-down"></i></a>
-                                <x-menus.menus-children :data="$item->menusChildren" />
+                            <li>
+                                <a href="{{ $item->link ?? '' }}" class="{{ url()->current() == $item->link ? 'active' : '' }}">{{ $item->title }}</a>
                             </li>
                         @endif
                     @endforeach
@@ -26,8 +26,8 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="search_box pull-right">
-                <input type="text" placeholder="Search" />
+            <div class="search_box pull-right" style="width: 100%;">
+                <input type="text" placeholder="tên ,nhản hiệu, danh mục sản phẩm " />
             </div>
         </div>
     </div>

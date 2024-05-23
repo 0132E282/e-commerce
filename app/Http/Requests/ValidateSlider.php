@@ -22,7 +22,7 @@ class ValidateSlider extends FormRequest
     public function rules(): array
     {
         $validate = [
-            'name_slider' => 'required',
+            'title' => 'required',
         ];
         if ($this->method() == 'post') {
             $validate['image_url'] = 'required';

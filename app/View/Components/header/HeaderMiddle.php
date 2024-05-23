@@ -2,6 +2,7 @@
 
 namespace App\View\Components\header;
 
+use App\Models\Setting;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -13,7 +14,6 @@ class HeaderMiddle extends Component
      */
     public function __construct()
     {
-        //
     }
 
     /**
