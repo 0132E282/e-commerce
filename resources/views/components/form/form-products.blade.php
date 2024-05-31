@@ -37,7 +37,7 @@
         <x-select.search name="brand" title="thương hiệu ">
             <option value="">chọn thương hiệu</option>
             @foreach ($brands as $brand)
-                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                <option value="{{ $brand->id }}"{{ !empty($detailProduct->brand_id) && $brand->id == $detailProduct->brand_id ? 'selected' : '' }}>{{ $brand->name }}</option>
             @endforeach
         </x-select.search>
     </div>

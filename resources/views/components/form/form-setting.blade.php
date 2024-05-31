@@ -25,28 +25,6 @@
                     <x-input.images name="icon_title_website" :valueImage="$settingSystem['icon_title_website'] ?? ''" />
                 </div>
             </div>
-            <div class="row  mb-5">
-                <div class="col-3 d-flex justify-content-strat align-items-center ">
-                    <label class="m-0 form-label" for="">Ngôn ngữ</label>
-                </div>
-                <div class="col">
-                    <x-select name="language">
-                        <option value="em">Tiếng việt</option>
-                        <option value="ev">Tiếng anh</option>
-                    </x-select>
-                </div>
-            </div>
-            <div class="row  mb-5">
-                <div class="col-3 d-flex justify-content-strat align-items-center ">
-                    <label class="m-0 form-label" for="">Thời gian</label>
-                </div>
-                <div class="col">
-                    <x-select name="timezone">
-                        <option value="vn">Tiếng việt</option>
-                        <option value="en">Tiếng anh</option>
-                    </x-select>
-                </div>
-            </div>
         </div>
     </div>
     <div class="mt-3">

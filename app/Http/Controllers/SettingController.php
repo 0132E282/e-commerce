@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SettingRequest;
 use App\Models\Setting;
 use App\storage\StoreFactory;
-use Dotenv\Store\FileStore;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -63,6 +61,21 @@ class SettingController extends Controller
             $setting = Setting::updateOrCreate(['key' =>    $settingSystemCode], ['key' => $settingSystemCode, 'value' => json_encode($setting)]);
             session()->put($settingSystemCode, json_decode($setting->value, true));
             return back()->with('message', ['content' => 'đã cập nhập thông website', 'type' => 'success']);
+        } catch (Exception $e) {
+            return back()->with('message', ['content' => ' cập nhập thông website thất bại', 'type' => 'error']);
+        }
+    }
+    function payment()
+    {
+        $payment = Setting::where('key', '=', 'payment')->first();
+        $payment = json_decode($payment->value, true);
+        return view('pages.setting.payment', ['payment' => $payment]);
+    }
+    function savePayment(Request $req)
+    {
+        try {
+            Setting::updateOrCreate(['key' => 'payment'], ['key' => 'payment', 'value' => json_encode($req->payment)]);
+            return back()->with('message', ['content' => 'đã lưu thông tinh', 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' => ' cập nhập thông website thất bại', 'type' => 'error']);
         }

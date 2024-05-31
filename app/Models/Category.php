@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,5 +23,13 @@ class Category extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
+    }
+    public function getAllDescendantCategories()
+    {
+        $categories = new Collection([$this]);
+        foreach ($this->children as $child) {
+            $categories = $categories->merge($child->getAllDescendantCategories());
+        }
+        return $categories;
     }
 }

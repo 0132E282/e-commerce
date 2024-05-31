@@ -9,7 +9,7 @@
         ],
         [
             'title' => 'Đơn hàng',
-            'url' => route('admin.products.status', ['status' => 0]),
+            'url' => route('admin.products.index', ['status' => 0]),
         ],
     ];
 @endphp

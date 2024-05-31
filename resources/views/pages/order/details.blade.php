@@ -57,7 +57,7 @@
                             </li>
                             <li class="list-group-item">
                                 <span class="fw-bold ">Trạng thái :</span>
-                                {{ $bill->status != null ? ($bill->status == 0 ? 'hủy  ' : 'đã xát nhận ') : 'chưa xát nhận' }} đơn hàng
+                                {{ $bill->status !== null ? ($bill->status === 1 ? 'đã xát nhận' : 'đã hủy') : 'chưa xát nhận' }} đơn hàng
                             </li>
                         </ul>
                     </div>
@@ -105,10 +105,10 @@
                             <i class="bi bi-file-earmark"></i>
                             In hóa đơn
                         </x-button>
-                        @if ($bill->status != 0 || $bill->status == null)
+                        @if ($bill->status !== 0 || $bill->status === null)
                             <x-button method="patch" :action="route('admin.order.update-status', ['id' => $bill->id, 'status' => 0])" class="btn-danger ">Hủy đơn </x-button>
                         @endif
-                        @if ($bill->status != 1)
+                        @if ($bill->status !== 1)
                             <x-button method="patch" :action="route('admin.order.update-status', ['id' => $bill->id, 'status' => 1])" class="btn-success"> xát nhận đơn </x-button>
                         @endif
                         <x-button :link="!empty($orderBefore->id) ? route('admin.order.detail', ['id' => $orderBefore->id]) : ''"> Trước đó</x-button>

@@ -10,8 +10,6 @@ use App\Repository\RepositoryMain\CategoryRepository;
 use App\Repository\RepositoryMain\ProductsRepository;
 use App\Repository\RepositoryMain\ProductsValidationRepository;
 use App\Repository\RepositoryMain\TagsRepository;
-use App\View\Components\Product\Details;
-use App\View\Components\product\VariationsAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -47,10 +45,21 @@ class ProductsController extends Controller
         $categoryList =  $this->categoryRepository->has_products();
         return view('pages.products.manager-all', ['products' => $products, 'categoryList' => $categoryList]);
     }
+    function soldOut(ProductsRequest $req,)
+    {
+        $option = ['filter' => $req->filter,  'search' => $req->search, ...$req->input()];
+        $products = $this->productRepository->all($option, function ($query) {
+            $query->whereHas('variations', function ($query) {
+                $query->whereNull('quantity')->orWhere('quantity', 0);
+            });
+        });
+        $categoryList =  $this->categoryRepository->has_products();
+        return view('pages.products.manager-all', ['products' => $products, 'categoryList' => $categoryList]);
+    }
     function details($id)
     {
         $product = $this->productRepository->details($id);
-        return (new Details($product))->render();
+        return view('pages.products.details', ['product' => $product]);
     }
     function status($status)
     {
@@ -119,7 +128,7 @@ class ProductsController extends Controller
                 'feature_image' => $req->feature_image,
                 'content' => $req->description ?? null,
                 'id_category' => $req->category,
-                'user_id' => Auth::id()
+                'brand_id' => $req->brand,
             ];
             $product = $this->productRepository->update($id, $dataProduct);
             $this->tagsRepository->update_by_products($product, $req->tags);
@@ -166,11 +175,6 @@ class ProductsController extends Controller
         } catch (Exception $e) {
             return response()->json($e->getMessage());
         }
-    }
-    function variationsAdmin($id)
-    {
-        $product = $this->productsValidationRepository->allByProduct($id);
-        return (new VariationsAdmin($product))->render();
     }
     function export(Request $req)
     {

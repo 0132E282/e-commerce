@@ -20,10 +20,10 @@ class UserController extends Controller
         $this->userRepository = new UserRepository();
         Paginator::useBootstrapFive();
     }
-    function index()
+    function index($status = null)
     {
-        $user = Auth::id();
-        $users = $this->modelUser->latest()->where('id', '!=', $user)->paginate(25);
+
+        $users = $this->userRepository->all(['status' => $status]);
         return view('pages.user.manager-all', ['users' => $users]);
     }
     function form($id = null)

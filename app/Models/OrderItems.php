@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrderItems extends Model
 {
+    use HasFactory;
     protected $table = 'order_items';
     protected $primaryKey = 'id';
     protected $fillable = ['variation_id', 'order_id', 'quantity', 'price'];
@@ -16,6 +17,4 @@ class OrderItems extends Model
     {
         return $this->BelongsTo(ProductVariants::class, 'variation_id');
     }
-
-    use HasFactory;
 }

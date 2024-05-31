@@ -23,6 +23,7 @@ class RouteGroup
             Route::prefix('category')->group(base_path('routes/includes/categoryRoute.php'));
             Route::prefix('brands')->group(base_path('routes/includes/brandsRoute.php'));
             Route::prefix('users')->group(base_path('routes/includes/usersRoute.php'));
+            Route::prefix('reviews')->group(base_path('routes/includes/reviewsRoute.php'));
             Route::prefix('order')->group(base_path('routes/includes/orderRoute.php'));
             Route::prefix('permission')->group(base_path('routes/includes/permissionRoute.php'));
             Route::prefix('products')->group(base_path('routes/includes/productRoute.php'));

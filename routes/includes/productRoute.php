@@ -17,8 +17,9 @@ Route::name('admin.products.')->controller(ProductsController::class)->group(fun
     Route::delete('{id}', 'delete')->middleware('can:DELETE_PRODUCT')->name('delete');
 
     Route::middleware('can:VIEW_PRODUCT')->group(function () {
-        Route::get('details/{id}', 'details')->name('details');
+        Route::get('details/{products:id}', 'details')->name('details');
         Route::post('export', 'export')->name('export');
+        Route::get('sold-out', 'soldOut')->name('sold-out');
         Route::get('{status?}', 'index')->name('index');
     });
 });

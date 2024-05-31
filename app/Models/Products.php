@@ -20,8 +20,6 @@ class Products extends Model
     ];
     protected $fillable = ['name', 'status',  'slug', 'content', 'feature_image', 'id_category', 'id_user', 'description_image', 'brand_id', 'user_id'];
 
-
-
     public function category(): BelongsTo
     {
         return $this->BelongsTo(Category::class, 'id_category');
@@ -40,6 +38,10 @@ class Products extends Model
     {
         return $this->hasManyThrough(OrderItems::class, ProductVariants::class, 'product_id', 'variation_id');
     }
+    function reviews(): HasMany
+    {
+        return $this->hasMany(reviews::class, 'product_id');
+    }
     function brand(): BelongsTo
     {
         return $this->belongsTo(Brands::class, 'brand_id');
@@ -47,7 +49,8 @@ class Products extends Model
     function scopeFilter($query, $filter = [])
     {
         $query->when(!empty($filter['category']), function ($query) use ($filter) {
-            $query->where('id_category', $filter['category']);
+            $category = Category::find($filter['category'])->getAllDescendantCategories()->pluck('id');
+            $query->whereIn('id_category', $category);
         });
         $query->when(!empty($filter['brand']), function ($query) use ($filter) {
             $query->where('brand_id', '=', $filter['brand']);
@@ -64,7 +67,7 @@ class Products extends Model
             $quantity = explode('_', $filter['quantity']);
             $query->havingBetween('quantity', $quantity);
         });
-        $query->when(!empty($filter['status']) || $filter['status'] === 0, function ($query) use ($filter) {
+        $query->when(isset($filter['status']), function ($query) use ($filter) {
             $query->where('status', '=', $filter['status']);
         });
         return $query;
@@ -73,9 +76,13 @@ class Products extends Model
     {
         $query->when(!empty($search), function ($query) use ($search) {
             $search = "%" . $search . "%";
-            $query->where('name', 'LIKE', $search)->orWhereHas('category', function ($query) use ($search) {
-                $query->where('name', 'LIKE', $search);
-            });
+            $query->where('name', 'LIKE', $search)
+                ->orWhereHas('category', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', $search);
+                })
+                ->orWhereHas('brand', function ($query) use ($search) {
+                    $query->where('name', 'LIKE', $search);
+                });
         });
         return $query;
     }

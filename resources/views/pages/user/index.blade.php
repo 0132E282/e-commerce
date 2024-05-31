@@ -8,8 +8,16 @@
             'url' => route('admin.users.index'),
         ],
         [
-            'title' => 'tài khoản khóa',
-            'url' => route('admin.products.status', ['status' => 0]),
+            'title' => 'hoạt động',
+            'url' => route('admin.users.index', ['status' => 1]),
+        ],
+        [
+            'title' => 'đã khóa',
+            'url' => route('admin.users.index', ['status' => 0]),
+        ],
+        [
+            'title' => 'đã xóa',
+            'url' => route('admin.users.trash.index'),
         ],
     ];
 @endphp

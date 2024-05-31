@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\validateOrder;
+use App\Models\Brands;
 use App\Models\Category;
 use App\Models\Customers;
 use App\Models\Orders;
 use App\Models\Products;
 use App\Models\ProductVariants;
+use App\Repository\RepositoryMain\CategoryRepository;
 use App\Repository\RepositoryMain\ProductsRepository;
 use Exception;
 use Illuminate\Contracts\Session\Session;
@@ -20,31 +22,35 @@ use PhpOffice\PhpSpreadsheet\Calculation\TextData\Extract;
 
 class ShopController extends Controller
 {
-    protected $modelProduct;
     protected $modelOrders;
     protected $modelCustomers;
     protected $modelCategory;
     protected $idCategory = [];
     protected $productsRepository;
+    protected $categoryRepository;
     function __construct()
     {
-        $this->modelProduct = new Products();
         $this->modelOrders = new Orders();
         $this->modelCategory = new Category();
         $this->modelCustomers = new Customers();
+        $this->categoryRepository = new CategoryRepository();
         $this->productsRepository = new ProductsRepository();
         Paginator::useBootstrapFive();
     }
-    function index($slug = null)
+    function index(Request $req, Category $category, Brands $brands)
     {
-        $productList = $this->modelProduct;
-        $productList =  $productList->latest()->paginate(12);
-        return view('pages/shop/index', ['productList' => $productList]);
+        $products = $this->productsRepository->shop(25, ['search' => $req->search, 'filter' => ['category' => $category->id, 'brand' => $brands->id]]);
+        return view('pages/shop/index', ['productList' => $products]);
     }
-    function detail($slug = null, $id = null)
+    function brand(Category $category)
+    {
+        $products = $this->productsRepository->shop(25, ['filter' => ['category' => $category->id]]);
+        return view('pages/shop/index', ['productList' => $products]);
+    }
+    function detail(Category $category, products $products)
     {
         try {
-            $product = $this->productsRepository->details($id);
+            $product = $this->productsRepository->details($products->id);
             return view('pages/shop/detail', ['detailProduct' => $product]);
         } catch (\Exception $e) {
         }

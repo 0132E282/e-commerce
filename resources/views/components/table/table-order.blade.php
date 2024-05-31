@@ -59,7 +59,7 @@
                 <td>{{ $order->phone }}</td>
                 <td>{{ $order->email }}</td>
                 <td>{{ number_format($toal_price) }} đ</td>
-                <td> {{ $order->status != null ? ($order->status == 1 ? 'đã xát nhận' : 'đã hủy') : 'chưa xát nhận' }}</td>
+                <td> {{ $order->status !== null ? ($order->status === 1 ? 'đã xát nhận' : 'đã hủy') : 'chưa xát nhận' }}</td>
                 <td> @switch($order->payment)
                         @case('VN_PAY')
                             vnpay

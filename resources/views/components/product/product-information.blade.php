@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="attr-products">
-                <label class="attr-title">Màu</label>
+                <label class="attr-title">Kích thước</label>
                 <div class="d-flex gap-2 ">
                     @foreach ($detailProductInfo->variations->pluck('size')->unique() as $size)
                         <label class="btn-checkbox btn btn-default attr-item"><input type="radio" hidden name="size" value="{{ $size }}">{{ $size }}</label>
@@ -93,6 +93,7 @@
                 };
                 const input = $(this).siblings('input[type="number"]');
                 if (data.id_variant != null) {
+
                     callFindVariant(data, {
                         success: function(data) {
                             data[0].quantity > Number(input.val()) ? input.val(Number(input.val()) + 1) : toastr.error('Số lượng không đủ');
@@ -114,6 +115,7 @@
                     'id_variant': $(this).data('variable'),
                     'quantity': $(this).find('input[name="quantity"]').val(),
                 };
+
                 $.ajax({
                     url: @js(route('client.shop.add-cart', ['id' => $detailProductInfo->id, 'slug' => $detailProductInfo->slug])),
                     data: data,
@@ -140,6 +142,8 @@
                                 style: 'currency',
                                 currency: 'VND'
                             });
+                            $(`.attr-item input[value="${data[0].size}"][name="size"]`).prop('checked', true);
+                            $(`.attr-item input[value="${data[0].color}"][name="color"]`).prop('checked', true);
                             $('#form-add-card').attr('data-variable', data[0].id)
                             $('.btn-quantity').attr('data-variable', data[0].id)
                             $('.price-product .price-by').text(formattedPrice);

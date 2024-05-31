@@ -12,15 +12,15 @@ class PaymentMoMo implements PaymentInterface
     protected $endpoint;
     function __construct($config = null)
     {
-        $this->secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
-        $this->endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
-        $this->inputData['accessKey'] = 'klm05TvNBzhg7h7j';
+        $this->secretKey = $config['secretKey'];
+        $this->endpoint =  $config['endpoint'];
+        $this->inputData['accessKey'] = $config['accessKey'] ?? '';
         $this->inputData['amount'] = $req['amount'] ?? '';
         $this->inputData['extraData'] = '';
-        $this->inputData['ipnUrl'] = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+        $this->inputData['ipnUrl'] =  $config['ipnUrl'] ?? "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
         $this->inputData['orderId'] = $req['order_id'] ?? '';
         $this->inputData['orderInfo'] = $req['content_order'] ?? '';
-        $this->inputData['partnerCode'] = 'MOMOBKUN20180529';
+        $this->inputData['partnerCode'] =  $config['partnerCode'] ?? '';
         $this->inputData['redirectUrl'] = $config['redirect_url'];
         $this->inputData['requestId'] = time() . "";
         $this->inputData['requestType'] = "payWithATM";

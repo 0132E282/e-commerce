@@ -8,6 +8,7 @@ use App\Payments\Payment;
 use App\Repository\RepositoryMain\OrdersRepository;
 use App\Repository\RepositoryMain\ProductsRepository;
 use App\Repository\RepositoryMain\ProductsValidationRepository;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -111,6 +112,9 @@ class OrderController extends Controller
             $order['order_items'] = $order->order_items()->createMany($productsCart);
 
             if (!empty($order['order_items'])) {
+                foreach ($order['order_items'] as $orderItem) {
+                    $orderItem->variation()->update(['quantity' => $orderItem->quantity]);
+                }
                 if ($req->payment != null) {
                     $config = ['redirect_url' => route('client.order.rel-checkout', $order->id)];
                     $payment = $this->payments->initialize($req->payment, $config);
@@ -162,10 +166,21 @@ class OrderController extends Controller
             return back()->with('message', ['content' =>  $e->getMessage(), 'type' => 'error']);
         }
     }
-    function relCheckout($id)
+    function relCheckout($id, Request $request)
     {
-        $order = $this->modelOrder->find($id);
-        return view('pages.shop.rel-checkout', ['order' => $order]);
+        try {
+            $order = $this->modelOrder->find($id);
+            throw_if(isset($request->vnp_ResponseCode) && $request->vnp_ResponseCode != 00 ||  isset($request->resultCode) != null && $request->resultCode != 0, 'Dao dịch thất bại');
+            if (isset($request->responseTime) || isset($request->vnp_PayDate)) {
+                $data = Carbon::createFromTimestamp(($request->responseTime ?? $request->vnp_PayDate) / 1000);
+                $order->update(['paid_at' => $data]);
+            }
+            return view('pages.shop.rel-checkout', ['order' => $order]);
+        } catch (\Exception $e) {
+            $order = $this->modelOrder->find($id);
+            $order->update(['status' => 0]);
+            return view('pages.shop.rel-checkout', ['message' => $e->getMessage()]);
+        }
     }
     function deleteOrderItem($id, $id_order_item)
     {

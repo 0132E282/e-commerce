@@ -9,6 +9,7 @@
                 </div>
                 <div style="margin-bottom: 20px;">
                     <x-input name="phone" placeholder="số điện thoại" />
+                    {{-- <p style="margin-top: 10px; font-size: 14px; color: red;">Hoomh yin tsfsdf</p> --}}
                 </div>
                 <div style="margin-bottom: 20px;">
                     <x-input type="email" name="email" placeholder="email" :value="optional($order)->email" />

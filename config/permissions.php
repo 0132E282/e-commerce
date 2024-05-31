@@ -41,6 +41,46 @@ return [
                 ],
             ]
         ],
+        'brands' => [
+            'policy' => 'App\Policies\BrandsPolicy',
+            'config' => [
+                'CREATE_BRANDS' => [
+                    'name' =>  'CREATE_BRANDS',
+                    'key_code' => 'create_brands',
+                    'action' => 'create',
+                ],
+                'UPDATE_BRANDS' => [
+                    'name' => 'UPDATE_BRANDS',
+                    'key_code' => 'update_brands',
+                    'action' => 'update',
+                ],
+                'DELETE_BRANDS' => [
+                    'name' => 'DELETE_BRANDS',
+                    'key_code' => 'delete_brands',
+                    'action' => 'delete',
+                ],
+                'VIEW_BRANDS' => [
+                    'name' => 'VIEW_BRANDS',
+                    'key_code' => 'show_brands',
+                    'action' => 'view',
+                ],
+                'RESTORE_BRANDS' => [
+                    'name' => 'RESTORE_BRANDS',
+                    'key_code' => 'restore_brands',
+                    'action' => 'restore',
+                ],
+                'DESTROY_BRANDS' => [
+                    'name' => 'DESTROY_BRANDS',
+                    'key_code' => 'destroy_brands',
+                    'action' => 'forceDelete',
+                ],
+                'VIEW_TRASH_BRANDS' => [
+                    'name' =>  'VIEW_TRASH_BRANDS',
+                    'key_code' => 'view_trash_brands',
+                    'action' => 'viewTrash',
+                ],
+            ]
+        ],
         'user' => [
             'policy' => 'App\Policies\UsersPolicy',
             'config' => [
@@ -324,80 +364,60 @@ return [
         'setting' => [
             'policy' => 'App\Policies\SettingPolicy',
             'config' => [
-                'CREATE_SETTING' => [
-                    'name' => 'CREATE_SETTING',
-                    'key_code' => 'create_setting',
-                    'action' => 'create',
+                'VIEW_ANY_SETTING' => [
+                    'name' => 'VIEW_ANY_SETTING',
+                    'key_code' => 'view_any_setting',
+                    'action' => 'viewAny',
                 ],
-                'UPDATE_SETTING' => [
-                    'name' => 'UPDATE_SETTING',
-                    'key_code' => 'update_setting',
-                    'action' => 'update',
+                'PAYMENT_SETTING' => [
+                    'name' => 'PAYMENT_SETTING',
+                    'key_code' => 'payment_setting',
+                    'action' => 'payment',
                 ],
-                'DELETE_SETTING' => [
-                    'name' => 'DELETE_SETTING',
-                    'key_code' => 'delete_setting',
-                    'action' => 'delete',
+                'PERMISSIONS_SETTING' => [
+                    'name' => 'PERMISSIONS_SETTING',
+                    'key_code' => 'permissions_setting',
+                    'action' => 'permissions',
                 ],
-                'VIEW_SETTING' => [
-                    'name' => 'VIEW_SETTING',
-                    'key_code' => 'show_setting',
-                    'action' => 'view',
+                'CONTACT_SETTING' => [
+                    'name' => 'CONTACT_SETTING',
+                    'key_code' => 'contact_setting',
+                    'action' => 'contact',
                 ],
-                'RESTORE_SETTING' => [
-                    'name' => 'RESTORE_SETTING',
-                    'key_code' => 'restore_setting',
-                    'action' => 'restore',
-                ],
-                'DESTROY_SETTING' => [
-                    'name' => 'DESTROY_SETTING',
-                    'key_code' => 'destroy_setting',
-                    'action' => 'forceDelete',
-                ],
-                'VIEW_TRASH_SETTING' => [
-                    'name' =>  'VIEW_TRASH_SETTING',
-                    'key_code' => 'view_trash_setting',
-                    'action' => 'viewTrash',
+                'SYSTEM_SETTING' => [
+                    'name' => 'SYSTEM_SETTING',
+                    'key_code' => 'system_setting',
+                    'action' => 'system',
                 ],
             ]
         ],
-        'brands' => [
-            'policy' => 'App\Policies\SettingPolicy',
+        'admin' => [
+            'policy' => 'App\Policies\AdminPolicy',
             'config' => [
-                'CREATE_BANDS' => [
-                    'name' => 'CREATE_BANDS',
-                    'key_code' => 'create_setting',
-                    'action' => 'create',
-                ],
-                'UPDATE_BANDS' => [
-                    'name' => 'UPDATE_BANDS',
-                    'key_code' => 'update_setting',
-                    'action' => 'update',
-                ],
-                'DELETE_BANDS' => [
-                    'name' => 'DELETE_BANDS',
-                    'key_code' => 'delete_setting',
-                    'action' => 'delete',
-                ],
-                'VIEW_BANDS' => [
-                    'name' => 'VIEW_BANDS',
-                    'key_code' => 'show_setting',
+                'VIEW_ADMIN' => [
+                    'name' => 'VIEW_ADMIN',
+                    'key_code' => 'show_admin',
                     'action' => 'view',
                 ],
-                'RESTORE_BANDS' => [
-                    'name' => 'RESTORE_BANDS',
-                    'key_code' => 'restore_setting',
-                    'action' => 'restore',
+            ]
+        ],
+        'reviews' => [
+            'policy' => 'App\Policies\ReviewsPolicy',
+            'config' => [
+                'VIEW_REVIEWS' => [
+                    'name' => 'VIEW_REVIEWS',
+                    'key_code' => 'show_admin',
+                    'action' => 'view',
                 ],
-                'DESTROY_BANDS' => [
-                    'name' => 'DESTROY_BANDS',
-                    'key_code' => 'destroy_setting',
-                    'action' => 'forceDelete',
+                'REPLY_REVIEWS' => [
+                    'name' => 'REPLY_REVIEWS',
+                    'key_code' => 'reply_reviews',
+                    'action' => 'reply',
                 ],
-                'VIEW_TRASH_BANDS' => [
-                    'name' =>  'VIEW_TRASH_BANDS',
-                    'key_code' => 'view_trash_setting',
-                    'action' => 'viewTrash',
+                'DELETE_REVIEWS' => [
+                    'name' => 'DELETE_REVIEWS',
+                    'key_code' => 'delete_reviews',
+                    'action' => 'delete',
                 ],
             ]
         ],

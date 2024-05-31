@@ -15,17 +15,12 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="recommended_items">
-                <x-product.recommended-item :data="$recommendedProduct" title="sản phẩm mua nhiều" />
+                <x-product.recommended-item :data="$TopProductByOrder" title="sản phẩm mua nhiều" />
             </div>
         </div>
         <div class="col-sm-12">
             <div class="recommended_items">
                 <x-product.recommended-item :data="$recommendedProduct" title="sản phẩm đề xuất" />
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <div class="recommended_items">
-                <x-product.recommended-item :data="$recommendedProduct" title="Sản phẩm ưa thích" />
             </div>
         </div>
         <div class="col-sm-3">

@@ -32,24 +32,24 @@ class SmallBoxes extends Component
         $user = $this->modalUsers->all();
         $quantityList = [
             [
-                'title' => 'đơn hàng',
-                'route' => route('order.index'),
+                'title' => 'tổng đơn đơn hàng',
+                'route' => route('admin.order.index'),
                 'fill' => 'bg-info',
-                'quantity' => count($bill),
+                'quantity' => $bill->count(),
                 'icon' => 'ion ion-bag'
             ],
             [
-                'title' => 'sản phẩm còn có',
+                'title' => 'Số lượng sản phẩm',
                 'route' => route('admin.products.index'),
                 'fill' => 'bg-success',
-                'quantity' => $product->sum('count_warehouse'),
+                'quantity' => $product->count(),
                 'icon' => 'ion ion-stats-bars'
             ],
             [
-                'title' => 'số lượng sản phẩm đã bán',
-                'route' => $product->sum('count_warehouse'),
+                'title' => 'Sẩn phẩm hêt hàng',
+                'route' => route('admin.products.index'),
                 'fill' => 'bg-success',
-                'quantity' => count($product),
+                'quantity' => number_format($this->modalProduct->whereHas('variations', fn ($query) => $query->where('quantity', '<=', 0))->count()),
                 'icon' => 'ion ion-stats-bars'
             ],
             [

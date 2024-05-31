@@ -26,9 +26,11 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="search_box pull-right" style="width: 100%;">
-                <input type="text" placeholder="tên ,nhản hiệu, danh mục sản phẩm " />
-            </div>
+            <form action="{{ route('client.shop.view') }}">
+                <div class="search_box pull-right" style="display: flex; width: 100%;">
+                    <input type="text" style="flex: 1" value="{{ request()->input('search') ?? '' }}" name="search" placeholder="tên ,nhản hiệu, danh mục sản phẩm " />
+                </div>
+            </form>
         </div>
     </div>
 </div>

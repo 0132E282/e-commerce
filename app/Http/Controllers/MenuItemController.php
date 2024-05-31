@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brands;
 use App\Models\Category;
 use App\Models\Menus;
 use App\Repository\RepositoryMain\CategoryRepository;
@@ -25,11 +26,12 @@ class MenuItemController extends Controller
         $categoryList = $this->categoryRepository->all([], function ($query) {
             $query->where('status', 1);
         });
+        $brands = Brands::all();
         $routes = Route::getRoutes()->getRoutesByName();
         $routes = collect($routes)->filter(function ($route) {
             return strpos($route->getName(), 'client') !== false && in_array('GET', $route->methods());
         });
-        return view('pages.menus.manager-menu-item', ['menuItems' => $menuItems, 'categoryList' => $categoryList, 'routes' =>  $routes]);
+        return view('pages.menus.manager-menu-item', ['menuItems' => $menuItems, 'categoryList' => $categoryList, 'routes' =>  $routes, 'brands' => $brands]);
     }
     function create($id, $type, Request $req)
     {
@@ -40,7 +42,7 @@ class MenuItemController extends Controller
                 $data = collect($category)->map(function ($category) {
                     return [
                         'title' => $category->name,
-                        'link' => route('client.shop.category', ['slug' => $category->slug]),
+                        'link' => route('client.shop.category', $category),
                         'type' => 1,
                     ];
                 });
@@ -55,14 +57,27 @@ class MenuItemController extends Controller
                 });
                 break;
             case '3':
-                $data = [[
-                    'title' => $req->title,
-                    'link' => $req->links,
-                    'type' => 3
-                ]];
+                $data = [
+                    [
+                        'title' => $req->title,
+                        'link' => $req->links,
+                        'type' => 3
+                    ]
+                ];
+                break;
+            case '4':
+                $brands = Brands::all()->whereIn('id', $req->brands)->all();
+                $data = collect($brands)->map(function ($brand) {
+                    return [
+                        'title' =>  str_replace('-', ' ', str_replace('client.', '', $brand->name)),
+                        'link' => route('client.shop.brand', $brand),
+                        'type' => 4
+                    ];
+                });
+                break;
         }
         $this->menusRepository->createMenuItems($id, $data);
-        return back();
+        return back()->with('message', ['content' => 'đã thêm thành công', 'type' => 'success']);
     }
     function updateParent($id, $id_parent, Request $req)
     {

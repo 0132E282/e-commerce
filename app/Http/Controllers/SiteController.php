@@ -23,7 +23,7 @@ class SiteController extends Controller
         $TopProductByOrder = $this->productsRepository->shopSlider('order');
         $category = $this->categoryRepository->all();
         $products = $this->productsRepository->shop(25, ['order' => 'view', 'by' => 'DESC']);
-        return view('pages.site.home', ['products' => $products, 'recommendedProduct' => $recommendedProduct, 'category' => $category]);
+        return view('pages.site.home', ['TopProductByOrder' => $TopProductByOrder, 'products' => $products, 'recommendedProduct' => $recommendedProduct, 'category' => $category]);
     }
     function page404()
     {

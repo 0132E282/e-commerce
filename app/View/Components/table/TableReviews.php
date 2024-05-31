@@ -1,20 +1,20 @@
 <?php
 
-namespace App\View\Components\Product;
+namespace App\View\Components\table;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class details extends Component
+class TableReviews extends Component
 {
     /**
      * Create a new component instance.
      */
-    protected $product;
-    public function __construct($product = null)
+    protected $reviews;
+    public function __construct($reviews)
     {
-        $this->product = $product;
+        $this->reviews = $reviews;
     }
 
     /**
@@ -22,6 +22,6 @@ class details extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.product.details', ['product' => $this->product]);
+        return view('components.table.table-reviews', ['reviews' => $this->reviews]);
     }
 }

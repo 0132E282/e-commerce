@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repository\RepositoriesInterface\UserRepositoryInterface;
 use App\Repository\RepositoryMain\BaseRepository;
 use App\storage\StoreFactory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
@@ -56,6 +57,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
     function all($options)
     {
+        return $this->modal->when(isset($options['status']) && $options['status'] !== null, function ($query) use ($options) {
+            $query->where('status', $options['status']);
+        })->where('id', '!=', Auth::id())->paginate(25);
     }
     function updateStatus($id, $status)
     {

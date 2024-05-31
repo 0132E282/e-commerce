@@ -59,6 +59,28 @@
                                 </div>
                             </div>
                             <div class="card">
+                                <div class="card-header py-1" id="headingOne">
+                                    <h2 class="mb-0 ">
+                                        <button class="btn btn-link btn-block text-left text-black d-flex" type="button" data-toggle="collapse" data-target="#brand" aria-expanded="true" aria-controls="brand">
+                                            Nhản hiệu
+                                            <i class="bi bi-plus-circle ms-auto fs-5"></i>
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="brand" class="collapse " aria-labelledby="brand" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <x-form :action="route('admin.menus.item.create', ['id' => request()->id, 'type' => 4])" :custom="true">
+                                            <div class="overflow-scroll ps-4" style="max-height: 300px;">
+                                                @foreach ($brands as $brand)
+                                                    <x-input type="checkbox" :title="$brand->name" name="brands[]" :value="$brand->id" :id="$brand->id . '_category'" />
+                                                @endforeach
+                                            </div>
+                                            <x-button type="submit" class="mt-3 w-100">Thêm vào</x-button>
+                                        </x-form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
                                 <div class="card-header py-1" id="headingTwo">
                                     <h2 class="mb-0">
                                         <button class="btn btn-link btn-block text-left text-black collapsed d-flex" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">

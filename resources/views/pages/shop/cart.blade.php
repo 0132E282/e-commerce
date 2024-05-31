@@ -30,7 +30,7 @@
                             <li>phí vận chuyển <span>Free</span></li>
                             <li>tổng cộng <span class="total-price">{{ number_format($totalPrice) }} đ</span></li>
                         </ul>
-                        <a class="btn btn-default update" href="{{ route('client.shop.checkout') }}">mua</a>
+                        <a class="btn btn-default update" href="{{ count($products) > 0 ? route('client.shop.checkout') : ' ' }}">mua</a>
                     </div>
                 </div>
             </div>
@@ -40,6 +40,8 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+            let timeout = null;
+
             function formatNumberMony(mony, option = {}) {
                 option = {
                     style: 'currency',
@@ -71,22 +73,31 @@
                 const data = {
                     quantity: Number($(this).val())
                 }
-                $.ajax({
-                    url: route,
-                    method: 'POST',
-                    data: data,
-                    success: function(res) {
-                        const currentProduct = res.data.cart[variant];
-                        $(this).val(currentProduct.quantity);
-                        const totalPriceItem = formatNumberMony((Number(currentProduct.quantity) * Number(currentProduct.price_product)));
-                        toastr.success('đã thêm số lượng sản phẩm')
-                        $('.cart_total_price').text(totalPriceItem);
-                        renderHtmlStatics(Object.values(res.data.cart));
-                    },
-                    error: function() {
+                if ($(this).val() >= 1) {
+                    const cart_total_price = $(this).closest('tr').find('.cart_total_price');
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        $.ajax({
+                            url: route,
+                            method: 'POST',
+                            data: data,
+                            success: function(res) {
+                                const currentProduct = res.data.cart[variant];
+                                $(this).val(currentProduct.quantity);
+                                const totalPriceItem = formatNumberMony((Number(currentProduct.quantity) * Number(currentProduct.price_product)));
+                                toastr.success('đã thêm số lượng sản phẩm')
+                                cart_total_price.text(totalPriceItem);
+                                renderHtmlStatics(Object.values(res.data.cart), cart_total_price);
+                            },
+                            error: function() {
 
-                    }
-                });
+                            }
+                        });
+                    }, 500);
+
+                } else {
+                    $(this).val(1);
+                }
             });
             $('.cart_quantity_delete').on('click', function() {
                 const route = $(this).data('route');

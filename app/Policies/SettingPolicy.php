@@ -12,20 +12,39 @@ class SettingPolicy
     /**
      * Determine whether the user can view any models.
      */
+    protected $configSetting;
+    function __construct()
+    {
+        $this->configSetting = config('permissions.access.setting.config');
+    }
     public function viewAny(User $user): bool
     {
-        if (Auth::user()->email === 'admin01@admin.com') {
+        $keyCode = $this->configSetting['VIEW_ANY_SETTING']['key_code'];
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
     }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Setting $setting): bool
+    public function payment(User $user): bool
     {
-        if (Auth::user()->email === 'admin01@admin.com') {
+        $keyCode = $this->configSetting['PAYMENT_SETTING']['key_code'];
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
+    }
+    function system(User $user)
+    {
+        $keyCode = $this->configSetting['SYSTEM_SETTING']['key_code'];
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+            return true;
+        }
+        return false;
+    }
+    public function permissions(User $user): bool
+    {
+        $keyCode = $this->configSetting['PERMISSIONS_SETTING']['key_code'];
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -34,53 +53,10 @@ class SettingPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function contact(User $user): bool
     {
-        if (Auth::user()->email === 'admin01@admin.com') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Setting $setting): bool
-    {
-        if (Auth::user()->email === 'admin01@admin.com') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Setting $setting): bool
-    {
-        if (Auth::user()->email === 'admin01@admin.com') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Setting $setting): bool
-    {
-        if (Auth::user()->email === 'admin01@admin.com') {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Setting $setting): bool
-    {
-        if (Auth::user()->email === 'admin01@admin.com') {
+        $keyCode = $this->configSetting['CONTACT_SETTING']['key_code'];
+        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;

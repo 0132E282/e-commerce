@@ -28,6 +28,5 @@
 @section('modal')
     <x-modal.import-file id="import-file" />
     <x-modal.modal-ex-file id="export-products" valueDefault="danh sách sản phẩm" />
-    <x-product.modal-details id="modal-details" />
     <x-modal.modal-message id="delete_message" btnTitle="xóa" title="Xóa sản phẩm" content="Bạn đồng ý xóa không" />
 @endsection

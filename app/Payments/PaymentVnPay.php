@@ -18,12 +18,11 @@ class PaymentVnPay implements PaymentInterface
     {
         $this->vnp_url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $this->vnp_Returnurl = "https://localhost/vnpay_php/vnpay_return.php";
-        $this->vnp_HashSecret = "XNBCJFAKAZQSGTARRLGCHVZWCIOIGSHN"; //Chuỗi bí mật
+        $this->vnp_HashSecret = $config['vnp_HashSecret'] ?? ''; //Chuỗi bí mật
 
         $this->inputData = [
             "vnp_Version" => "2.1.0",
-            "vnp_TmnCode" => "CGXZLS0Z",
-
+            "vnp_TmnCode" => $config['vnp_TmnCode'] ?? '',
             "vnp_Command" => "pay",
             "vnp_CreateDate" => date('YmdHis'),
             "vnp_CurrCode" => "VND",

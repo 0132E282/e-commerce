@@ -9,7 +9,7 @@
             <div class="icon">
                 <i class="{{ $quantity['icon'] }}"></i>
             </div>
-            <a href="{{ $quantity['route'] }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="{{ $quantity['route'] }}" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 @endforeach

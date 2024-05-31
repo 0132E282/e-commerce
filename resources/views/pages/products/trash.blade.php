@@ -11,6 +11,5 @@
     </div>
 @endsection
 @section('modal')
-    <x-product.modal-details id="modal-details" />
     <x-modal.modal-message id="delete_message" btnTitle="xóa" title="Xóa sản phẩm" content="Bạn đồng ý xóa không" />
 @endsection

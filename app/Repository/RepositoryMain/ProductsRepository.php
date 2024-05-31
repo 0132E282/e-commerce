@@ -27,7 +27,10 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             ->withSum('variations as quantity', 'quantity')
             ->orderByCustom($options['order'], $options['by'] ?? 'DESC')
             ->search($options['search'] ?? null)
-            ->filter([...$options['filter'], 'status' => $options['status']]);
+            ->when(isset($query), function ($queryBuild) use ($query) {
+                call_user_func($query, $queryBuild);
+            })
+            ->filter([...$options['filter'], 'status' => $options['status'] ?? null]);
         return $productsQueryBase->paginate($options['paginate'] ?? null);
     }
     function shop($paginate = 15, $options = null, $query = null)
@@ -35,7 +38,7 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         $productsQuery = $this->modal->with('category')
             ->withMin('variations as min_price', 'price')
             ->withMax('variations as max_price', 'price')
-            ->orderByCustom($options['order'], $options['by'] ?? 'DESC')
+            ->orderByCustom($options['order'] ?? 'created_at', $options['by'] ?? 'DESC')
             ->search($options['search'] ?? null)
             ->filter(['status' => 1, ...$options['filter'] ?? []]);
         return $productsQuery->paginate($paginate);
@@ -49,8 +52,9 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
                 $query->orderBy('views_count', 'DESC');
             })
             ->when($type == 'order', function ($query) {
-                dd($query->order_items);
-                $query->orderBy('views_count', 'DESC');
+                $query->whereHas('order_items');
+                $query->withSum('order_items as total_quantity_order', 'quantity');
+                $query->orderBy('total_quantity_order', 'DESC');
             })
             ->orderBy('created_at', 'DESC')
             ->filter(['status' => 1]);
@@ -69,6 +73,8 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         if (!empty($value['feature_image'])) {
             $file->deletePath($product['feature_image']);
             $value['feature_image'] = $file->uploadImage($value['feature_image'], 'products');
+        } else {
+            $value['feature_image']  =  $product->feature_image;
         }
         $imagesList = $product->description_image ?? [];
         if (!empty($value['description_image'])) {

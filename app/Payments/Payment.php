@@ -2,6 +2,7 @@
 
 namespace App\Payments;
 
+use App\Models\Setting;
 use App\Payments\PaymentMoMo;
 use App\Payments\PaymentVnPay;
 use Exception;
@@ -13,11 +14,15 @@ class Payment
     function initialize($payment = null, $config = null)
     {
         $config = [...$config];
+        $setting = Setting::where('key', 'payment')->first();
+        $setting = !empty($setting->value) ? json_decode($setting->value, true) : [];
         switch ($payment) {
             case 'MOMO':
-                return new PaymentMoMo($config);
+                $settingMoMo = [...($setting['momo'] ?? []), ...$config];
+                return new PaymentMoMo($settingMoMo);
             case 'VN_PAY':
-                return  new PaymentVnPay($config);
+                $settingVnpay = [...($setting['vnpay'] ?? []), ...$config];
+                return  new PaymentVnPay($settingVnpay);
             default:
                 return [
                     'type' => 'thanh toán khi nhận hàng',

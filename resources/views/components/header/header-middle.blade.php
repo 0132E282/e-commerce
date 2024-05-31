@@ -13,9 +13,7 @@
                         <a href="{{ route('client.shop.cart') }}">
                             <i class="fa fa-shopping-cart"></i>
                             Giỏ hàng
-                            @if (session()->has('cart_product'))
-                                <span class="badge quantity-cart">{{ count(session('cart_product')) }}</span>
-                            @endif
+                            <span class="badge quantity-cart">{{ !empty(session('cart_product')) ? count(session('cart_product')) : 0 }}</span>
                         </a>
                     </li>
                     <li><a href="#"><i class="fa fa-user"></i> Tài khoản</a></li>

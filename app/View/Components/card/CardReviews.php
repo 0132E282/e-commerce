@@ -1,21 +1,20 @@
 <?php
 
-namespace App\View\Components\admin;
+namespace App\View\Components\card;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use PSpell\Config;
 
-class LatestOrders extends Component
+class CardReviews extends Component
 {
     /**
      * Create a new component instance.
      */
-    protected $products;
-    public function __construct($data)
+    protected $review;
+    public function __construct($review)
     {
-        $this->products = $data;
+        $this->review = $review;
     }
 
     /**
@@ -23,6 +22,6 @@ class LatestOrders extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.admin.latest-orders', ['products' =>  $this->products]);
+        return view('components.card.card-reviews', ['review' => $this->review]);
     }
 }

@@ -18,6 +18,10 @@
             'url' => route('admin.products.index', ['status' => 'stop-working']),
         ],
         [
+            'title' => 'hết hàng',
+            'url' => route('admin.products.sold-out'),
+        ],
+        [
             'title' => 'thùng rác',
             'url' => route('admin.products.trash'),
         ],

@@ -17,9 +17,9 @@ class SidebarAdmin extends Component
         $this->menuList = [
             [
                 'title' => 'Thống kê',
-                'icon' => 'far bi bi-house',
+                'icon' => 'bi bi-house',
                 'path' => route('admin-home'),
-                'key_code' => 'MANAGER_ADMIN',
+                'key_code' => 'VIEW_ADMIN',
             ],
             [
                 'title' => 'Bán hàng',
@@ -29,12 +29,6 @@ class SidebarAdmin extends Component
                 'children' => [
                     [
                         'title' => 'Đơn hàng',
-                        'icon' => 'far fa-circle ',
-                        'key_code' => 'VIEW_ORDERS',
-                        'path' => route('admin.order.index'),
-                    ],
-                    [
-                        'title' => 'Thanh toán',
                         'icon' => 'far fa-circle ',
                         'key_code' => 'VIEW_ORDERS',
                         'path' => route('admin.order.index'),
@@ -54,7 +48,11 @@ class SidebarAdmin extends Component
                         'key_code' => 'VIEW_MENUS',
                         'path' => route('admin.menus.index'),
                     ],
-
+                    [
+                        'title' => 'slider',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('admin.slider.index'),
+                    ],
                 ]
             ],
             [
@@ -69,14 +67,20 @@ class SidebarAdmin extends Component
                         'path' => route('admin.products.index'),
                     ],
                     [
-                        'title' => 'Tảo sản phẩm mới',
+                        'title' => 'Tảo mới',
                         'icon' => 'far fa-circle ',
                         'path' => route('admin.products.create'),
                     ],
                     [
-                        'title' => 'Danh mục sản phẩm',
+                        'title' => 'Danh mục',
                         'icon' => 'far fa-circle ',
                         'path' => route('admin.category.table'),
+                        'key_code' => 'VIEW_CATEGORY',
+                    ],
+                    [
+                        'title' => 'Đánh giá ',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('admin.reviews.index'),
                         'key_code' => 'VIEW_CATEGORY',
                     ],
                     [
@@ -84,19 +88,6 @@ class SidebarAdmin extends Component
                         'icon' => 'far fa-circle ',
                         'path' => route('admin.brands.index'),
                         'key_code' => 'VIEW_CATEGORY',
-                    ],
-                ]
-            ],
-            [
-                'title' => 'Quản cáo',
-                'icon' => ' far bi bi-sliders',
-                'path' => '',
-                'key_code' => 'VIEW_SLIDER',
-                'children' => [
-                    [
-                        'title' => 'slider',
-                        'icon' => 'far fa-circle ',
-                        'path' => route('admin.slider.index'),
                     ],
                 ]
             ],
@@ -122,7 +113,7 @@ class SidebarAdmin extends Component
                 'title' => 'Thiết lập',
                 'icon' => ' far bi bi-gear-fill',
                 'path' => '',
-                'key_code' => 'CREATE_SETTING',
+                'key_code' => 'VIEW_ANY_SETTING',
                 'children' => [
                     [
                         'title' => 'Hệ thống',
@@ -138,6 +129,11 @@ class SidebarAdmin extends Component
                         'title' => 'Vai trò',
                         'icon' => 'far fa-circle ',
                         'path' => route('admin.permissions.create'),
+                    ],
+                    [
+                        'title' => 'Thanh toán',
+                        'icon' => 'far fa-circle ',
+                        'path' => route('admin.settings.payment'),
                     ],
                 ]
             ],
