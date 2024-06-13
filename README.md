@@ -20,15 +20,17 @@ Website e-shopper là một  website dùng để bán các mặt hàng thời tr
     5. Trang đặt hàng
     6. Trang kết quản thanh toán
     7. Trang quản trị 
-    
+
+## Giới thiệu tính năng
+
 **Tính năng dành người dùng** 
 
     1. Xem sản phẩm trang home (top sản phẩm được mua nhiều nhất, sản phẩm mới nhất , một số sản phẩm tiêu biểu)
     2. Cửa hàng 
     3. Sản phẩm theo danh mục
     4. Sản phẩm theo nhảng hiệu
-    5. tìm kiếm sản phẩm theo tên, tên danh mục, nhản hiệu
-    6. thêm sản phảm vào giỏ hàng
+    5. Tìm kiếm sản phẩm theo tên, tên danh mục, nhản hiệu
+    6. Thêm sản phảm vào giỏ hàng
     7. Thanh toán sản phẩm theo momo vnpay hoặt mặt định 
     
 **Tính năng dành cho quản lý** 
@@ -97,3 +99,5 @@ Website e-shopper là một  website dùng để bán các mặt hàng thời tr
         - thiết lập vai tro (user marter mới có quyền làm)
         
     10. backup dữ liệu (lỗi)
+
+## Hướng cài đặt dự án
