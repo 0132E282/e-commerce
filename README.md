@@ -100,4 +100,4 @@ Website e-shopper là một  website dùng để bán các mặt hàng thời tr
         
     10. backup dữ liệu (lỗi)
 
-## Hướng cài đặt dự án
+## Hướng dẫn cài đặt dự án
