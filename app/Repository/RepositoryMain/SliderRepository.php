@@ -23,7 +23,7 @@ class SliderRepository extends BaseRepository
     function create($value, $options = [])
     {
         if (!empty($value['location'])) {
-            $sliderHasLocation = $this->modal->where('location', '=', $value['location'])->first();
+            $sliderHasLocation = $this->modal->where('location', '=', $value['location'])->get();
             if ($sliderHasLocation->count() > 0) {
                 $sliderHasLocation->update(['location' => null]);
             }

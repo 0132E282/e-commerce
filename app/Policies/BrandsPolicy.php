@@ -24,7 +24,7 @@ class BrandsPolicy
     public function view(User $user): bool
     {
         $keyCode = $this->configBrands['VIEW_BRANDS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -36,7 +36,7 @@ class BrandsPolicy
     public function create(User $user): bool
     {
         $keyCode = $this->configBrands['CREATE_BRANDS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -48,7 +48,7 @@ class BrandsPolicy
     public function update(User $user): bool
     {
         $keyCode = $this->configBrands['UPDATE_BRANDS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -60,7 +60,7 @@ class BrandsPolicy
     public function delete(User $user): bool
     {
         $keyCode = $this->configBrands['DELETE_BRANDS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -72,7 +72,7 @@ class BrandsPolicy
     public function restore(User $user): bool
     {
         $keyCode = $this->configBrands['RESTORE_BRANDS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -84,7 +84,7 @@ class BrandsPolicy
     public function forceDelete(User $user): bool
     {
         $keyCode = $this->configBrands['DESTROY_BRANDS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -92,7 +92,7 @@ class BrandsPolicy
     public function viewTrash(User $user)
     {
         $keyCode = $this->configBrands['VIEW_TRASH_BRANDS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;

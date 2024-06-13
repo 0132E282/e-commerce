@@ -56,6 +56,9 @@
     </div>
     <div class="row mb-3">
         <x-product.table-create-attr :variations="$detailProduct->variations ?? []" />
+        @error('attr')
+            <p class="fs-6 py-1 text-danger">{{ $message }}</p>
+        @enderror
     </div>
 </x-form>
 @push('scripts')

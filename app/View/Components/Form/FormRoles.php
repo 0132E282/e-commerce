@@ -10,11 +10,11 @@ use Illuminate\View\Component;
 class FormRoles extends Component
 {
     protected $modelPermission;
-    protected $dataForm;
-    public function __construct($data = null)
+    protected $role;
+    public function __construct($role = null)
     {
         $this->modelPermission = new Permissions();
-        $this->dataForm = $data;
+        $this->role = $role;
     }
 
     /**
@@ -24,6 +24,6 @@ class FormRoles extends Component
     {
         $permissions = $this->modelPermission->whereNull('parent_id')->with('children')->get();
 
-        return view('components/form/form-roles', ['permissions' => $permissions, 'dataForm' => $this->dataForm]);
+        return view('components/form/form-roles', ['permissions' => $permissions, 'role' => $this->role]);
     }
 }

@@ -10,10 +10,10 @@
         @enderror
     </div>
     <div class="mb-3">
-        <x-input type="text" value="{{ $sliderDetails->title ?? '' }}" name="title" title="Tiêu đề " />
+        <x-input type="text" value="{{ $sliderDetails->title ?? '' }}" name="title" title="Tiêu đề " placeholder="nhập tiêu đề slider" />
     </div>
     <div class="mb-3">
-        <x-input type="text" value="{{ $sliderDetails->links ?? '' }}" name="links" title="Đường dẫn " />
+        <x-input type="text" value="{{ $sliderDetails->links ?? '' }}" name="links" title="Đường dẫn " placeholder="nhập đường dẫn" />
     </div>
     <div class="mb-3">
         <x-select title="Thứ tự xuất hiện" name="location">
@@ -24,7 +24,7 @@
         </x-select>
     </div>
     <div class="mb-3">
-        <x-input type="text" value="{{ $sliderDetails->content ?? '' }}" name="content" title="mô tả " />
+        <x-input type="text" value="{{ $sliderDetails->content ?? '' }}" name="content" title="mô tả " placeholder="mô tả" />
     </div>
 </x-form>
 

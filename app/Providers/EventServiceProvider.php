@@ -2,8 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\CreateReviews;
+use App\Events\CreateReviewsEvent;
+use App\Events\OrdersProcessed;
+use App\Listeners\NotificationsOrder;
+use App\Listeners\NotificationsReviews;
+use App\Listeners\UpdateStatusOrder;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -15,9 +20,13 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        OrdersProcessed::class => [
+            UpdateStatusOrder::class,
+            NotificationsOrder::class
         ],
+        CreateReviewsEvent::class => [
+            NotificationsReviews::class
+        ]
     ];
 
     /**
@@ -25,7 +34,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 
     /**

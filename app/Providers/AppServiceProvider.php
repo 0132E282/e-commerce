@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\User;
+use App\Services\Login\LoginFactory;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(LoginFactory::class, function ($app) {
+            return new LoginFactory();
+        });
     }
 
     /**

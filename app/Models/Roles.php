@@ -14,7 +14,7 @@ class Roles extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
-        'description'
+        'description', 'created_at'
     ];
     function users(): BelongsToMany
     {

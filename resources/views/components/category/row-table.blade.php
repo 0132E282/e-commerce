@@ -28,11 +28,6 @@
                 <x-button class="btn btn-warning" title="chỉn sửa" link="{{ route('admin.category.update', $category->id) }}" data-toggle="tooltip" data-placement="top">
                     <i class="bi bi-pencil-square"></i>
                 </x-button>
-                <x-button data-target="#modal-coppy" data-toggle="modal" data-path="{{ route('admin.category.details', $category->id) }}">
-                    <span data-toggle="tooltip" data-placement="top" title="coppy đường dẫn sản phẩm">
-                        <i class="bi bi-files"></i>
-                    </span>
-                </x-button>
                 <x-button class="btn btn-warning" title="cập nhập trạng thái" action="{{ route('admin.category.update-status', $category->id) }}" data-toggle="tooltip" data-placement="top">
                     <i class="{{ $category->status == 1 ? 'bi bi-lock' : 'bi bi-unlock ' }}"></i>
                 </x-button>

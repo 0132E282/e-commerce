@@ -45,7 +45,7 @@ class ProductsController extends Controller
         $categoryList =  $this->categoryRepository->has_products();
         return view('pages.products.manager-all', ['products' => $products, 'categoryList' => $categoryList]);
     }
-    function soldOut(ProductsRequest $req,)
+    function soldOut(ProductsRequest $req)
     {
         $option = ['filter' => $req->filter,  'search' => $req->search, ...$req->input()];
         $products = $this->productRepository->all($option, function ($query) {

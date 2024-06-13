@@ -6,6 +6,7 @@ use App\Models\Setting;
 use App\storage\StoreFactory;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class SettingController extends Controller
 {
@@ -79,5 +80,10 @@ class SettingController extends Controller
         } catch (Exception $e) {
             return back()->with('message', ['content' => ' cập nhập thông website thất bại', 'type' => 'error']);
         }
+    }
+    function backup()
+    {
+        $filesBackup = File::allFiles(storage_path('app/laravel'));
+        return view('pages.setting.backup', ['filesBackup' => $filesBackup]);
     }
 }

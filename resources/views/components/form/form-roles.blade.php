@@ -3,11 +3,11 @@
     <div class="row gap-4">
         <div class="col-5">
             <div class="mb-3">
-                <x-input name="name" value="{{ $dataForm->name ?? '' }}" title="tên vai trò" />
+                <x-input name="name" value="{{ $role->name ?? '' }}" title="tên vai trò" />
             </div>
             <div class="mb-3">
                 <x-TextareaForm name="description" title="mô tả vai trò">
-                    {{ $dataForm->description ?? '' }}
+                    {{ $role->description ?? '' }}
                 </x-TextareaForm>
             </div>
             <div class="mt-4">
@@ -32,7 +32,7 @@
                                 <div class="row px-4 ">
                                     @foreach ($permission->children as $key => $permission)
                                         <div class="col-4">
-                                            <x-input type="checkbox" :value="$permission->id" :title="$permission->display_name" :id="$permission->name" name="permissions[]" />
+                                            <x-input type="checkbox" :value="$permission->id" :checked="$role->permissions->contains($permission)" :title="$permission->display_name" :id="$permission->name" name="permissions[]" />
                                         </div>
                                     @endforeach
                                 </div>

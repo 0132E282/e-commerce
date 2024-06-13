@@ -1,7 +1,7 @@
-@props(['title' => ''])
+@props(['title' => '', 'id' => ''])
 
 <h2 class="title text-start">{{ $title }}</h2>
-<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+<div id="{{ $id }}" class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
         @foreach ($recommendedProduct as $key => $product)
             @if ($key % 4 == 0)
@@ -16,10 +16,10 @@
     @endforeach
 </div>
 </div>
-<a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+<a class="left recommended-item-control" href="#{{ $id }}" data-slide="prev">
     <i class="fa fa-angle-left"></i>
 </a>
-<a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+<a class="right recommended-item-control" href="#{{ $id }}" data-slide="next">
     <i class="fa fa-angle-right"></i>
 </a>
 </div>

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrdersProcessed;
 use App\Http\Requests\OrderRequest;
 use App\Models\Orders;
-use App\Payments\Payment;
 use App\Repository\RepositoryMain\OrdersRepository;
 use App\Repository\RepositoryMain\ProductsRepository;
 use App\Repository\RepositoryMain\ProductsValidationRepository;
-use Carbon\Carbon;
+use App\Services\OrderStatus\OrderStatusFactory;
+use App\Services\OrderStatus\OrderStatusStrategy;
+use App\Services\Payments\Payment;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -21,7 +23,8 @@ class OrderController extends Controller
     protected $productsRepository;
     protected $variationsModal;
     protected $ordersRepository;
-    function __construct()
+    protected $orderStatusFactory;
+    function __construct(OrderStatusFactory  $orderStatusFactory)
     {
         Paginator::useBootstrapFive();
         $this->modelOrder = new Orders();
@@ -29,6 +32,7 @@ class OrderController extends Controller
         $this->productsRepository = new ProductsRepository();
         $this->variationsModal = new ProductsValidationRepository();
         $this->ordersRepository = new OrdersRepository();
+        $this->orderStatusFactory  = $orderStatusFactory;
     }
 
     function index(OrderRequest $req, $status = null)
@@ -133,7 +137,8 @@ class OrderController extends Controller
     function updateStatus($id, $status)
     {
         try {
-            $this->modelOrder->find($id)->update(['status' => $status]);
+            $status = ($status == 1) ? 'success' : 'error';
+            $this->orderStatusFactory->make($status, $this->modelOrder->find($id));
             return back()->with('message', ['content' => 'cập nhập thành công', 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message',  ['content' => $e->getMessage(), 'type' => 'error']);
@@ -160,7 +165,7 @@ class OrderController extends Controller
     function destroy($id)
     {
         try {
-            $order = $this->ordersRepository->destroy($id);
+            $this->ordersRepository->destroy($id);
             return back()->with('message', ['content' => 'xóa thành công', 'type' => 'success']);
         } catch (Exception $e) {
             return back()->with('message', ['content' =>  $e->getMessage(), 'type' => 'error']);
@@ -170,15 +175,10 @@ class OrderController extends Controller
     {
         try {
             $order = $this->modelOrder->find($id);
-            throw_if(isset($request->vnp_ResponseCode) && $request->vnp_ResponseCode != 00 ||  isset($request->resultCode) != null && $request->resultCode != 0, 'Dao dịch thất bại');
-            if (isset($request->responseTime) || isset($request->vnp_PayDate)) {
-                $data = Carbon::createFromTimestamp(($request->responseTime ?? $request->vnp_PayDate) / 1000);
-                $order->update(['paid_at' => $data]);
-            }
+            OrdersProcessed::dispatch($order, $request);
             return view('pages.shop.rel-checkout', ['order' => $order]);
         } catch (\Exception $e) {
-            $order = $this->modelOrder->find($id);
-            $order->update(['status' => 0]);
+            dd($e->getMessage());
             return view('pages.shop.rel-checkout', ['message' => $e->getMessage()]);
         }
     }

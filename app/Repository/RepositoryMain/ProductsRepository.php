@@ -25,12 +25,12 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
             ->withMin('variations as min_price', 'price')
             ->withMax('variations as max_price', 'price')
             ->withSum('variations as quantity', 'quantity')
-            ->orderByCustom($options['order'], $options['by'] ?? 'DESC')
+            ->orderByCustom($options['order'] ?? 'created_at', $options['by'] ?? 'DESC')
             ->search($options['search'] ?? null)
             ->when(isset($query), function ($queryBuild) use ($query) {
                 call_user_func($query, $queryBuild);
             })
-            ->filter([...$options['filter'], 'status' => $options['status'] ?? null]);
+            ->filter([...$options['filter'] ?? [], 'status' => $options['status'] ?? null]);
         return $productsQueryBase->paginate($options['paginate'] ?? null);
     }
     function shop($paginate = 15, $options = null, $query = null)

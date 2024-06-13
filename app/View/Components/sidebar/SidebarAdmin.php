@@ -2,6 +2,7 @@
 
 namespace App\View\Components\sidebar;
 
+use App\Models\Setting;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -138,10 +139,16 @@ class SidebarAdmin extends Component
                 ]
             ],
             [
+                'title' => 'backup dữ liệu',
+                'icon' => 'bi bi-layer-backward',
+                'key_code' => 'VIEW_ADMIN',
+                'path' => route('admin.settings.backup'),
+            ],
+            [
                 'title' => 'logout',
                 'icon' => 'bi bi-box-arrow-left',
                 'method' => 'post',
-                'key_code' => 'MANAGER_ADMIN',
+                'key_code' => 'VIEW_ADMIN',
                 'path' => route('logout')
             ]
         ];
@@ -153,6 +160,7 @@ class SidebarAdmin extends Component
     public function render(): View|Closure|string
     {
         $user = Auth::user();
-        return view('components/sidebar/sidebar-admin', ['user' => $user]);
+        $settingSystem = json_decode(Setting::where('key', '=', 'setting_system')->first()->value, true);
+        return view('components/sidebar/sidebar-admin', ['user' => $user, 'settingSystem' => $settingSystem]);
     }
 }

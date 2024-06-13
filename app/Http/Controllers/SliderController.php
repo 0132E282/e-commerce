@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Components\StorageImage;
-use App\Http\Requests\ValidateSlider;
+use App\Http\Requests\SliderRequest;
 use App\Models\Sliders;
 use App\Repository\RepositoryMain\SliderRepository;
 use Illuminate\Http\Request;
@@ -38,7 +38,7 @@ class SliderController extends Controller
         }
         return view('pages.slider.form', ['sliderDetails' => $sliderDetails]);
     }
-    function create(ValidateSlider $req)
+    function create(SliderRequest $req)
     {
         try {
             $data = [
@@ -50,17 +50,16 @@ class SliderController extends Controller
                 'user_id' => Auth::id(),
             ];
             $slider = $this->sliderRepository->create($data);
-            return back()->with('message', ['content' => 'create slider success id:' . $slider->id, 'type' => 'success']);
+            return back()->with('message', ['content' => 'tạo thành công id:' . $slider->id, 'type' => 'success']);
         } catch (\Exception $e) {
-            return $e->getMessage();
-            return back()->with('message', ['content' => 'create slider fail', 'type' => 'error']);
+            return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         }
     }
-    function update($id, ValidateSlider $req)
+    function update($id, SliderRequest $req)
     {
         try {
             $sliderDetails = $this->sliderRepository->update($id, $req);
-            return back()->with('message', ['content' => 'update slider success id :' . $sliderDetails->id, 'type' => 'success']);
+            return back()->with('message', ['content' => 'cập nhập thành công id :' . $sliderDetails->id, 'type' => 'success']);
         } catch (\Exception $e) {
             return back()->with('message', ['content' =>  $e->getMessage(), 'type' => 'error']);
         }

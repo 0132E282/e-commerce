@@ -13,7 +13,7 @@
             @endif
             <div class="card py-2 px-3">
                 <div class="d-flex justify-content-between ">
-                    <button class="btn btn-primary">quay lại</button>
+                    <x-Button link="{{ route('admin.menus.index') }}" class="btn btn-primary">quay lại</x-Button>
                 </div>
             </div>
             <div class="card shadow">

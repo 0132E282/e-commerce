@@ -38,7 +38,9 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            // 'phone' => ['required', 'phone:VN'],
+            // 'fullname' => ['required'],
+            // 'email' => ['email']
         ];
     }
 }

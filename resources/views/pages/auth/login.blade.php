@@ -1,7 +1,7 @@
 @extends('/include/layouts/admin-empty-layout')
 @section('content')
     <div class="card-body login-card-body">
-        <p class="login-box-msg ">login</p>
+        <p class="login-box-msg ">Đăng nhập vào trang admin</p>
         @if (Session::has('error'))
             <p class="login-box-msg text-danger">{{ Session::get('error') }}</p>
         @endif
@@ -12,42 +12,29 @@
                 <x-input name="email" type="email" placeholder="email" />
             </div>
             <div class="mb-3">
-                <x-input name="password" type="password" placeholder="password" />
+                <x-input name="password" type="password" placeholder="mật khậu" />
             </div>
             <div class="row">
-                <div class="col-8">
+                <div class="col-12">
                     <div class="icheck-primary">
                         <input type="checkbox" id="remember" name="remember">
                         <label for="remember">
-                            Remember Me
+                            nhớ mặt khẩu
                         </label>
                     </div>
                 </div>
-                <!-- /.col -->
-                <div class="col-4">
-                    <x-button type="submit" class="btn-block">Sign In </x-button>
+                <div class="col-12">
+                    <x-button type="submit" class="btn-block">Đăng nhập </x-button>
                 </div>
-                <!-- /.col -->
             </div>
         </form>
-
         <div class="social-auth-links text-center mb-3">
-            <p>- OR -</p>
-            <x-button link="#" class="btn-block">
-                <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+            <x-button link="{{ route('auth.driver', ['driver' => 'facebook']) }}" class="btn-block">
+                <i class="fab fa-facebook mr-2"></i> đăng nhập Facebook
             </x-button>
-            <x-button href="#" class=" btn-block btn-danger">
-                <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+            <x-button link="{{ route('auth.driver', ['driver' => 'google']) }}" class=" btn-block btn-danger">
+                <i class="fab fa-google-plus mr-2"></i> đăng nhập Google+
             </x-button>
         </div>
-        <!-- /.social-auth-links -->
-
-        <p class="mb-1">
-            <a href="forgot-password.html">I forgot my password</a>
-        </p>
-        <p class="mb-0">
-            <a href="register.html" class="text-center">Register a new membership</a>
-        </p>
     </div>
-    <!-- /.login-card-body -->
 @endsection

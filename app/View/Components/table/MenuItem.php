@@ -22,6 +22,7 @@ class MenuItem extends Component
      */
     public function render(): View|Closure|string
     {
+
         return view('components.table.menu-item');
     }
 }

@@ -20,7 +20,7 @@ class SettingPolicy
     public function viewAny(User $user): bool
     {
         $keyCode = $this->configSetting['VIEW_ANY_SETTING']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -28,7 +28,7 @@ class SettingPolicy
     public function payment(User $user): bool
     {
         $keyCode = $this->configSetting['PAYMENT_SETTING']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -36,7 +36,7 @@ class SettingPolicy
     function system(User $user)
     {
         $keyCode = $this->configSetting['SYSTEM_SETTING']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -44,7 +44,7 @@ class SettingPolicy
     public function permissions(User $user): bool
     {
         $keyCode = $this->configSetting['PERMISSIONS_SETTING']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -56,7 +56,7 @@ class SettingPolicy
     public function contact(User $user): bool
     {
         $keyCode = $this->configSetting['CONTACT_SETTING']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;

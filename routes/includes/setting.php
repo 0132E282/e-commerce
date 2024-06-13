@@ -12,4 +12,5 @@ Route::controller(SettingController::class)->name('admin.settings.')->middleware
     Route::post('info',  'UpdateInfo')->middleware('can:CONTACT_SETTING')->name('info');
     Route::get('payment',  'payment')->middleware('can:PAYMENT_SETTING')->name('payment');
     Route::post('payment',  'savePayment')->middleware('can:PAYMENT_SETTING')->name('payment');
+    Route::get('backup',  'backup')->middleware('can:PAYMENT_SETTING')->name('backup');
 });

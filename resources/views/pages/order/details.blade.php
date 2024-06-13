@@ -41,7 +41,8 @@
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <span class="fw-bold ">Địa chỉ giao hàng : </span>
-                                {{ is_array($address) ? join(' , ', $address) : 'NaN' }}
+                                Tỉnh/TP : {{ $address['provinces'] }} quận/huyện : {{ $address['district'] }}_phường/xã {{ $address['wards'] }}_{{ $address['details'] }}
+
                             </li>
                             <li class="list-group-item">
                                 <span class="fw-bold ">ngày đặt hàng :</span>

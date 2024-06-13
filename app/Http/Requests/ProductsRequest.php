@@ -38,10 +38,16 @@ class ProductsRequest extends FormRequest
     public function rules(): array
     {
         $rules = [];
-        if ($this->isMethod('post')) {
+        if (!$this->isMethod('get')) {
             $rules =  [
                 'name_product' => ['required'],
+                'feature_image' => ['image', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp'],
+                'brand' => ['required'],
+                'category' => ['required'],
             ];
+        }
+        if ($this->isMethod('post')) {
+            $rules['feature_image'][] = 'required';
         }
         return $rules;
     }
@@ -49,6 +55,11 @@ class ProductsRequest extends FormRequest
     {
         return [
             'name_product.required' => 'tên sản phẩm không được để trống',
+            'feature_image.required' => 'ảnh đại diện không được để trống',
+            'feature_image.image' => 'phải là hình ảnh',
+            'brand.required' => 'thương hiệu không được để trống',
+            'category' => 'danh mục sản phẩm không được để trống',
+
         ];
     }
 }

@@ -57,9 +57,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
     function all($options)
     {
-        return $this->modal->when(isset($options['status']) && $options['status'] !== null, function ($query) use ($options) {
-            $query->where('status', $options['status']);
-        })->where('id', '!=', Auth::id())->paginate(25);
+        return $this->modal->search($options['search'] ?? null)->filters($options)->where('id', '!=', Auth::id())->paginate(25);
     }
     function updateStatus($id, $status)
     {

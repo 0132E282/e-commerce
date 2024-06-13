@@ -4,6 +4,8 @@ namespace App\View\Components\header;
 
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class HeaderAdmin extends Component
@@ -21,6 +23,7 @@ class HeaderAdmin extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.header.header-admin');
+        $notifications =  Auth::user()->notifications->whereNull('read_at');
+        return view('components.header.header-admin', ['notifications' => $notifications]);
     }
 }

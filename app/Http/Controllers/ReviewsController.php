@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CreateReviews;
+use App\Events\CreateReviewsEvent;
 use App\Models\Reviews;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,16 +24,21 @@ class ReviewsController extends Controller
     }
     function create(Request $request, $id)
     {
-        $review = $this->modalReviews->create([
-            'name' => $request->name ?? Auth::user()->name,
-            'content' => $request->content,
-            'rating' => $request->rating,
-            'product_id' => $id,
-            'email' => $request->email ?? Auth::user()->email,
-            'id_user' => Auth::id()
-        ]);
-        $review['avatar'] = $review->user->avatar_url ?? null;
-        return response()->json(['data' => $review, 'message' => 'đã bình luận sản phẩm']);
+        try {
+            $review = $this->modalReviews->create([
+                'name' => $request->name ?? Auth::user()->name,
+                'content' => $request->content,
+                'rating' => $request->rating,
+                'product_id' => $id,
+                'email' => $request->email ?? Auth::user()->email,
+                'id_user' => Auth::id()
+            ]);
+            $review['avatar'] = $review->user->avatar_url ?? null;
+            CreateReviewsEvent::dispatch($review);
+            return response()->json(['data' => $review, 'message' => 'đã bình luận sản phẩm']);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage(), 'status' => 'error']);
+        }
     }
     function reply(Request $request, $id)
     {

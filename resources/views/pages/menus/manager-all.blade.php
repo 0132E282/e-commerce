@@ -8,10 +8,6 @@
                 <i class="bi bi-plus-lg me-1"></i>
                 Tạo mới
             </x-button>
-            <x-button data-target="#import-file" data-toggle="modal" data-route="{{ Route('admin.category.import') }}">
-                <i class="bi bi-plus-lg me-1"></i>
-                Thêm nhiều
-            </x-button>
         </div>
     </div>
     <x-table.table-menus :menus="$menus" />

@@ -8,6 +8,7 @@ use App\Models\Menus;
 use App\Repository\RepositoryMain\CategoryRepository;
 use App\Repository\RepositoryMain\MenusRepository;
 use Exception;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,49 +36,71 @@ class MenuItemController extends Controller
     }
     function create($id, $type, Request $req)
     {
-        $data = [];
-        switch ($type) {
-            case '1':
-                $category = Category::all()->whereIn('id', $req->category)->all();
-                $data = collect($category)->map(function ($category) {
-                    return [
-                        'title' => $category->name,
-                        'link' => route('client.shop.category', $category),
-                        'type' => 1,
+        try {
+            $data = [];
+            switch ($type) {
+                case '1':
+                    $validator = Validator::make($req->all(), [
+                        'category' => 'required',
+                    ]);
+                    throw_if($validator->fails(), 'chưa chọn danh mục sản phẩm');
+
+                    $category = Category::all()->whereIn('id', $req->category)->all();
+                    $data = collect($category)->map(function ($category) {
+                        return [
+                            'title' => $category->name,
+                            'link' => route('client.shop.category', $category),
+                            'type' => 1,
+                        ];
+                    });
+                    break;
+                case '2':
+                    $validator = Validator::make($req->all(), [
+                        'routeName' => 'required',
+                    ]);
+                    throw_if($validator->fails(), 'chưa chọn đường dẫn liên kết');
+                    $data = collect($req->routeName)->map(function ($route) {
+                        return [
+                            'title' =>  str_replace('-', ' ', str_replace('client.', '', $route)),
+                            'link' => route($route),
+                            'type' => 2
+                        ];
+                    });
+                    break;
+                case '3':
+                    $validator = Validator::make($req->all(), [
+                        'title' => 'required',
+                        'links' => 'required',
+                    ]);
+                    throw_if($validator->fails(), 'bạn chưa nhập tiêu đề hoạt đường dẫn links');
+                    $data = [
+                        [
+                            'title' => $req->title,
+                            'link' => $req->links,
+                            'type' => 3
+                        ]
                     ];
-                });
-                break;
-            case '2':
-                $data = collect($req->routeName)->map(function ($route) {
-                    return [
-                        'title' =>  str_replace('-', ' ', str_replace('client.', '', $route)),
-                        'link' => route($route),
-                        'type' => 2
-                    ];
-                });
-                break;
-            case '3':
-                $data = [
-                    [
-                        'title' => $req->title,
-                        'link' => $req->links,
-                        'type' => 3
-                    ]
-                ];
-                break;
-            case '4':
-                $brands = Brands::all()->whereIn('id', $req->brands)->all();
-                $data = collect($brands)->map(function ($brand) {
-                    return [
-                        'title' =>  str_replace('-', ' ', str_replace('client.', '', $brand->name)),
-                        'link' => route('client.shop.brand', $brand),
-                        'type' => 4
-                    ];
-                });
-                break;
+                    break;
+                case '4':
+                    $validator = Validator::make($req->all(), [
+                        'brands' => 'required',
+                    ]);
+                    throw_if($validator->fails(), 'bạn chưa chọn nhản hiệu cần liên kết dẫn links');
+                    $brands = Brands::all()->whereIn('id', $req->brands)->all();
+                    $data = collect($brands)->map(function ($brand) {
+                        return [
+                            'title' =>  str_replace('-', ' ', str_replace('client.', '', $brand->name)),
+                            'link' => route('client.shop.brand', $brand),
+                            'type' => 4
+                        ];
+                    });
+                    break;
+            }
+            $this->menusRepository->createMenuItems($id, $data);
+            return back()->with('message', ['content' => 'đã thêm thành công', 'type' => 'success']);
+        } catch (Exception $e) {
+            return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         }
-        $this->menusRepository->createMenuItems($id, $data);
-        return back()->with('message', ['content' => 'đã thêm thành công', 'type' => 'success']);
     }
     function updateParent($id, $id_parent, Request $req)
     {

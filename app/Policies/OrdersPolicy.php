@@ -20,7 +20,7 @@ class OrdersPolicy
     }
     public function viewAny(User $user): bool
     {
-        if (Auth::user()->email === 'admin01@admin.com') {
+        if (Auth::user()->email ===  env('APP_USERNAME')) {
             return true;
         }
         return false;
@@ -32,7 +32,7 @@ class OrdersPolicy
     public function view(User $user): bool
     {
         $keyCode =  $this->configOrders['VIEW_ORDERS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' ||  $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') ||  $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -43,7 +43,7 @@ class OrdersPolicy
      */
     public function create(User $user): bool
     {
-        if (Auth::user()->email === 'admin01@admin.com') {
+        if (Auth::user()->email ===  env('APP_USERNAME')) {
             return true;
         }
         return false;
@@ -54,7 +54,7 @@ class OrdersPolicy
      */
     public function update(User $user, Orders $orders): bool
     {
-        if (Auth::user()->email === 'admin01@admin.com') {
+        if (Auth::user()->email ===  env('APP_USERNAME')) {
             return true;
         }
         return false;
@@ -65,7 +65,7 @@ class OrdersPolicy
      */
     public function delete(User $user, Orders $orders): bool
     {
-        if (Auth::user()->email === 'admin01@admin.com') {
+        if (Auth::user()->email ===  env('APP_USERNAME')) {
             return true;
         }
         return false;
@@ -77,7 +77,7 @@ class OrdersPolicy
     public function restore(User $user, Orders $orders): bool
     {
         $keyCode = $this->configOrders['VIEW_MENUS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -88,7 +88,7 @@ class OrdersPolicy
      */
     public function forceDelete(User $user, Orders $orders): bool
     {
-        if (Auth::user()->email === 'admin01@admin.com') {
+        if (Auth::user()->email ===  env('APP_USERNAME')) {
             return true;
         }
         return false;

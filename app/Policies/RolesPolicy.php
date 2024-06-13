@@ -17,7 +17,7 @@ class RolesPolicy
     }
     public function viewAny(User $user): bool
     {
-        if (Auth::user()->email === 'admin01') {
+        if (Auth::user()->email ===  env('APP_USERNAME')) {
             return true;
         }
     }
@@ -28,7 +28,7 @@ class RolesPolicy
     public function view(User $user): bool
     {
         $keyCode = $this->configRole['VIEW_ROLES']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email === env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -40,7 +40,7 @@ class RolesPolicy
     public function create(User $user): bool
     {
         $keyCode = $this->configRole['CREATE_ROLES']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email === env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -52,7 +52,7 @@ class RolesPolicy
     public function update(User $user): bool
     {
         $keyCode = $this->configRole['UPDATE_ROLES']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email === env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -64,7 +64,7 @@ class RolesPolicy
     public function delete(User $user): bool
     {
         $keyCode = $this->configRole['DELETE_ROLES']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email === env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -76,7 +76,7 @@ class RolesPolicy
     public function restore(User $user): bool
     {
         $keyCode = $this->configRole['RESTORE_ROLES']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email === env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -88,7 +88,7 @@ class RolesPolicy
     public function forceDelete(User $user): bool
     {
         $keyCode = $this->configRole['DESTROY_ROLES']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email === env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -96,7 +96,7 @@ class RolesPolicy
     public function viewTrash(User $user): bool
     {
         $keyCode = $this->configRole['VIEW_TRASH_ROLES']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email === env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;

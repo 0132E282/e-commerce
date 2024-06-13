@@ -28,7 +28,7 @@ class ReviewsPolicy
     public function view(User $user): bool
     {
         $keyCode = $this->configReviews['VIEW_REVIEWS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -44,7 +44,7 @@ class ReviewsPolicy
     public function reply(User $user): bool
     {
         $keyCode = $this->configReviews['REPLY_REVIEWS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;
@@ -63,7 +63,7 @@ class ReviewsPolicy
     public function delete(User $user): bool
     {
         $keyCode = $this->configReviews['DELETE_REVIEWS']['key_code'];
-        if (Auth::user()->email === 'admin01@admin.com' || $user->checkPermission($keyCode)) {
+        if (Auth::user()->email ===  env('APP_USERNAME') || $user->checkPermission($keyCode)) {
             return true;
         }
         return false;

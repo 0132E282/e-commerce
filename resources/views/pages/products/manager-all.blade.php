@@ -7,11 +7,10 @@
                 <i class="bi bi-plus-lg me-1"></i>
                 Tạo mới
             </x-button>
-
-            <x-button data-target="#import-file" data-toggle="modal" data-route="{{ Route('admin.category.import') }}">
+            {{-- <x-button data-target="#import-file" data-toggle="modal" data-route="{{ Route('admin.category.import') }}">
                 <i class="bi bi-plus-lg me-1"></i>
                 Thêm nhiều
-            </x-button>
+            </x-button> --}}
             <x-button data-target="#export-products" data-toggle="modal" class="btn-success" data-route="{{ Route('admin.products.export') }}">
                 <i class="bi bi-file-earmark me-1"></i>
                 Xuất File

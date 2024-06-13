@@ -10,7 +10,7 @@
                 @endif
             </div>
             <div class="card p-4 ">
-                <x-form.form-roles :action="route('admin.roles.create')" method="POST" />
+                <x-form.form-roles :action="empty($role) ? route('admin.roles.create') : route('admin.roles.update', ['id' => $role->id])" :role="$role" :method="empty($role) ? 'POST' : 'PUT'" />
             </div>
         </div>
     </section>

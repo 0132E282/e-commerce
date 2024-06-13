@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="card p-4">
-                <x-form method="put" :action="route('order.add-product', ['id' => request()->id])" id="form-add-product" :custom="true">
+                <x-form method="put" :action="route('admin.order.add-product', ['id' => request()->id])" id="form-add-product" :custom="true">
                     <div class="row">
                         @foreach ($products as $product)
                             <div class="col-4">

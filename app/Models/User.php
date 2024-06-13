@@ -26,7 +26,10 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar_url',
-        'status'
+        'status',
+        'google_id',
+        'facebook_id',
+        'loginBy'
     ];
 
     /**
@@ -56,6 +59,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Category::class, 'user_id');
     }
+    function reviews(): HasMany
+    {
+        return $this->hasMany(Reviews::class, 'id_user');
+    }
     function products(): HasMany
     {
         return $this->hasMany(Products::class, 'user_id');
@@ -74,5 +81,26 @@ class User extends Authenticatable
             }
         }
         return false;
+    }
+    function scopeFilters($query, $filters)
+    {
+        $query->when(!empty($filters['role']), function ($query) use ($filters) {
+            $query->whereHas('roles', function ($query) use ($filters) {
+                $query->where('id_role', $filters['role']);
+            });
+        });
+        $query->when(!empty($filters['created']), function ($query) use ($filters) {
+            $created = explode('_', $filters['created']);
+            $query->whereDate('created_at', '<=', $created[1])->whereDate('created_at', '>=', $created[0]);
+        });
+        $query->when(isset($filters['status']) && $filters['status'] !== null, function ($query) use ($filters) {
+            $query->where('status', $filters['status']);
+        });
+        return $query;
+    }
+    function scopeSearch($query, $search)
+    {
+        $textSearch = "%" . $search . "%";
+        return $query->where('name', "LIKE", $textSearch)->orWhere('email', 'LIKE',  $textSearch);
     }
 }

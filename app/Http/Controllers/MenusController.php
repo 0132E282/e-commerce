@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Http\Requests\MenusValidation;
+use App\Http\Requests\MenusRequest;
 use App\Repository\RepositoryMain\MenusRepository;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -37,7 +37,7 @@ class MenusController extends Controller
         }
     }
 
-    function store(MenusValidation $req)
+    function store(MenusRequest $req)
     {
         try {
             $menu =  $this->menusRepository->create([
@@ -51,7 +51,7 @@ class MenusController extends Controller
             return back()->with('message', ['content' => $e->getMessage(), 'type' => 'error']);
         };
     }
-    function edit(MenusValidation $req, $id)
+    function edit(MenusRequest $req, $id)
     {
         try {
             $menu = $this->menusRepository->update($id, [

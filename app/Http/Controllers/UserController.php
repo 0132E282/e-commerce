@@ -6,9 +6,8 @@ use App\Http\Requests\ValidateUser;
 use App\Models\User;
 use App\Repository\RepositoryMain\UserRepository;
 use Exception;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -20,10 +19,10 @@ class UserController extends Controller
         $this->userRepository = new UserRepository();
         Paginator::useBootstrapFive();
     }
-    function index($status = null)
+    function index(Request $request, $status = null)
     {
 
-        $users = $this->userRepository->all(['status' => $status]);
+        $users = $this->userRepository->all(['status' => $status, ...$request->input()]);
         return view('pages.user.manager-all', ['users' => $users]);
     }
     function form($id = null)

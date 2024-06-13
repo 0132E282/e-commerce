@@ -102,6 +102,5 @@
     <x-modal.import-file id="import-file" />
     <x-modal.modal-ex-file id="modal-export-category" valueDefault="danh muc sản phẩm" />
     <x-category.modal-details id="modal-catgory" />
-    <x-category.modal-coppy />
     <x-modal.modal-message id="delete_message" btnTitle="xóa" title="Xóa sản danh mục sản phẩm" content="nếu bạn xóa danh mục nầy đồng nghĩ những sản phẩm thuộc danh mục sẽ không được hoạt động" />
 @endsection

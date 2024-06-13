@@ -1,6 +1,7 @@
 @extends('include.layouts.admin-layout')
 
 @php
+    use App\Models\Roles;
     $curentUrl = Request::url();
     $navProduct = [
         [
@@ -20,6 +21,7 @@
             'url' => route('admin.users.trash.index'),
         ],
     ];
+    $roles = Roles::all();
 @endphp
 @section('content')
     <!-- Main content -->
@@ -40,27 +42,30 @@
                             </div>
                             <div class="col ">
                                 <div class="pe-3 me-1 ">
-                                    <x-select>
+                                    <x-select name="role">
                                         <option value="">Chọn quyền người dùng</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}" {{ $role->id == request()->role ? 'selected' : '' }}>{{ $role->name }}</option>
+                                        @endforeach
                                     </x-select>
                                 </div>
                             </div>
                         </div>
                         <div class="row col-6">
                             <div class="col-2">
-                                <label for="">Tên người dùng</label>
+                                <label for="">tìm kiếm người dùng</label>
                             </div>
                             <div class="col">
                                 <div class="pe-3 me-1 ">
                                     <div class="input-group ">
-                                        <input type="text" class="form-control" name="search" placeholder="Nhập tên, email người dùng  ">
+                                        <input type="text" value="{{ request()->search ?? '' }}" class="form-control" name="search" placeholder="Nhập tên, email người dùng  ">
                                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row col-6">
-                            <x-input.input-between type="number" labde="Sản phẩm" name="products" :placeholder="['start' => 'số lượng sản phẩm tối thiểu', 'end' => 'số lượng sản phẩm tối đa']" :value="request()->products" />
+                            <x-input.input-between :value="request()->orders ?? ''" type="number" labde="đơn hàng" name="orders" :placeholder="['start' => 'số lượng đơn hàng tối thiểu', 'end' => 'số lượng đơn hàng tối đa']" />
                         </div>
                         <div class="row col-6">
                             <x-input.input-between type="date" labde="ngày tạo" name="created" :value="request()->created" />

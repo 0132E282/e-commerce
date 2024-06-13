@@ -12,14 +12,14 @@
 @endsection
 
 @section('content')
-    <div class="product-details"><!--product-details-->
+    <div class="product-details">
         <div class="col-sm-5">
             <x-product.view-product :data="$detailProduct" />
         </div>
         <div class="col-sm-6">
             <x-product.product-information :data="$detailProduct" />
         </div>
-    </div><!--/product-details-->
+    </div>
 
     <div class="category-tab shop-details-tab"><!--category-tab-->
         <div class="col-sm-12">

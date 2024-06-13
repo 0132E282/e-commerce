@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OrderController;
+use App\Http\Middleware\ReadNotifyMiddleware;
 use Illuminate\Support\Facades\Route;
 
 
@@ -11,7 +12,7 @@ Route::name('admin.order.')->controller(OrderController::class)->group(function 
         Route::delete('{order:id}', 'destroy')->name('destroy');
     });
 
-    Route::prefix('detail/{id}')->group(function () {
+    Route::prefix('detail/{id}')->middleware(ReadNotifyMiddleware::class)->group(function () {
         Route::get('/', 'detailBill')->name('detail');
         Route::delete('/', 'delete')->name('delete');
 

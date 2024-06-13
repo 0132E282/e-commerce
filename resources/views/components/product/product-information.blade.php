@@ -4,15 +4,25 @@
 @endphp
 <div class="product-information"><!--/product-information-->
     <div class="header">
-        <h2 class="name-product">{{ $detailProductInfo->name }}</h2>
+        <h2 class="name-product" style="margin-bottom: 5px;">{{ $detailProductInfo->name }}</h2>
+
         <div class="scores">
-            <p>Lượt xem : ( {{ $detailProductInfo->views_count }} )</p>
-            <ul>
-                @for ($i = 1; $i <= 5; $i++)
-                    <li><i class="bi bi-star-fill"></i></li>
-                @endfor
-            </ul>
+            <p>Lượt mua : {{ number_format($detailProductInfo->order_items->sum('quantity')) }} </p>
+            <div style="margin-left : 10px; display: flex; align-items: center;">
+                <p>Đánh giá : </p>
+                <ul>
+                    @for ($i = 1; $i <= 5; $i++)
+                        @if ($i <= round($detailProductInfo->reviews->avg('rating')))
+                            <li><i class="bi bi-star-fill"></i></li>
+                        @else
+                            <li><i class="bi bi-star"></i></li>
+                        @endif
+                    @endfor
+                </ul>
+                <p style="margin-left: 4px;"> ({{ $detailProductInfo->reviews->count() }})</p>
+            </div>
         </div>
+
     </div>
     <div class="control">
         <x-form id="form-add-card" action="" method="POST" :custom="true">
@@ -47,12 +57,13 @@
                     Thêm giỏ hàng
                 </button>
             </div>
-
         </x-form>
+        <div style="  10px; margin-bottom: 10px">
+            <p><b>Danh mục:</b> {{ $detailProductInfo->category->name }}</p>
+            <p><b>Nhản hiệu:</b> {{ $detailProductInfo->brand->name }}</p>
+        </div>
     </div>
-    <p><b>Số lượng:</b> {{ $detailProductInfo->category->name }}</p>
-    <p><b>Danh mục:</b> {{ $detailProductInfo->category->name }}</p>
-    <p><b>Nhản hiệu:</b> {{ $detailProductInfo->brand->name }}</p>
+
 </div><!--/product-information-->
 @push('scripts')
     <script>

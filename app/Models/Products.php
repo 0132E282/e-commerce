@@ -56,8 +56,8 @@ class Products extends Model
             $query->where('brand_id', '=', $filter['brand']);
         });
         $query->when(!empty($filter['created']), function ($query) use ($filter) {
-            $price = explode('_', $filter['created']);
-            $query->whereDate('created_at', '<=', $price[1])->whereDate('created_at', '>=', $price[0]);
+            $created = explode('_', $filter['created']);
+            $query->whereDate('created_at', '<=', $created[1])->whereDate('created_at', '>=', $created[0]);
         });
         $query->when(!empty($filter['price']), function ($query) use ($filter) {
             $price = explode('_', $filter['price']);

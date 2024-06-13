@@ -26,19 +26,19 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         @stack('links')
     </head>
-    </head><!--/head-->
+    </head>
 
     <body>
-        <header id="header"><!--header-->
+        <header id="header">
             <x-header.header-web />
-        </header><!--/header-->
+        </header>
         @yield('content-top')
         <section>
             <div class="container">
                 @yield('content')
             </div>
         </section>
-        <footer id="footer"><!--Footer-->
+        <footer id="footer" style="margin-top: 50px;">
             <x-footer.footer-web />
         </footer>
         <script src="/web/assets/js/jquery.js"></script>
