@@ -56,7 +56,6 @@
                 const totalQuantity = data.reduce((totalQuantity, cart) => Number(totalQuantity) + Number(cart.quantity), 0);
                 $('.total-quantity').text(totalQuantity)
                 $('.total-price').text(formatNumberMony(totalPrice))
-
             }
             $('.btn-quantity .btn-add').on('click', function(e) {
                 const input = $(this).siblings('input[name="quantity"]');
@@ -70,6 +69,7 @@
             $('.btn-quantity input[name="quantity"]').on('input', function() {
                 const route = $(this).closest('.btn-quantity').data('route');
                 const variant = $(this).closest('.table-row').data('variant');
+                const input = $(this);
                 const data = {
                     quantity: Number($(this).val())
                 }
@@ -83,14 +83,13 @@
                             data: data,
                             success: function(res) {
                                 const currentProduct = res.data.cart[variant];
-                                $(this).val(currentProduct.quantity);
                                 const totalPriceItem = formatNumberMony((Number(currentProduct.quantity) * Number(currentProduct.price_product)));
                                 toastr.success('đã thêm số lượng sản phẩm')
                                 cart_total_price.text(totalPriceItem);
                                 renderHtmlStatics(Object.values(res.data.cart), cart_total_price);
                             },
-                            error: function() {
-
+                            error: function(xhr) {
+                                toastr.error(xhr.responseJSON.message);
                             }
                         });
                     }, 500);

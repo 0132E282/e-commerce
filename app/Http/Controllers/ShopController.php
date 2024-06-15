@@ -2,23 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\validateOrder;
 use App\Models\Brands;
 use App\Models\Category;
 use App\Models\Customers;
 use App\Models\Orders;
 use App\Models\Products;
-use App\Models\ProductVariants;
 use App\Repository\RepositoryMain\CategoryRepository;
 use App\Repository\RepositoryMain\ProductsRepository;
 use Exception;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session as FacadesSession;
-use PharIo\Manifest\Extension;
-use PhpOffice\PhpSpreadsheet\Calculation\TextData\Extract;
 
 class ShopController extends Controller
 {
@@ -81,7 +74,7 @@ class ShopController extends Controller
                 ]
             ], 200);
         } catch (\Exception $e) {
-            return  response()->json(['message' => $e->getMessage(), 'type' => 'error']);
+            return  response()->json(['message' => $e->getMessage(), 'type' => 'error'], 409);
         }
     }
     function cart()

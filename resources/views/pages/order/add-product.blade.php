@@ -102,6 +102,9 @@
                         productActive.find('input.input-quantity').attr('name', 'orders[' + data[0].id + '][quantity]');
                         productActive.find('input.input-quantity').val(1);
                     }
+                },
+                error: function(err) {
+                    console.log(err);
                 }
             });
         });
