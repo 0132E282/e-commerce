@@ -1,20 +1,26 @@
-e-commerce:
-  build: .
-  dockerfile: ./docker/dockerfile
-  container_name: e-commerce
-  working_dir: /var/www/html
-  ports: 
+services:
+  miduner_server:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile
+    container_name: e-commerce
+    working_dir: /var/www/html
+    ports: 
       - "80:80"
-  volumes:
-      - .:"var/www/html"
+    volumes:
+      - .:/var/www/html
       - ./docker/nginx_log:/var/log/nginx
-      - ./docker/php-fpm:/var/log/php-fpm.log
+      - ./docker/php-fpm/php-fpm.log:/var/log/php-fpm.log
       - ./docker/config/app.conf:/etc/nginx/conf.d/app.conf
+    links:
+      - mysql
 
-mysql:
+  mysql:
     image: mysql:5.6
     container_name: e-commerce_mysql
     ports: 
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
