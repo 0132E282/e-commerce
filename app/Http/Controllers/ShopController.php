@@ -50,8 +50,8 @@ class ShopController extends Controller
     }
     function addToCart($slug = null, $id = null, Request $req)
     {
+        $productVariants = $this->productsRepository->findVariants($id, $req)[0];
         try {
-            $productVariants = $this->productsRepository->findVariants($id, $req)[0];
             if ($productVariants->quantity < $req->quantity) throw new Exception('số lượng kho hàng không đủ');
             $cart = session()->get('cart_product', []);
             $cart[$productVariants->id] = [
@@ -74,7 +74,7 @@ class ShopController extends Controller
                 ]
             ], 200);
         } catch (\Exception $e) {
-            return  response()->json(['message' => $e->getMessage(), 'type' => 'error'], 409);
+            return  response()->json(['message' => ['message' => $e->getMessage(), 'total_max' =>   $productVariants->quantity], 'type' => 'error'], 409);
         }
     }
     function cart()

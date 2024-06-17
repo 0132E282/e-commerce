@@ -49,7 +49,7 @@
                 <label>số lượng: <span class="quantity-product">{{ $detailProductInfo->variations->sum('quantity') }}</span></label>
                 <div class="btn-quantity">
                     <button class="btn btn-primary btn-dow" type="button">-</button>
-                    <input type="number" name="quantity" value="1" />
+                    <input type="number" name="quantity" value="1" min="1" />
                     <button class="btn btn-primary btn-add" type="button">+</button>
                 </div>
                 <button type="submit" class="btn btn-fefault cart">
@@ -96,15 +96,12 @@
                     input.val(1)
                 }
             });
-
-
             $('.btn-quantity .btn-add').on('click', function() {
                 const data = {
-                    'id_variant': $('.btn-quantity').data('variable')
+                    'id_variant': $('div.btn-quantity').attr('data-variable')
                 };
                 const input = $(this).siblings('input[type="number"]');
                 if (data.id_variant != null) {
-
                     callFindVariant(data, {
                         success: function(data) {
                             data[0].quantity > Number(input.val()) ? input.val(Number(input.val()) + 1) : toastr.error('Số lượng không đủ');
@@ -116,7 +113,7 @@
             });
             $('.btn-quantity .btn-dow').on('click', function() {
                 const input = $(this).siblings('input[type="number"]');
-                if (input.val() > 0) {
+                if (input.val() > 1) {
                     input.val(Number(input.val()) - 1);
                 }
             });

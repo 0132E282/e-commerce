@@ -86,6 +86,7 @@
                 data[$(this).attr('name')] = $(this).val();
             });
             const productActive = $(this).closest('[data-id]');
+
             const urlFindVariant = @js(route('client.shop.find-variant', ['id' => ':id'])).replace(':id', productActive.data('id'));
             $.ajax({
                 url: urlFindVariant,

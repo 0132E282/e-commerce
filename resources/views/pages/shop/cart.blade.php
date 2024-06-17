@@ -89,7 +89,8 @@
                                 renderHtmlStatics(Object.values(res.data.cart), cart_total_price);
                             },
                             error: function(xhr) {
-                                toastr.error(xhr.responseJSON.message);
+                                toastr.error('số lượng khoog đủ');
+                                input.val(xhr.responseJSON.total_max);
                             }
                         });
                     }, 500);
