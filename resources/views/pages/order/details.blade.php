@@ -102,7 +102,7 @@
                         ) }}
                     </div>
                     <div class="col-4 text-end">
-                        <x-button>
+                        <x-button :link="route('admin.order.export-bill-detail', ['id' => $bill->id])">
                             <i class="bi bi-file-earmark"></i>
                             In hóa đơn
                         </x-button>

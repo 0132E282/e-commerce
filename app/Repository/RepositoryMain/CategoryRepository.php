@@ -4,6 +4,7 @@ namespace App\Repository\RepositoryMain;
 
 use App\Models\Category;
 use App\Repository\RepositoriesInterface\CategoryRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
@@ -141,9 +142,32 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             });
         return $category->paginate($options['paginate'] ?? null);
     }
+    /**
+     * cập nhập trang thái sản phẩm
+     * @param id : id sản của danh mục 
+     */
     function updateStatus($id)
     {
         $category =  $this->modal->find($id);
         return  $category->update(['status' => $category->status == 1 ? 0 : 1]);
+    }
+    /**
+     * lấy ra danh mục có sản phẩm bán chậy nhất 
+     * @param limit : số lượng sản phẩm lấy ra mặt đinh 10
+     */
+    function topByOrder($limit = null)
+    {
+        return Category::select(
+            'category.id',
+            'category.name',
+            DB::raw('SUM(order_items.quantity) as total_quantity'),
+            DB::raw('SUM(order_items.quantity * order_items.price) as total_sales')
+        )
+            ->join('products', 'products.id_category', '=', 'category.id')
+            ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
+            ->join('order_items', 'order_items.variation_id', '=', 'product_variations.id')
+            ->groupBy('category.id', 'category.name')
+            ->orderBy('total_quantity', 'DESC')->limit($limit)
+            ->get();
     }
 }

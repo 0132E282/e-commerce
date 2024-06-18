@@ -28,6 +28,7 @@ class OrdersRepository extends BaseRepository implements OrdersRepositoryInterfa
     }
     function details($id, $option = null)
     {
+        return $this->orderModal->find($id);
     }
     function all($options = null)
     {

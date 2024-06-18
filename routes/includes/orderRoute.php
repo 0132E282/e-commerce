@@ -15,7 +15,7 @@ Route::name('admin.order.')->controller(OrderController::class)->group(function 
     Route::prefix('detail/{id}')->middleware(ReadNotifyMiddleware::class)->group(function () {
         Route::get('/', 'detailBill')->name('detail');
         Route::delete('/', 'delete')->name('delete');
-
+        Route::get('download', 'exportBillDetail')->name('export-bill-detail');
         Route::patch('update-status/{status}', 'updateStatus')->name('update-status');
         Route::match(['get', 'put'], 'add-product', request()->isMethod('put') ? 'addProduct' : 'addProductForm')->name('add-product');
         Route::put('update-order-item', 'updateOrderItem')->name('update-item');

@@ -83,7 +83,7 @@ class SettingController extends Controller
     }
     function backup()
     {
-        $filesBackup = File::allFiles(storage_path('app/laravel'));
+        $filesBackup = File::exists(storage_path('app/laravel')) ? File::allFiles(storage_path('app/laravel')) : [];
         return view('pages.setting.backup', ['filesBackup' => $filesBackup]);
     }
 }

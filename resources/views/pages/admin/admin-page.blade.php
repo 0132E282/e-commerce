@@ -59,9 +59,61 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <x-admin.latest-orders :data="$topProductBill" />
+                    <div class="card" style="min-height: calc(100% - 20px);">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Top sản phẩm bán chạy</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <x-table.index :tableHead="['sản phẩm', 'danh mục', 'đã bán', 'thành tiền']">
+                                    @foreach ($TopProducts as $product)
+                                        <tr>
+                                            <td class="overflow-hidden" style=" max-width: 200px; text-wrap: nowrap;text-overflow: ellipsis;">
+                                                <p class="ms-2"> {{ $product->name }}</p>
+                                            </td>
+                                            <td class="overflow-hidden" style="  max-width: 200px;text-wrap: nowrap;text-overflow: ellipsis;">{{ $product->category->name }}</td>
+                                            <td class="overflow-hidden" style="  max-width: 200px;text-wrap: nowrap;text-overflow: ellipsis;">{{ $product->total_quantity }}</td>
+                                            <td class="overflow-hidden" style="  max-width: 200px;text-wrap: nowrap;text-overflow: ellipsis;">{{ number_format($product->total_sales) }} đ</td>
+                                        </tr>
+                                    @endforeach
+                                </x-table.index>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+                            <a href="{{ route('admin.products.index') }}" class="btn btn-sm btn-secondary float-right">xem tất cả</a>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="col-lg-6">
+                    <div class="card " style="height: calc(100% - 20px);">
+                        <div class="card-header border-0">
+                            <h3 class="card-title">Top danh mục bán chậy</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <x-table.index :tableHead="['danh mục', 'số lượng sản phẩm', 'đã bán', 'thành tiền']">
+                                    @foreach ($topCategory as $category)
+                                        <tr>
+                                            <td class="overflow-hidden" style=" max-width: 200px; text-wrap: nowrap;text-overflow: ellipsis;">
+                                                <p class="ms-2"> {{ $category->name }}</p>
+                                            </td>
+                                            <td class="overflow-hidden" style="max-width: 200px;text-wrap: nowrap;text-overflow: ellipsis;">{{ $category->products->count() }}</td>
+                                            <td class="overflow-hidden" style="max-width: 200px;text-wrap: nowrap;text-overflow: ellipsis;">{{ $category->total_quantity }}</td>
+                                            <td class="overflow-hidden" style="  max-width: 200px;text-wrap: nowrap;text-overflow: ellipsis;">{{ number_format($category->total_sales) }} đ</td>
+                                        </tr>
+                                    @endforeach
+                                </x-table.index>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+                            <a href="{{ route('admin.products.index') }}" class="btn btn-sm btn-secondary float-right">xem tất cả</a>
+                        </div>
+                    </div>
                 </div>
             </div>
     </section>

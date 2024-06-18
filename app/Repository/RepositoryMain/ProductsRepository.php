@@ -5,6 +5,7 @@ namespace App\Repository\RepositoryMain;
 use App\Repository\RepositoriesInterface\ProductsRepositoryInterface;
 use App\Models\Products;
 use App\storage\StoreFactory;
+use Illuminate\Support\Facades\DB;
 
 class ProductsRepository extends BaseRepository implements ProductsRepositoryInterface
 {
@@ -163,5 +164,20 @@ class ProductsRepository extends BaseRepository implements ProductsRepositoryInt
         })->when(!empty($req->id_variant), function ($query)  use ($req) {
             $query->where('id', $req->id_variant);
         })->get();
+    }
+    function topProducts($limit = null)
+    {
+        return Products::select(
+            'products.id',
+            'products.name',
+            'products.id_category',
+            DB::raw('SUM(order_items.quantity) as total_quantity'),
+            DB::raw('SUM(order_items.quantity * order_items.price) as total_sales')
+        )
+            ->join('product_variations', 'product_variations.product_id', '=', 'products.id')
+            ->join('order_items', 'order_items.variation_id', '=', 'product_variations.id')
+            ->groupBy('products.id', 'products.name', 'products.id_category')
+            ->limit($limit ?? 10)
+            ->get();
     }
 }

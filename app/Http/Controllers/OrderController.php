@@ -9,12 +9,12 @@ use App\Repository\RepositoryMain\OrdersRepository;
 use App\Repository\RepositoryMain\ProductsRepository;
 use App\Repository\RepositoryMain\ProductsValidationRepository;
 use App\Services\OrderStatus\OrderStatusFactory;
-use App\Services\OrderStatus\OrderStatusStrategy;
 use App\Services\Payments\Payment;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 
 class OrderController extends Controller
 {
@@ -45,6 +45,7 @@ class OrderController extends Controller
     }
     function detailBill($id)
     {
+
         $bill = $this->modelOrder->find($id);
         $orderNext = $this->modelOrder->where('id', '>', $bill->id)->orderBy('id', 'ASC')->first('id');
         $orderBefore  = $this->modelOrder->where('id', '<', $bill->id)->orderBy('id', 'desc')->first('id');
@@ -229,5 +230,11 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             return back()->with('message', ['content' =>   $e->getMessage(), 'type' => 'error']);
         }
+    }
+    function exportBillDetail($id)
+    {
+        $order = $this->ordersRepository->details($id);
+        $pdf = Pdf::loadView('pages.order.pdf', ['order' => $order]);
+        return $pdf->download('order.pdf');
     }
 }
